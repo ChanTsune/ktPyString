@@ -18,36 +18,27 @@ class Slice(stop:Int?) {
         }
     }
     fun adjustIndex(length:Int):Triple<Int,Int,Int> {
-        var step:Int
+        var step:Int = this.step ?: 1
         var start:Int
         var stop:Int
         var upper:Int
         var lower:Int
-        var step_is_negative:Boolean
-        var cmp_result:Boolean
 
-        /* Convert step to an integer; raise for zero step. */
-        if (this.step == null) {
-            step = 1
-            step_is_negative = false
+        // Convert step to an integer; raise for zero step.
+        var step_sign:Int = _PyLong_Sign(step)
+        if (step_sign == 0) {
+            throw Exception("ValueError: slice step cannot be zero")
         }
-        else {
-            var step_sign:Int
-            step = this.step!!
-            step_sign = _PyLong_Sign(step);
-            if (step_sign == 0) {
-                throw Exception("ValueError: slice step cannot be zero")
-            }
-            step_is_negative = step_sign < 0
-        }
-        // Find lower and upper bounds for start and stop.
+        var step_is_negative:Boolean = step_sign < 0
+
+        /* Find lower and upper bounds for start and stop. */
         if (step_is_negative) {
             lower = -1
             upper = length + lower
         }
         else {
             lower = 0
-            upper = length;
+            upper = length
         }
 
         // Compute start.
@@ -60,15 +51,13 @@ class Slice(stop:Int?) {
             if (_PyLong_Sign(start) < 0) {
                 start += length
 
-                cmp_result = start < lower // Py_LT
-                if (cmp_result) {
-                    start = lower;
+                if (start < lower /* Py_LT */) {
+                    start = lower
                 }
             }
             else {
-                cmp_result = start > upper // Py_GT
-                if (cmp_result) {
-                    start = upper;
+                if (start > upper /* Py_GT */) {
+                    start = upper
                 }
             }
         }
@@ -82,15 +71,13 @@ class Slice(stop:Int?) {
 
             if (_PyLong_Sign(stop) < 0) {
                 stop += length
-                cmp_result = stop < lower // Py_LT
-                if (cmp_result) {
-                    stop = lower;
+                if (stop < lower /* Py_LT */) {
+                    stop = lower
                 }
             }
             else {
-                cmp_result = stop > upper // Py_GT
-                if (cmp_result) {
-                    stop = upper;
+                if (stop > upper /* Py_GT */) {
+                    stop = upper
                 }
             }
         }
@@ -102,8 +89,12 @@ class Slice(stop:Int?) {
 
 fun main(args: Array<String>) {
     println("hw".split("a"))
-    val slice = Slice(0)
-    println(slice.adjustIndex(0))
+    val slice = Slice(0,10,-1)
+    var slice2 = Slice(0,-2)
+    var slice3 = Slice(-5,-2,-2)
+    println(slice.adjustIndex(20))
+    println(slice2.adjustIndex(10))
+    println(slice3.adjustIndex(10))
     println("Hello, World!")
 }
 
