@@ -85,6 +85,33 @@ class Slice(stop:Int?) {
     }
 }
 
+operator fun String.times(n:Int):String{
+    return this.repeat(n)
+}
+operator fun String.timesAssign(n:Int){
+}
+
+// capitalize  ... exist in kotlin
+
+// casefoled ... Bothersome
+
+fun String.center(width:Int,fillchar:Char=' '):String{
+    if (this.length >= width) {
+        return this
+    }
+    var l:Int = 0
+    var r:Int = 0
+    return fillchar.toString() * l + this + fillchar.toString() * r
+}
+
+
+fun sample() {
+    println("=== start sample ===")
+    var str = "abc abc abc"
+    println(str.capitalize())
+    println()
+    println("=== end sample ===")
+} 
 
 
 fun main(args: Array<String>) {
@@ -96,6 +123,11 @@ fun main(args: Array<String>) {
     println(slice2.adjustIndex(10))
     println(slice3.adjustIndex(10))
     println("Hello, World!")
+    println("a" * 10)
+    var a = "a"
+//    a *= 10
+    println(a)
+    sample()
 }
 
 fun String.split(suffix:String):List<String> {
