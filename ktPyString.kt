@@ -88,8 +88,6 @@ class Slice(stop:Int?) {
 operator fun String.times(n:Int):String{
     return this.repeat(n)
 }
-operator fun String.timesAssign(n:Int){
-}
 
 // capitalize  ... exist in kotlin
 
@@ -125,7 +123,7 @@ fun main(args: Array<String>) {
     println("Hello, World!")
     println("a" * 10)
     var a = "a"
-//    a *= 10
+    a *= 10
     println(a)
     sample()
 }

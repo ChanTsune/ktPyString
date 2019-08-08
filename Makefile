@@ -1,3 +1,5 @@
+BULID_DIR = bin
+
 .PHONY:all
 
 all:
@@ -5,7 +7,8 @@ all:
 	make exec
 
 build:ktPyString.kt
-	kotlinc ktPyString.kt -include-runtime -d sample.jar
+	mkdir -p $(BULID_DIR)
+	kotlinc ktPyString.kt -include-runtime -d $(BULID_DIR)/sample.jar
 
-exec:sample.jar
-	java -jar sample.jar
+exec:$(BULID_DIR)/sample.jar
+	java -jar $(BULID_DIR)/sample.jar
