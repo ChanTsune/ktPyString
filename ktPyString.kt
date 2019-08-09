@@ -97,8 +97,9 @@ fun String.center(width:Int,fillchar:Char=' '):String{
     if (this.length >= width) {
         return this
     }
-    var l:Int = 0
-    var r:Int = 0
+    var r:Int = width - length
+    var l:Int = r / 2
+    r = l + r % 2
     return fillchar.toString() * l + this + fillchar.toString() * r
 }
 
@@ -107,7 +108,7 @@ fun sample() {
     println("=== start sample ===")
     var str = "abc abc abc"
     println(str.capitalize())
-    println()
+    println("a".center(4))
     println("=== end sample ===")
 } 
 
