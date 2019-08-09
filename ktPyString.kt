@@ -89,6 +89,36 @@ operator fun String.times(n:Int):String{
     return this.repeat(n)
 }
 
+operator fun String.get(slice:Slice):String {
+    var (start,stop,step) = slice.adjustIndex(this.length)
+    if (step == 1) {
+        return this.substring(start,stop)
+    }
+    else {
+        var result = ""
+        var loop = 0
+        if (step < 0) {
+            if (stop < start) {
+                loop = (start - stop - 1) / (-step) + 1
+            }
+        }
+        else {
+            if (start < stop) {
+                loop = (stop - start - 1) / step + 1
+            }
+        }
+        for (i in 0 until loop){
+            result += this[start]
+            start += step
+        }
+        return result
+    }
+}
+
+operator fun String.get(start:Int?,end:Int?,step:Int?=null):String {
+    return this[Slice(start,end,step)]
+}
+
 // capitalize  ... exist in kotlin
 
 // casefoled ... Bothersome
@@ -106,6 +136,13 @@ fun String.center(width:Int,fillchar:Char=' '):String{
 
 fun sample() {
     println("=== start sample ===")
+    var s = "01234567890"
+    println(s[null,null,-1])
+    println(s[null,null,-2])
+    println(s[0,0,2])
+    println(s[2,5])
+    println(s[2,5,2])
+    println(s[-20,-2])
     var str = "abc abc abc"
     println(str.capitalize())
     println("a".center(4))
@@ -118,9 +155,11 @@ fun main(args: Array<String>) {
     val slice = Slice(0,10,-1)
     var slice2 = Slice(0,-2)
     var slice3 = Slice(-5,-2,-2)
+    var slice4 = Slice(null,5,-1)
     println(slice.adjustIndex(20))
     println(slice2.adjustIndex(10))
     println(slice3.adjustIndex(10))
+    println(slice4.adjustIndex(10))
     println("Hello, World!")
     println("a" * 10)
     var a = "a"
