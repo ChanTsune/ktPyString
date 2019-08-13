@@ -141,6 +141,14 @@ fun String.endswith(suffix:String,start:Int?=null,end:Int?=null):Boolean {
     return this[Slice(start,end)].endsWith(suffix)
 }
 
+fun String.expandtabs(tabsize:Int=8):String {
+    return this.replace("\t"," "*tabsize)
+}
+
+fun String.replace(old:String,new:String,maxcount:Int=Int.MAX_VALUE):String {
+    return ""
+}
+
 fun sample() {
     println("=== start sample ===")
     var s = "01234567890"
@@ -153,6 +161,7 @@ fun sample() {
     var str = "abc abc abc"
     println(str.capitalize())
     println("a".center(4))
+    println("\t".expandtabs())
     println("=== end sample ===")
 } 
 
