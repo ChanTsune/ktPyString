@@ -10,14 +10,14 @@ class Slice(stop:Int?) {
     override fun toString():String {
         return "Slice(${start}, ${stop}, ${step})"
     }
-    private fun _PyLong_Sign(n:Int):Int {
-        return when {
-            n == 0 -> 0
-            n > 0 -> 1
-            else -> -1
-        }
-    }
     fun adjustIndex(length:Int):Triple<Int,Int,Int> {
+        fun _PyLong_Sign(n:Int):Int {
+            return when {
+                n == 0 -> 0
+                n > 0 -> 1
+                else -> -1
+            }
+        }
         var step:Int = this.step ?: 1
         var start:Int
         var stop:Int
@@ -133,6 +133,13 @@ fun String.center(width:Int,fillchar:Char=' '):String{
     return fillchar.toString() * l + this + fillchar.toString() * r
 }
 
+fun String.count(sub:String,start:Int?=null,end:Int?=null):Int {
+    return 0
+}
+
+fun String.endswith(suffix:String,start:Int?=null,end:Int?=null):Boolean {
+    return this[Slice(start,end)].endsWith(suffix)
+}
 
 fun sample() {
     println("=== start sample ===")
