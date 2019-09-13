@@ -55,13 +55,17 @@ fun String.find(sub: String, start: Int? = null, end: Int? = null): Int {
     return -1
 }
 
+//fun String.format() {
+//
+//}
+
+//fun String.format_map() {
+//
+//}
+
 fun String.index(sub: String, start: Int? = null, end: Int? = null): Int {
     val tmp = this.find(sub, start, end)
     return if (tmp == -1) throw Exception("ValueError: substring not found") else tmp
-}
-
-fun String.replace(old: String, new: String, maxcount: Int = Int.MAX_VALUE): String {
-    return ""
 }
 
 // isalnum ...
@@ -138,8 +142,126 @@ fun String.partition(sep:String):Triple<String,String,String> {
     // }
 }
 
+fun String.replace(old: String, new: String, maxcount: Int = Int.MAX_VALUE): String {
+    return ""
+}
 
-fun String.split(suffix: String): List<String> {
+fun String.rfind(sub: String,start:Int?=null,end:Int?=null):Int {
+    return -1
+}
+
+fun String.rindex(sub:String,start:Int?=null,end:Int?=null):Int {
+    val i = this.rfind(sub,start,end)
+    if (i == -1) {
+        throw Exception("ValueError: substring not found")
+    }
+    return i
+}
+
+fun String.rjust(width:Int,fillchar:Char=' '):String {
+    return if (this.length >= width) {
+        this
+    } else {
+        val filllen = this.length - width
+        fillchar.toString() * filllen + this
+    }
+}
+
+fun String.rpartition(sep:String) : Triple<String,String,String> {
+    val tmp = this.rsplit(sep,1)
+    return if (tmp.size == 2) {
+        Triple(tmp[0],sep,tmp[1])
+    } else {
+        Triple("","",this)
+    }
+}
+
+fun String.rsplit(sep:String?=null,maxsplit:Int=-1) : List<String> {
+    var splited:MutableList<String> = mutableListOf()
+    return splited
+}
+
+fun String.rstrip(chars:String?=null) : String {
+    return if (chars == null) {
+        dropLastWhile { c -> c.isWhiteSpace() }
+    } else {
+        dropLastWhile { c -> chars.contains(c) }
+    }
+}
+
+fun String.split(sep: String?,maxsplit:Int=-1): List<String> {
     var splited: MutableList<String> = mutableListOf()
     return splited
 }
+
+fun String.splitlines(keepends:Boolean=false) :List<String> {
+    var splited:MutableList<String> = mutableListOf()
+    return splited
+}
+
+fun String.startswith(prefix:String,start:Int?=null,end:Int?=null):Boolean = this[start,end].startsWith(prefix)
+
+fun String.strip(chars: String?=null):String = this.lstrip(chars).rstrip(chars)
+
+fun String.swapcase():String {
+    var tmp = ""
+    for (c in this) {
+        tmp += if (c.isLowerCase()) {
+            c.toUpperCase()
+        } else if (c.isUpperCase()) {
+            c.toLowerCase()
+        } else {
+            c
+        }
+    }
+    return tmp
+}
+
+fun String.title():String {
+    var titled = ""
+    var prevCased = false
+    for (c in this) {
+        if (!prevCased) {
+            titled += if (c.isTitleCase()) {
+                c.toTitleCase()
+            } else {
+                c
+            }
+        } else {
+            titled += if (c.isCased()) {
+                if (!c.isLowerCase()) {
+                    c.toLowerCase()
+                } else {
+                    c
+                }
+            } else {
+                c
+            }
+        }
+        prevCased = c.isCased()
+    }
+    return titled
+}
+
+fun String.translate(table:Map<Int,String>):String {
+    return this
+}
+
+fun String.upper():String {
+    return this
+}
+
+fun String.zfill(width:Int):String {
+    return if (this[0] == '-' || this[0] == '+') {
+        this[0] + this[1,null].rjust(width-1,'0')
+    } else {
+        this.rjust(width,'0')
+    }
+}
+
+private fun Char.isWhiteSpace():Boolean {
+    return "\u0020\u00A0\u2002\u2003\u2004\u2005\u2006\u2007\u2008\u2009\u200A\u200B\u3000\uFEFF\u0009".contains(this)
+}
+
+private fun Char.isCased():Boolean =
+    this.isUpperCase() || this.isLowerCase() || this.isTitleCase()
