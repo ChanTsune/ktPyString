@@ -51,7 +51,20 @@ fun String.endswith(suffix: String, start: Int? = null, end: Int? = null): Boole
 
 fun String.expandtabs(tabsize: Int = 8): String = this.replace("\t", " " * tabsize)
 
+
+fun makeTable(text:String,target:String): Map<Char,Int> {
+    return mapOf()
+}
+
 fun String.find(sub: String, start: Int? = null, end: Int? = null): Int {
+    var (start,end,_) = Slice(start,end).adjustIndex(this.length)
+    while (end > this.length) {
+        if (this[start,start+sub.length] == sub) {
+            return start
+        }
+        ++start
+        ++end
+    }
     return -1
 }
 
