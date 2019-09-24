@@ -44,7 +44,14 @@ fun String.center(width: Int, fillchar: Char = ' '): String {
 }
 
 fun String.count(sub: String, start: Int? = null, end: Int? = null): Int {
-    return 0
+//    var (start,end,_) = Slice(start,end).adjustIndex(this.length)
+    var i = 0
+//    val sublen = if (sub.length == 0) 1 else sub.length
+//    while (this.find(sub,start,end) != -1){
+//        ++i
+//        start += sublen
+//    }
+    return i
 }
 
 fun String.endswith(suffix: String, start: Int? = null, end: Int? = null): Boolean = this[Slice(start, end)].endsWith(suffix)
@@ -58,12 +65,12 @@ fun makeTable(text:String,target:String): Map<Char,Int> {
 
 fun String.find(sub: String, start: Int? = null, end: Int? = null): Int {
     var (start,end,_) = Slice(start,end).adjustIndex(this.length)
-    while (end > this.length) {
+    var fin = end - sub.length
+    while (start <= fin) {
         if (this[start,start+sub.length] == sub) {
             return start
         }
         ++start
-        ++end
     }
     return -1
 }

@@ -16,6 +16,24 @@ class StringTest {
         assertEquals("world",b[7,null])
         
     }
+    @Test fun testExtendedGetSlice() {
+        var b = ""
+        for(i in 0..255) {
+            b += i.toString()
+        }
+        var indices = arrayOf(0, null, 1, 3, 19, 100, 54775807, -1, -2, -31, -100)
+        for (start in indices) {
+            for (stop in indices) {
+                for(step in indices) {
+                    println(start)
+                    println(stop)
+                    println(step)
+                    println(b[start,stop,step])
+                    assertEquals(b[start,stop,step], b[start,stop,step])
+                }
+            }
+        }
+    }
     @Test fun testCenter() {
         val str = "12".center(5)
         assertEquals(5,str.length)
@@ -23,6 +41,8 @@ class StringTest {
     }
     @Test fun testCount() {
         assertEquals(5,"aaaaa".count("a"))
+        assertEquals(2,"a".count(""))
+        assertEquals(3,"ab".count(""))
     }
     @Test fun testEndswith() {
         assertTrue("1234567890".endswith("0"))
@@ -35,13 +55,13 @@ class StringTest {
     }
     @Test fun testFind() {
         assertEquals(2,"01234567890".find("2"))
-        assertEquals(3,"01234567890".find("45"))
-        assertEquals(-1,"0123456789".find(""))
+        assertEquals(4,"01234567890".find("45"))
+        assertEquals(0,"0123456789".find(""))
     }
     @Test fun testIndex() {
         assertEquals(2,"0123456789".find("2"))
-        assertEquals(3,"01234567890".find("45"))
-        assertEquals(-1,"0123456789".find(""))
+        assertEquals(4,"01234567890".find("45"))
+        assertEquals(0,"0123456789".find(""))
     }
     @Test fun testJoin() {
         assertEquals("1,2,3",",".join(listOf("1","2","3")))
