@@ -123,11 +123,11 @@ fun String.ljust(width: Int, fillchar: Char = ' '): String {
 fun String.lower(): String = this.toLowerCase()
 
 fun String.lstrip(chars: String? = null): String {
-    if (chars != null) {
-        val str: String = chars
-        return this.dropWhile { c -> str.indexOf(c) != -1 }
+    return if (chars != null) {
+        this.dropWhile { c -> chars.indexOf(c) != -1 }
+    } else {
+        this.dropWhile { c -> c == ' ' } // 空白文字を除去するパターン
     }
-    return this.dropWhile { c -> c == ' ' } // 空白文字を除去するパターン
 }
 
 fun String.maketrans(x:Map<Int, String?>): Map<Int, String> {
@@ -202,10 +202,10 @@ fun String.rsplit(sep:String?=null,maxsplit:Int=-1) : List<String> {
 }
 
 fun String.rstrip(chars:String?=null) : String {
-    return if (chars == null) {
-        dropLastWhile { c -> c.isWhiteSpace() }
-    } else {
+    return if (chars != null) {
         dropLastWhile { c -> chars.contains(c) }
+    } else {
+        dropLastWhile { c -> c.isWhiteSpace() }
     }
 }
 
