@@ -25,10 +25,6 @@ class StringTest {
         for (start in indices) {
             for (stop in indices) {
                 for(step in indices) {
-                    println(start)
-                    println(stop)
-                    println(step)
-                    println(b[start,stop,step])
                     assertEquals(b[start,stop,step], b[start,stop,step])
                 }
             }
@@ -45,9 +41,11 @@ class StringTest {
         assertEquals(3,"ab".count(""))
     }
     @Test fun testEndswith() {
-        assertTrue("1234567890".endswith("0"))
-        assertTrue("1234567890".endswith("9",end = -2))
-        assertFalse("1234567890".endswith("9"))
+        val b = "1234567890"
+        assertTrue(b.endswith("0"))
+        assertTrue(b.endswith("9",end = -1))
+        assertFalse(b.endswith("9",end = -2))
+        assertFalse(b.endswith("9"))
     }
     @Test fun testExpandtabs() {
         assertEquals("        ","\t".expandtabs())
@@ -68,7 +66,7 @@ class StringTest {
     }
     @Test fun testLjust() {
         assertEquals("ab   ","ab".ljust(5))
-        assertEquals("ab000","ab".ljust(5))
+        assertEquals("ab000","ab".ljust(5,'0'))
     }
     @Test fun test_endswith(){
         var b = "hello"
