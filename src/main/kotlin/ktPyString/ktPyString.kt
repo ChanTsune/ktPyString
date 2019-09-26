@@ -55,7 +55,10 @@ fun makeTable(text:String,target:String): Map<Char,Int> {
 }
 
 fun String.find(sub: String, start: Int? = null, end: Int? = null): Int {
-    var (start,end,_) = Slice(start,end).adjustIndex(this.length)
+    if (sub.isEmpty()) {
+        return 0
+    }
+    var (start,end,_,_) = Slice(start,end).adjustIndex(this.length)
     var fin = end - sub.length
     while (start <= fin) {
         if (this[start,start+sub.length] == sub) {
@@ -169,7 +172,7 @@ fun String.rindex(sub:String,start:Int?=null,end:Int?=null):Int {
     return i
 }
 
-fun String.rjust(width:Int,fillchar:Char=' '):String {
+fun String.rjust(width:Int, fillchar:Char=' '):String {
     return if (this.length >= width) {
         this
     } else {
