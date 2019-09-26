@@ -4,21 +4,12 @@ package ktPyString
 operator fun String.times(n: Int): String = this.repeat(n)
 
 operator fun String.get(slice: Slice): String {
-    var (start, stop, step) = slice.adjustIndex(this.length)
+    var (start, stop, step,loop) = slice.adjustIndex(this.length)
     if (step == 1) {
         return this.substring(start, stop)
     } else {
         var result = ""
-        var loop = 0
-        if (step < 0) {
-            if (stop < start) {
-                loop = (start - stop - 1) / (-step) + 1
-            }
-        } else {
-            if (start < stop) {
-                loop = (stop - start - 1) / step + 1
-            }
-        }
+
         for (i in 0 until loop) {
             result += this[start]
             start += step
