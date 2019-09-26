@@ -263,10 +263,10 @@ fun String.upper():String {
 }
 
 fun String.zfill(width:Int):String {
-    return if (this[0] == '-' || this[0] == '+') {
-        this[0] + this[1,null].rjust(width-1,'0')
-    } else {
+    return if(this.isEmpty() || (this[0] != '-' && this[0] != '+')){
         this.rjust(width,'0')
+    } else {
+        this[0] + this[1,null].rjust(width-1,'0')
     }
 }
 
