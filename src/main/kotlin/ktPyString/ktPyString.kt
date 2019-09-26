@@ -209,7 +209,7 @@ fun String.rstrip(chars:String?=null) : String {
     }
 }
 
-fun String.split(sep: String?,maxsplit:Int=-1): List<String> {
+fun String.split(sep: String?=null,maxsplit:Int=-1): List<String> {
     var splited: MutableList<String> = mutableListOf()
     return splited
 }
