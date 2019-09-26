@@ -5,8 +5,8 @@ operator fun String.times(n: Int): String = this.repeat(if (n > 0) n else 0)
 
 operator fun String.get(slice: Slice): String {
     var (start, stop, step,loop) = slice.adjustIndex(this.length)
-    if (step == 1) {
-        return this.substring(start, stop)
+    return if (step == 1) {
+        this.substring(start, stop)
     } else {
         var result = ""
 
@@ -14,7 +14,7 @@ operator fun String.get(slice: Slice): String {
             result += this[start]
             start += step
         }
-        return result
+        result
     }
 }
 
