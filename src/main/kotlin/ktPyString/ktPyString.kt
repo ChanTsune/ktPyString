@@ -176,7 +176,7 @@ fun String.rjust(width:Int, fillchar:Char=' '):String {
     return if (this.length >= width) {
         this
     } else {
-        val filllen = this.length - width
+        val filllen = width - this.length
         fillchar.toString() * filllen + this
     }
 }

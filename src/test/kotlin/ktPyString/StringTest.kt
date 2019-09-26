@@ -21,7 +21,7 @@ class StringTest {
         for(i in 0..255) {
             b += i.toString()
         }
-        var indices = arrayOf(0, null, 1, 3, 19, 100, 54775807, -1, -2, -31, -100)
+        val indices = arrayOf(0, null, 1, 3, 19, 100, 54775807, -1, -2, -31, -100)
         for (start in indices) {
             for (stop in indices) {
                 for(step in indices) {
@@ -69,7 +69,7 @@ class StringTest {
         assertEquals("ab000","ab".ljust(5,'0'))
     }
     @Test fun test_endswith(){
-        var b = "hello"
+        val b = "hello"
         assertFalse("".endswith("anything"))
         assertTrue(b.endswith("hello"))
         assertTrue(b.endswith("llo"))
@@ -78,7 +78,7 @@ class StringTest {
         assertFalse(b.endswith("no"))
     }
     @Test fun test_getslice(){
-        var b = "Hello, world"
+        val b = "Hello, world"
         assertEquals("Hello",b[null,5])
         assertEquals("ello",b[1,5])
         assertEquals(", ",b[5,7])
@@ -94,20 +94,20 @@ class StringTest {
         assertEquals("Hello",b[-100,5])
     }
     @Test fun test_rpartition(){
-        var b = "mississippi"
+        val b = "mississippi"
         assertEquals(Triple("missi", "ss", "ippi"),b.rpartition("ss"))
         assertEquals(Triple("mississipp", "i", ""),b.rpartition("i"))
         assertEquals(Triple("", "", "mississippi"),b.rpartition("w"))
     }
     @Test fun test_replace(){
-        var b = "mississippi"
+        val b = "mississippi"
         assertEquals("massassappa",b.replace("i", "a"))
         assertEquals("mixixippi",b.replace("ss", "x"))
     }
     @Test fun test_rfind(){
-        var b = "mississippi"
-        var i = "i"
-        var w = "w"
+        val b = "mississippi"
+        val i = "i"
+        val w = "w"
         assertEquals(5,b.rfind("ss"))
         assertEquals(-1,b.rfind("w"))
         assertEquals(-1,b.rfind("mississippian"))
@@ -119,7 +119,7 @@ class StringTest {
         assertEquals(7,b.rfind(i, 3, 9))
         assertEquals(-1,b.rfind(w, 1, 3))
     }
-    @Test fun test_split_unicodewhitespace(){
+    @Test fun test_split_unicodewhitespace() {
         var b = "\t\n\u000b\u000c\r\u001c\u001d\u001e\u001f"
         assertEquals(listOf("a\u01cb"), "a\u01cb".split())
         assertEquals(listOf("a\u01db"), "a\u01db".split())
@@ -246,7 +246,7 @@ class StringTest {
         assertEquals("-100", c.zfill(4))
         assertEquals("-100", c.zfill(3))
         assertEquals("-100", c.zfill(2))
-        assertEquals("+0100", c.zfill(5))
+        assertEquals("+0100", d.zfill(5))
         assertEquals("0=100", e.zfill(5))
     }
 }
