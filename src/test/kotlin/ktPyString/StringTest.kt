@@ -173,7 +173,7 @@ class StringTest {
 //    }
     @Test fun test_repeat(){
         var b = "abc"
-        assertEquals("abcabc",b * 3)
+        assertEquals("abcabcabc",b * 3)
         assertEquals("",b * 0)
         assertEquals("",b * -1)
     }
