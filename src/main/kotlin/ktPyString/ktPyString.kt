@@ -35,14 +35,18 @@ fun String.center(width: Int, fillchar: Char = ' '): String {
 }
 
 fun String.count(sub: String, start: Int? = null, end: Int? = null): Int {
-//    var (start,end,_) = Slice(start,end).adjustIndex(this.length)
+    var (start,end,_,len) = Slice(start,end).adjustIndex(this.length)
+    val subLength = sub.length
     var i = 0
-//    val sublen = if (sub.length == 0) 1 else sub.length
-//    while (this.find(sub,start,end) != -1){
-//        ++i
-//        start += sublen
-//    }
-    return i
+    return if (subLength == 0) {
+        len + 1
+    } else {
+        while (this.find(sub,start,end) != -1) {
+            ++i
+            start += subLength
+        }
+        i
+    }
 }
 
 fun String.endswith(suffix: String, start: Int? = null, end: Int? = null): Boolean = this[Slice(start, end)].endsWith(suffix)
