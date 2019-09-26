@@ -234,4 +234,19 @@ class StringTest {
         var b = "\t\n\u000b\u000c\r\u001c\u001d\u001e\u001f"
         assertEquals(listOf("\u001c\u001d\u001e\u001f"),b.rsplit())
     }
+    @Test fun testZfill() {
+        var b = "100"
+        var c = "-100"
+        var d = "+100"
+        var e = "=100"
+        assertEquals("00100", b.zfill(5))
+        assertEquals("100", b.zfill(3))
+        assertEquals("100", b.zfill(2))
+        assertEquals("-0100", c.zfill(5))
+        assertEquals("-100", c.zfill(4))
+        assertEquals("-100", c.zfill(3))
+        assertEquals("-100", c.zfill(2))
+        assertEquals("+0100", c.zfill(5))
+        assertEquals("0=100", e.zfill(5))
+    }
 }
