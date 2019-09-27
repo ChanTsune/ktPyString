@@ -1,5 +1,7 @@
 package ktPyString
 
+import kotlin.math.sign
+
 
 operator fun String.times(n: Int): String = this.repeat(if (n > 0) n else 0)
 
@@ -190,7 +192,8 @@ fun String.rpartition(sep:String) : Triple<String,String,String> {
     }
 }
 
-fun String.rsplit(sep:String?=null,maxsplit:Int=-1) : List<String> {
+fun String.rsplit(sep:String?=null, maxsplit:Int=-1) : List<String> {
+    var maxsplit = if (maxsplit.sign == -1) Int.MAX_VALUE else maxsplit
     var splited:MutableList<String> = mutableListOf()
     return splited
 }
@@ -203,8 +206,10 @@ fun String.rstrip(chars:String?=null) : String {
     }
 }
 
-fun String.split(sep: String?=null,maxsplit:Int=-1): List<String> {
+fun String.split(sep: String?=null, maxsplit:Int=-1): List<String> {
+    var maxsplit = if (maxsplit.sign == -1) Int.MAX_VALUE else maxsplit
     var splited: MutableList<String> = mutableListOf()
+    
     return splited
 }
 
