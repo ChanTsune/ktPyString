@@ -215,7 +215,7 @@ private fun String._rsplit(sep:String, maxsplit: Int): List<String> {
     var sep_len = sep.length
     var maxsplit = maxsplit
     while (maxsplit > 0) {
-        index = this.rfind(sep, prev_index)
+        index = this.rfind(sep, 0, prev_index)
         if (index == -1) {
             break
         }
@@ -228,7 +228,7 @@ private fun String._rsplit(sep:String, maxsplit: Int): List<String> {
 
         maxsplit -= 1
 
-        if (maxsplit == 0) {
+        if (maxsplit <= 0) {
             break
         }
     }
@@ -252,6 +252,9 @@ private fun String._rsplit(maxsplit: Int): List<String> {
             len = 0
         } else {
             len += 1
+        }
+        if (maxsplit <= 0){
+            break
         }
     }
     val tmp = this[0, index + 1].rstrip()

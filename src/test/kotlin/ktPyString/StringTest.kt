@@ -231,7 +231,7 @@ class StringTest {
         assertEquals("----abc",b.rjust(7, '-'))
     }
     @Test fun testRsplit() {
-        assertEquals(listOf("a", "b", "c", "d", ""), "a,b,c,d,".rsplit(","))
+        assertEquals(listOf("a", "b", "c", "d", ""), "a|b|c|d|".rsplit("|"))
         assertEquals(listOf("a", "b", "c", "d", ""), "a,b,c,d,".rsplit(","))
         assertEquals(listOf("a,b,c,d,"), "a,b,c,d,".rsplit())
         assertEquals(listOf("a,b,c", "d", ""), "a,b,c,d,".rsplit(",", 2))
