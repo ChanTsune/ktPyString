@@ -1,5 +1,7 @@
 package ktPyString
 
+import kotlin.math.sign
+
 
 operator fun String.times(n: Int): String = this.repeat(if (n > 0) n else 0)
 
@@ -31,18 +33,17 @@ fun String.center(width: Int, fillchar: Char = ' '): String {
 }
 
 fun String.count(sub: String, start: Int? = null, end: Int? = null): Int {
-    var (start,end,_,len) = Slice(start,end).adjustIndex(this.length)
-    val subLength = sub.length
-    var i = 0
-    return if (subLength == 0) {
-        len + 1
-    } else {
-        while (this.find(sub,start,end) != -1) {
-            ++i
-            start += subLength
-        }
-        i
+    var (start,end,_,length) = Slice(start, end).adjustIndex(this.length)
+    if (sub.isEmpty()) {
+        return length + 1
     }
+    var n = this.find(sub, start, end)
+    var c = 0
+    while (n != -1) {
+        c += 1
+        n = this.find(sub, n + sub.length, end)
+    }
+    return c
 }
 
 fun String.endswith(suffix: String, start: Int? = null, end: Int? = null): Boolean = this[Slice(start, end)].endsWith(suffix)
@@ -150,17 +151,34 @@ fun String.maketrans(x:String,y:String,z:String=""):Map<Int,String> {
 }
 
 fun String.partition(sep:String):Triple<String,String,String> {
-    // val s = this.split(sep,1)
-    // if s.size == 3 {
-    return Triple("", "", "")
-    // }
+    val tmp = this.split(sep,1)
+    return if (tmp.size == 2) {
+        Triple(tmp[0],sep,tmp[1])
+    } else {
+        Triple(this,"","")
+    }
 }
 
 fun String.replace(old: String, new: String, maxcount: Int = Int.MAX_VALUE): String {
-    return ""
+    return new.join(this.split(old,maxcount))
 }
 
 fun String.rfind(sub: String,start:Int?=null,end:Int?=null):Int {
+    if (sub.isEmpty()) {
+        return this.length
+    }
+    var (s, e, _, _) = Slice(start, end).adjustIndex(this.length)
+    if ((e - s) < sub.length) {
+        return -1;
+    }
+    s -= 1
+    var fin = e - sub.length
+    while (fin != s) {
+        if (this[fin, fin + sub.length] == sub) {
+            return fin
+        }
+        fin -= 1
+    }
     return -1
 }
 
@@ -190,9 +208,69 @@ fun String.rpartition(sep:String) : Triple<String,String,String> {
     }
 }
 
-fun String.rsplit(sep:String?=null,maxsplit:Int=-1) : List<String> {
-    var splited:MutableList<String> = mutableListOf()
-    return splited
+private fun String._rsplit(sep:String, maxsplit: Int): List<String> {
+    var result: MutableList<String> = mutableListOf()
+    var index = 0
+    var prev_index = Int.MAX_VALUE
+    var sep_len = sep.length
+    var maxsplit = maxsplit
+    while (maxsplit > 0) {
+        index = this.rfind(sep, 0, prev_index)
+        if (index == -1) {
+            break
+        }
+        index += sep_len
+        result.add(0, this[index, prev_index])
+        index -= sep_len
+
+        index -= 1
+        prev_index = index + 1
+
+        maxsplit -= 1
+
+        if (maxsplit <= 0) {
+            break
+        }
+    }
+    result.add(0,this[0, prev_index])
+    return result
+}
+
+private fun String._rsplit(maxsplit: Int): List<String> {
+    val result:MutableList<String> = mutableListOf()
+    var index = this.length - 1
+    var len = 0
+    var maxsplit = maxsplit
+    for (chr in this.reversed()) {
+        if (chr.isWhitespace()) {
+            if (len != 0) {
+                result.add(0,this[index, len])
+                maxsplit -= 1
+                index -= len
+            }
+            index -= 1
+            len = 0
+        } else {
+            len += 1
+        }
+        if (maxsplit <= 0){
+            break
+        }
+    }
+    val tmp = this[0, index + 1].rstrip()
+    if (tmp.isNotEmpty()) {
+        result.add(0,tmp)
+    }
+    return result
+}
+
+fun String.rsplit(sep:String?=null, maxsplit:Int=-1) : List<String> {
+    var maxsplit = if (maxsplit.sign == -1) Int.MAX_VALUE else maxsplit
+    return if(sep != null && sep.isNotEmpty()) {
+        this._rsplit(sep,maxsplit)
+    } else {
+        this._rsplit(maxsplit)
+    }
 }
 
 fun String.rstrip(chars:String?=null) : String {
@@ -203,9 +281,60 @@ fun String.rstrip(chars:String?=null) : String {
     }
 }
 
-fun String.split(sep: String?=null,maxsplit:Int=-1): List<String> {
-    var splited: MutableList<String> = mutableListOf()
-    return splited
+private fun String._split(sep:String,maxsplit:Int):List<String> {
+    var maxsplit = maxsplit
+    val result: MutableList<String> = mutableListOf()
+    var index = 0
+    var prevIndex = 0
+    val sepLen = sep.length
+    while (maxsplit > 0) {
+        index = this.find(sep, prevIndex)
+        if (index == -1) {
+            break
+        }
+        result.add(this[prevIndex, index])
+        prevIndex = index + sepLen
+
+        maxsplit -= 1
+    }
+    result.add(this[prevIndex, null])
+    return result
+}
+private fun String._split(maxsplit: Int):List<String> {
+    val result: MutableList<String> = mutableListOf()
+    var maxsplit = maxsplit
+    var index = 0
+    var len = 0
+    for (chr in this) {
+        if (chr.isWhitespace()) {
+            if (len != 0) {
+                result.add(this[index, len])
+                maxsplit -= 1
+                index += len
+            }
+            index += 1
+            len = 0
+        } else {
+            len += 1
+        }
+        if (maxsplit == 0) {
+            break
+        }
+    }
+    val tmp = this[index, null].lstrip()
+    if (tmp.isNotEmpty()) {
+        result.add(tmp)
+    }
+    return result
+}
+
+fun String.split(sep: String?=null, maxsplit:Int=-1): List<String> {
+    var maxsplit = if (maxsplit.sign == -1) Int.MAX_VALUE else maxsplit
+    return if(sep != null && sep.isNotEmpty()) {
+        this._split(sep, maxsplit)
+    } else {
+        this._split(maxsplit)
+    }
 }
 
 fun String.splitlines(keepends:Boolean=false) :List<String> {
