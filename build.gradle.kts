@@ -4,6 +4,9 @@
  * This generated file contains a sample Kotlin library project to get you started.
  */
 
+group = "jp.ChanTsune"
+version = "0.0.0"
+
 plugins {
     // Apply the Kotlin JVM plugin to add support for Kotlin.
     id("org.jetbrains.kotlin.jvm") version "1.3.41"
@@ -13,6 +16,9 @@ plugins {
 
     // Apply the java-library plugin for API and implementation separation.
     `java-library`
+
+    // Apply library publish plugin
+    `maven-publish`
 }
 
 repositories {
@@ -38,4 +44,26 @@ dependencies {
 tasks.dokka {
     outputFormat = "html"
     outputDirectory = "$buildDir/javadoc"
+}
+// Create dokka Jar task from dokka task output
+val dokkaJar by tasks.creating(Jar::class) {
+    group = JavaBasePlugin.DOCUMENTATION_GROUP
+    description = "Assembles Kotlin docs with Dokka"
+    classifier = "javadoc"
+    // dependsOn(tasks.dokka) not needed; dependency automatically inferred by from(tasks.dokka)
+    from(tasks.dokka)
+}
+
+publishing {
+    publications {
+        create<MavenPublication>("default") {
+            from(components["java"])
+            artifact(dokkaJar)
+        }
+    }
+    repositories {
+        maven {
+            url = uri("$buildDir/repository")
+        }
+    }
 }
