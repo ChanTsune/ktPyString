@@ -329,7 +329,7 @@ private fun String._split(maxsplit: Int):List<String> {
 }
 
 fun String.split(sep: String?=null, maxsplit:Int=-1): List<String> {
-    var maxsplit = if (maxsplit.sign == -1) Int.MAX_VALUE else maxsplit
+    val maxsplit = if (maxsplit.sign == -1) Int.MAX_VALUE else maxsplit
     return if(sep != null && sep.isNotEmpty()) {
         this._split(sep, maxsplit)
     } else {
