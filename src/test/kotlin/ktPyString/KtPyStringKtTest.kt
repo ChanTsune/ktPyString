@@ -196,8 +196,10 @@ internal class KtPyStringKtTest {
         assertEquals(-1, b.rfind(w, 1, 3))
     }
 
-    @Test
+    @Test(expected = Exception::class)
     fun rindex() {
+        val b = "mississippi"
+        b.rindex("w")
     }
 
     @Test
@@ -216,12 +218,21 @@ internal class KtPyStringKtTest {
 
     @Test
     fun rsplit() {
+        val expected = listOf("1", "1", "1", "1", "1")
+        assertEquals(expected, "1 1 1 1 1".rsplit())
+        assertEquals(expected, " 1 1 1 1 1 ".rsplit())
+        assertEquals(expected, "  1  1   1 1 1  ".rsplit())
+    }
+
+    @Test
+    fun rsplitWithArgument() {
         assertEquals(listOf("a", "b", "c", "d", ""), "a|b|c|d|".rsplit("|"))
         assertEquals(listOf("a", "b", "c", "d", ""), "a,b,c,d,".rsplit(","))
-        assertEquals(listOf("a,b,c,d,"), "a,b,c,d,".rsplit())
         assertEquals(listOf("a,b,c", "d", ""), "a,b,c,d,".rsplit(",", 2))
         assertEquals(listOf("a,b,c,d,"), "a,b,c,d,".rsplit(",", 0))
         assertEquals(listOf("aabbxx", "bb", "ddbb"), "aabbxxaabbaaddbb".rsplit("aa", 2))
+        assertEquals(listOf("a,b,c,d,"), "a,b,c,d,".rsplit())
+
     }
 
     @Test
@@ -232,8 +243,23 @@ internal class KtPyStringKtTest {
 
     @Test
     fun split() {
-        val str = "1 1 1 1 1"
-        assertEquals(listOf("1", "1", "1", "1", "1"), str.split())
+        val expected = listOf("1", "1", "1", "1", "1")
+        assertEquals(expected, "1 1 1 1 1".split())
+        assertEquals(expected, " 1 1 1 1 1 ".split())
+        assertEquals(expected, "  1  1   1 1 1  ".split())
+        assertEquals(listOf("11111"), "11111".split())
+    }
+
+    @Test
+    fun splitWithArgument() {
+        val expected1 = listOf("1", "1", "1", "1", "1")
+        val expected2 = listOf("", "1", "1", "1", "1", "1", "");
+        val expected3 = listOf("-1", "1", "1", "1", "1-");
+        val expected4 = listOf("", "1", "", "1", "", "1", "", "1", "", "1", "");
+        assertEquals(expected1, "1,1,1,1,1".split(","))
+        assertEquals(expected2, ",1,1,1,1,1,".split(","))
+        assertEquals(expected3, "-1--1--1--1--1-".split("--"))
+        assertEquals(expected4, "-1--1--1--1--1-".split("-"))
     }
 
     @Test
@@ -259,10 +285,16 @@ internal class KtPyStringKtTest {
 
     @Test
     fun swapcase() {
+        assertEquals("abc", "ABC".swapcase())
+        assertEquals("ABC", "abc".swapcase())
+        assertEquals("A b", "a B".swapcase())
     }
 
     @Test
     fun title() {
+        assertEquals("Title Case", "title case".title())
+        assertEquals("Title  Case", "title  case".title())
+        assertEquals("Title  Case", "title  cAse".title())
     }
 
     @Test
