@@ -43,7 +43,18 @@ internal class KtPyStringKtTest {
         assertEquals("", empty[5, 7])
         assertEquals("", empty[7, null])
     }
-
+    @Test
+    fun sliceStepIsNegative() {
+        assertEquals("dlroW olleH", "Hello World"[null,null,-1])
+        assertEquals("drWolH", "Hello World"[null,null,-2])
+        assertEquals("H", "Hello World"[0,null,-2])
+        assertEquals("drWo", "Hello World"[null,3,-2])
+        assertEquals("d", "Hello World"[null,-3,-2])
+    }
+    @Test
+    fun sliceStopAndStepIsNegative() {
+        assertEquals("3210", "0123"[null,-6,-1])
+    }
     @Test
     fun center() {
         val str = "12"
