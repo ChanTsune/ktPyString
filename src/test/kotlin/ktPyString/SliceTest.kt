@@ -57,4 +57,8 @@ internal class SliceTest {
             Slice(null,-5,0).adjustIndex(10)
         }
     }
+    @Test
+    fun testIndies() {
+        assertEquals(Triple(0,10,1), Slice().indices(10))
+    }
 }

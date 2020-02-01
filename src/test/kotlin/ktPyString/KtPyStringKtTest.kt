@@ -11,6 +11,7 @@ internal class KtPyStringKtTest {
         assertEquals("Hello WorldHello World", hello * 2)
         assertEquals("", empty * 2)
         assertEquals("", hello * 0)
+        assertEquals("", hello * -2)
     }
 
     @Test
