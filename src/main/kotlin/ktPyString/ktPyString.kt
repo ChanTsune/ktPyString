@@ -186,10 +186,7 @@ fun String.rfind(sub: String, start: Int? = null, end: Int? = null): Int {
 
 fun String.rindex(sub: String, start: Int? = null, end: Int? = null): Int {
     val i = this.rfind(sub, start, end)
-    if (i == -1) {
-        throw Exception("ValueError: substring not found")
-    }
-    return i
+    return if (i == -1) throw Exception("ValueError: substring not found") else i
 }
 
 fun String.rjust(width: Int, fillchar: Char = ' '): String {

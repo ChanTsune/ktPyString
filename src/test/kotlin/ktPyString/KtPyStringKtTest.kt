@@ -165,6 +165,11 @@ internal class KtPyStringKtTest {
 
     @Test
     fun lower() {
+        val a = "hello"
+        val b = "HELLO"
+        assertEquals("", "".lower())
+        assertEquals("hello", a.lower())
+        assertEquals("hello", b.lower())
     }
 
     @Test
@@ -315,6 +320,11 @@ internal class KtPyStringKtTest {
 
     @Test
     fun upper() {
+        val a = "hello"
+        val b = "HELLO"
+        assertEquals("", "".upper())
+        assertEquals("HELLO", a.upper())
+        assertEquals("HELLO", b.upper())
     }
 
     @Test
