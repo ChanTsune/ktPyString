@@ -33,7 +33,7 @@ fun String.center(width: Int, fillchar: Char = ' '): String {
 }
 
 fun String.count(sub: String, start: Int? = null, end: Int? = null): Int {
-    var (start, end, _, length) = Slice(start, end).adjustIndex(this.length)
+    val (start, end, _, length) = Slice(start, end).adjustIndex(this.length)
     if (sub.isEmpty()) {
         return length + 1
     }
@@ -84,17 +84,57 @@ fun String.index(sub: String, start: Int? = null, end: Int? = null): Int {
     return if (tmp == -1) throw Exception("ValueError: substring not found") else tmp
 }
 
-// isalnum ...
+private fun String.isX(empty:Boolean,conditional:(Char)->Boolean):Boolean{
+    if (this.isEmpty()){
+        return empty
+    }
+    for (i in this){
+        if(!conditional(i)){
+            return false
+        }
+    }
+    return true
+}
+
+fun String.isalnum():Boolean {
+    val alnumTypes = listOf(CharCategory.DECIMAL_DIGIT_NUMBER)
+    return this.isX(false){
+        alnumTypes.contains(it.category)
+    }
+}
+
 // isalpha ...
-// isascii ...
-// isdecimal ...
-// isdigit ...
-// islower ...
+
+fun String.isascii():Boolean {
+    return this.isX(true){
+        it in '\u0000'..'\u0080'
+    }
+}
+fun String.isdecimal():Boolean {
+    return this.isX(false){
+        it.category == CharCategory.DECIMAL_DIGIT_NUMBER
+    }
+}
+fun String.isdigit():Boolean {
+    return this.isX(false){
+        it.category == CharCategory.LETTER_NUMBER ||
+        it.category == CharCategory.DECIMAL_DIGIT_NUMBER
+    }
+}
+fun String.islower():Boolean {
+    return this.isX(false){
+        it.isCased() && it.isLowerCase()
+    }
+}
 // isnumeric ...
 // isprintable ...
 // isspace ...
 // istitle ...
-// isupper ...
+fun String.isupper():Boolean {
+    return this.isX(false){
+        it.isCased() && it.isUpperCase()
+    }
+}
 
 fun String.join(iterable: List<String>): String {
     var result = ""
