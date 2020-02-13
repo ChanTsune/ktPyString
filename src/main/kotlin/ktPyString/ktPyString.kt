@@ -123,16 +123,70 @@ fun String.isdigit():Boolean {
 }
 fun String.islower():Boolean {
     return this.isX(false){
-        it.isCased() && it.isLowerCase()
+        if (it.isCased()){
+            it.isLowerCase()
+        } else {
+            true
+        }
     }
 }
-// isnumeric ...
-// isprintable ...
-// isspace ...
-// istitle ...
+fun String.isnumeric(): Boolean {
+    return this.isX(false){
+        it.category != it.category
+
+    }
+}
+fun String.isprintable():Boolean {
+    val otherTypes = listOf(
+        CharCategory.OTHER_LETTER,
+        CharCategory.OTHER_NUMBER,
+        CharCategory.OTHER_PUNCTUATION,
+        CharCategory.OTHER_SYMBOL)
+    val separatorTypes = listOf(
+        CharCategory.LINE_SEPARATOR,
+        CharCategory.SPACE_SEPARATOR,
+        CharCategory.PARAGRAPH_SEPARATOR
+    )
+    val maybeDisPrintable = otherTypes + separatorTypes
+    return this.isX(true){
+        if (maybeDisPrintable.contains(it.category)) {
+            it == ' '
+        } else {
+            true
+        }
+    }
+}
+fun String.isspace():Boolean{
+    return this.isX(false){
+        it.isWhiteSpace()
+    }
+}
+fun String.istitle():Boolean {
+    if (this.isEmpty()) {
+        return false
+    }
+    var prevCased = false
+    for (chr in this) {
+        if (!prevCased) {
+            if (!chr.isTitleCase()) {
+                return false
+            }
+        } else if (chr.isCased()) {
+            if (!chr.isLowerCase()) {
+                return false
+            }
+        }
+        prevCased = chr.isCased()
+    }
+    return true
+}
 fun String.isupper():Boolean {
     return this.isX(false){
-        it.isCased() && it.isUpperCase()
+        if (it.isCased()){
+            it.isUpperCase()
+        } else {
+            true
+        }
     }
 }
 
