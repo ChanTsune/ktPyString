@@ -146,7 +146,85 @@ internal class KtPyStringKtTest {
     fun indexNotFound() {
         assertEquals(0, digits.index("87"))
     }
-
+    @Test
+    fun isalnum() {
+        assertFalse("".isalnum())
+        assertTrue("a".isalnum())
+        assertTrue("１".isalnum())
+        assertFalse("a@b".isalnum())
+        assertFalse("abc 123".isalnum())
+    }
+    @Test
+    fun isalpha() {
+        assertFalse("I have pen.".isalpha())
+        assertTrue("qwerty".isalpha())
+        assertFalse("123".isalpha())
+        assertFalse("".isalpha())
+    }
+    @Test
+    fun isascii() {
+        assertTrue("I have pen.".isascii())
+        assertTrue("qwerty".isascii())
+        assertTrue("123".isascii())
+        assertTrue("".isascii())
+        assertFalse("非ASCII文字列".isascii())
+    }
+    @Test
+    fun isdecimal() {
+        assertTrue("123".isdecimal())
+        assertTrue("１２３４５".isdecimal())
+        assertFalse("一".isdecimal())
+        assertFalse("".isdecimal())
+    }
+    @Test
+    fun isdigit() {
+        assertTrue("123".isdigit())
+        assertTrue("１２３４５".isdigit())
+        assertFalse("一".isdigit())
+        assertFalse("".isdigit())
+    }
+    @Test
+    fun islower() {
+        assertTrue("lower case string".islower())
+        assertFalse("Lower case string".islower())
+        assertFalse("lower case String".islower())
+        assertFalse("lower Case string".islower())
+        assertFalse("小文字では無い".islower())
+    }
+    @Test
+    fun isprintable() {
+        assertTrue("".isprintable())
+        assertTrue("abc".isprintable())
+        assertFalse("\u060D".isprintable())
+    }
+    @Test
+    fun isspace() {
+        assertTrue(" ".isspace())
+        assertFalse("".isspace())
+        assertFalse("Speace".isspace())
+    }
+    @Test
+    fun isnumeric() {
+        assertTrue("123".isnumeric())
+        assertTrue("１２３４５".isnumeric())
+        assertTrue("一".isnumeric())
+        assertFalse("".isnumeric())
+    }
+    @Test
+    fun istitle() {
+        assertTrue("Title Case String".istitle())
+        assertTrue("Title_Case_String".istitle())
+        assertTrue("Title__Case  String".istitle())
+        assertFalse("not Title Case String".istitle())
+        assertFalse("NotTitleCaseString".istitle())
+        assertFalse("Not Title case String".istitle())
+    }
+    @Test
+    fun isupper() {
+        assertTrue("UPPER CASE STRING".isupper())
+        assertFalse("Upper Case String".isupper())
+        assertFalse("大文字では無い".isupper())
+    }
 
     @Test
     fun join() {
