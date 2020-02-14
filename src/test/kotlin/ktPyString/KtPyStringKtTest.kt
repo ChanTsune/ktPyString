@@ -11,6 +11,7 @@ internal class KtPyStringKtTest {
         assertEquals("Hello WorldHello World", hello * 2)
         assertEquals("", empty * 2)
         assertEquals("", hello * 0)
+        assertEquals("", hello * -2)
     }
 
     @Test
@@ -42,6 +43,20 @@ internal class KtPyStringKtTest {
         assertEquals("", empty[1, 5])
         assertEquals("", empty[5, 7])
         assertEquals("", empty[7, null])
+    }
+
+    @Test
+    fun sliceStepIsNegative() {
+        assertEquals("dlroW olleH", "Hello World"[null, null, -1])
+        assertEquals("drWolH", "Hello World"[null, null, -2])
+        assertEquals("H", "Hello World"[0, null, -2])
+        assertEquals("drWo", "Hello World"[null, 3, -2])
+        assertEquals("d", "Hello World"[null, -3, -2])
+    }
+
+    @Test
+    fun sliceStopAndStepIsNegative() {
+        assertEquals("3210", "0123"[null, -6, -1])
     }
 
     @Test
@@ -135,6 +150,95 @@ internal class KtPyStringKtTest {
         assertEquals(0, digits.index("87"))
     }
 
+    @Test
+    fun isalnum() {
+        assertFalse("".isalnum())
+        assertTrue("a".isalnum())
+        assertTrue("１".isalnum())
+        assertFalse("a@b".isalnum())
+        assertFalse("abc 123".isalnum())
+    }
+
+    @Test
+    fun isalpha() {
+        assertFalse("I have pen.".isalpha())
+        assertTrue("qwerty".isalpha())
+        assertFalse("123".isalpha())
+        assertFalse("".isalpha())
+    }
+
+    @Test
+    fun isascii() {
+        assertTrue("I have pen.".isascii())
+        assertTrue("qwerty".isascii())
+        assertTrue("123".isascii())
+        assertTrue("".isascii())
+        assertFalse("非ASCII文字列".isascii())
+    }
+
+    @Test
+    fun isdecimal() {
+        assertTrue("123".isdecimal())
+        assertTrue("１２３４５".isdecimal())
+        assertFalse("一".isdecimal())
+        assertFalse("".isdecimal())
+    }
+
+    @Test
+    fun isdigit() {
+        assertTrue("123".isdigit())
+        assertTrue("１２３４５".isdigit())
+        assertFalse("一".isdigit())
+        assertFalse("".isdigit())
+    }
+
+    @Test
+    fun islower() {
+        assertTrue("lower case string".islower())
+        assertFalse("Lower case string".islower())
+        assertFalse("lower case String".islower())
+        assertFalse("lower Case string".islower())
+        assertFalse("小文字では無い".islower())
+    }
+
+    @Test
+    fun isprintable() {
+        assertTrue("".isprintable())
+        assertTrue("abc".isprintable())
+        assertFalse("\u060D".isprintable())
+    }
+
+    @Test
+    fun isspace() {
+        assertTrue(" ".isspace())
+        assertFalse("".isspace())
+        assertFalse("Speace".isspace())
+    }
+
+    @Test
+    fun isnumeric() {
+        assertTrue("123".isnumeric())
+        assertTrue("１２３４５".isnumeric())
+        assertTrue("一".isnumeric())
+        assertFalse("".isnumeric())
+    }
+
+    @Test
+    fun istitle() {
+        assertTrue("Title Case String".istitle())
+        assertTrue("Title_Case_String".istitle())
+        assertTrue("Title__Case  String".istitle())
+        assertFalse("not Title Case String".istitle())
+        assertFalse("NotTitleCaseString".istitle())
+        assertFalse("Not Title case String".istitle())
+    }
+
+    @Test
+    fun isupper() {
+        assertTrue("UPPER CASE STRING".isupper())
+        assertFalse("Upper Case String".isupper())
+        assertFalse("大文字では無い".isupper())
+    }
 
     @Test
     fun join() {
@@ -153,6 +257,11 @@ internal class KtPyStringKtTest {
 
     @Test
     fun lower() {
+        val a = "hello"
+        val b = "HELLO"
+        assertEquals("", "".lower())
+        assertEquals("hello", a.lower())
+        assertEquals("hello", b.lower())
     }
 
     @Test
@@ -206,6 +315,7 @@ internal class KtPyStringKtTest {
     fun rjust() {
         val b = "abc"
         assertEquals("----abc", b.rjust(7, '-'))
+        assertEquals("    abc", b.rjust(7))
     }
 
     @Test
@@ -264,6 +374,10 @@ internal class KtPyStringKtTest {
 
     @Test
     fun splitlines() {
+        assertEquals(listOf("abc", "abc"), "abc\nabc".splitlines())
+        assertEquals(listOf("abc\n", "abc\r"), "abc\nabc\r".splitlines(true))
+        assertEquals(listOf("abc", "abc"), "abc\r\nabc\n".splitlines())
+        assertEquals(listOf("abc\r\n", "abc\n"), "abc\r\nabc\n".splitlines(true))
     }
 
     @Test
@@ -303,6 +417,11 @@ internal class KtPyStringKtTest {
 
     @Test
     fun upper() {
+        val a = "hello"
+        val b = "HELLO"
+        assertEquals("", "".upper())
+        assertEquals("HELLO", a.upper())
+        assertEquals("HELLO", b.upper())
     }
 
     @Test

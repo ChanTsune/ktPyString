@@ -1,5 +1,7 @@
 package ktPyString
 
+import ktPyString.properties.NumericType
+import ktPyString.properties.numericType
 import kotlin.math.sign
 
 
@@ -33,7 +35,7 @@ fun String.center(width: Int, fillchar: Char = ' '): String {
 }
 
 fun String.count(sub: String, start: Int? = null, end: Int? = null): Int {
-    var (start, end, _, length) = Slice(start, end).adjustIndex(this.length)
+    val (start, end, _, length) = Slice(start, end).adjustIndex(this.length)
     if (sub.isEmpty()) {
         return length + 1
     }
@@ -51,10 +53,10 @@ fun String.endswith(suffix: String, start: Int? = null, end: Int? = null): Boole
 
 fun String.expandtabs(tabsize: Int = 8): String = this.replace("\t", " " * tabsize)
 
-
-fun makeTable(text: String, target: String): Map<Char, Int> {
-    return mapOf()
-}
+//
+//fun makeTable(text: String, target: String): Map<Char, Int> {
+//    return mapOf()
+//}
 
 fun String.find(sub: String, start: Int? = null, end: Int? = null): Int {
     if (sub.isEmpty()) {
@@ -84,17 +86,139 @@ fun String.index(sub: String, start: Int? = null, end: Int? = null): Int {
     return if (tmp == -1) throw Exception("ValueError: substring not found") else tmp
 }
 
-// isalnum ...
-// isalpha ...
-// isascii ...
-// isdecimal ...
-// isdigit ...
-// islower ...
-// isnumeric ...
-// isprintable ...
-// isspace ...
-// istitle ...
-// isupper ...
+private fun String.isX(empty: Boolean, conditional: (Char) -> Boolean): Boolean {
+    if (this.isEmpty()) {
+        return empty
+    }
+    for (i in this) {
+        if (!conditional(i)) {
+            return false
+        }
+    }
+    return true
+}
+
+fun String.isalnum(): Boolean {
+    return this.isX(false) {
+        it.isLetterOrDigit() || it.category == CharCategory.LETTER_NUMBER
+    }
+}
+
+fun String.isalpha(): Boolean {
+    return this.isX(false) {
+        it.isLetter()
+    }
+}
+
+fun String.isascii(): Boolean {
+    return this.isX(true) {
+        it in '\u0000'..'\u0080'
+    }
+}
+
+fun String.isdecimal(): Boolean {
+    return this.isX(false) {
+        it.category == CharCategory.DECIMAL_DIGIT_NUMBER
+    }
+}
+
+fun String.isdigit(): Boolean {
+    return this.isX(false) {
+        it.category == CharCategory.LETTER_NUMBER ||
+                it.category == CharCategory.DECIMAL_DIGIT_NUMBER
+    }
+}
+
+fun String.islower(): Boolean {
+    if (this.isEmpty()) {
+        return false
+    }
+    var hasCase = false
+    for (chr in this) {
+        if (chr.isCased()) {
+            if (!chr.isLowerCase()) {
+                return false
+            }
+            hasCase = true
+        }
+    }
+    return hasCase
+}
+
+fun String.isnumeric(): Boolean {
+    return this.isX(false) {
+        it.category == CharCategory.LETTER_NUMBER ||
+                it.category == CharCategory.DECIMAL_DIGIT_NUMBER ||
+                it.category == CharCategory.OTHER_NUMBER ||
+                it.numericType != NumericType.NOT_NUMERIC
+    }
+}
+
+fun String.isprintable(): Boolean {
+    val otherTypes = listOf(
+        CharCategory.OTHER_LETTER,
+        CharCategory.OTHER_NUMBER,
+        CharCategory.OTHER_PUNCTUATION,
+        CharCategory.OTHER_SYMBOL
+    )
+    val separatorTypes = listOf(
+        CharCategory.LINE_SEPARATOR,
+        CharCategory.SPACE_SEPARATOR,
+        CharCategory.PARAGRAPH_SEPARATOR
+    )
+    val maybeDisPrintable = otherTypes + separatorTypes
+    return this.isX(true) {
+        if (maybeDisPrintable.contains(it.category)) {
+            it == ' '
+        } else {
+            true
+        }
+    }
+}
+
+fun String.isspace(): Boolean {
+    return this.isX(false) {
+        it.isWhiteSpace()
+    }
+}
+
+private fun Char.isTitle(): Boolean = this == this.toTitleCase()
+
+fun String.istitle(): Boolean {
+    if (this.isEmpty()) {
+        return false
+    }
+    var prevCased = false
+    for (chr in this) {
+        if (!prevCased) {
+            if (!chr.isTitle()) {
+                return false
+            }
+        } else if (chr.isCased()) {
+            if (!chr.isLowerCase()) {
+                return false
+            }
+        }
+        prevCased = chr.isCased()
+    }
+    return true
+}
+
+fun String.isupper(): Boolean {
+    if (this.isEmpty()) {
+        return false
+    }
+    var hasCase = false
+    for (chr in this) {
+        if (chr.isCased()) {
+            if (!chr.isUpperCase()) {
+                return false
+            }
+            hasCase = true
+        }
+    }
+    return hasCase
+}
 
 fun String.join(iterable: List<String>): String {
     var result = ""
@@ -126,13 +250,13 @@ fun String.lstrip(chars: String? = null): String {
     }
 }
 
-fun String.maketrans(x: Map<Int, String?>): Map<Int, String> {
-    var table: MutableMap<Int, String> = mutableMapOf()
-    for ((k, v) in x) {
-        table[k] = v ?: ""
-    }
-    return table
-}
+//fun String.maketrans(x: Map<Int, String?>): Map<Int, String> {
+//    var table: MutableMap<Int, String> = mutableMapOf()
+//    for ((k, v) in x) {
+//        table[k] = v ?: ""
+//    }
+//    return table
+//}
 
 // fun String.maketrans(x:Map<Char,String?>):Map<Int,String> {
 //     var table: MutableMap<Int, String> = mutableMapOf()
@@ -141,16 +265,16 @@ fun String.maketrans(x: Map<Int, String?>): Map<Int, String> {
 //     }
 //     return table
 // }
-fun String.maketrans(x: String, y: String, z: String = ""): Map<Int, String> {
-    var table: MutableMap<Int, String> = mutableMapOf()
-    for ((k, v) in x zip y) {
-        table[k.toInt()] = v.toString()
-    }
-    for (c in x) {
-        table[c.toInt()] = ""
-    }
-    return table
-}
+//fun String.maketrans(x: String, y: String, z: String = ""): Map<Int, String> {
+//    var table: MutableMap<Int, String> = mutableMapOf()
+//    for ((k, v) in x zip y) {
+//        table[k.toInt()] = v.toString()
+//    }
+//    for (c in x) {
+//        table[c.toInt()] = ""
+//    }
+//    return table
+//}
 
 fun String.partition(sep: String): Triple<String, String, String> {
     val tmp = this.split(sep, 1)
@@ -186,10 +310,7 @@ fun String.rfind(sub: String, start: Int? = null, end: Int? = null): Int {
 
 fun String.rindex(sub: String, start: Int? = null, end: Int? = null): Int {
     val i = this.rfind(sub, start, end)
-    if (i == -1) {
-        throw Exception("ValueError: substring not found")
-    }
-    return i
+    return if (i == -1) throw Exception("ValueError: substring not found") else i
 }
 
 fun String.rjust(width: Int, fillchar: Char = ' '): String {
@@ -212,12 +333,11 @@ fun String.rpartition(sep: String): Triple<String, String, String> {
 
 private fun String._rsplit(sep: String, maxsplit: Int): List<String> {
     val result: MutableList<String> = mutableListOf()
-    var index = 0
     var prevIndex = Int.MAX_VALUE
     val sep_len = sep.length
     var maxsplit = maxsplit
     while (maxsplit > 0) {
-        index = this.rfind(sep, 0, prevIndex)
+        var index = this.rfind(sep, 0, prevIndex)
         if (index == -1) {
             break
         }
@@ -262,11 +382,10 @@ fun String.rstrip(chars: String? = null): String {
 private fun String._split(sep: String, maxsplit: Int): List<String> {
     var maxsplit = maxsplit
     val result: MutableList<String> = mutableListOf()
-    var index = 0
     var prevIndex = 0
     val sepLen = sep.length
     while (maxsplit > 0) {
-        index = this.find(sep, prevIndex)
+        val index = this.find(sep, prevIndex)
         if (index == -1) {
             break
         }
@@ -314,8 +433,38 @@ fun String.split(sep: String? = null, maxsplit: Int = -1): List<String> {
     }
 }
 
+private fun Char.isRowBoundary(): Boolean {
+    return listOf(
+        0xa, 0xb, 0xc, 0xd,
+        0x1c, 0x1d, 0x1e,
+        0x85, 0x2028, 0x2029
+    ).contains(this.toInt())
+}
+
 fun String.splitlines(keepends: Boolean = false): List<String> {
-    var splited: MutableList<String> = mutableListOf()
+    val splited: MutableList<String> = mutableListOf()
+    val len = this.length
+    var i = 0
+    var j = 0
+    while (i < len) {
+        while (i < len && !this[i].isRowBoundary())
+            ++i
+        var eol = i
+        if (i < len) {
+            if (this[i] == '\r' && i + 1 < len && this[i + 1] == '\n') {
+                i += 2
+            } else {
+                ++i
+            }
+            if (keepends)
+                eol = i
+        }
+        splited.add(this[j, eol])
+        j = i
+    }
+    if (j < len) {
+        splited.add(this[j, len])
+    }
     return splited
 }
 
@@ -344,7 +493,7 @@ fun String.title(): String {
                 c
             }
         } else {
-            if (c.isTitleCase()) {
+            if (c.isTitle()) {
                 c
             } else {
                 c.toTitleCase()
@@ -355,9 +504,9 @@ fun String.title(): String {
     return titled
 }
 
-fun String.translate(table: Map<Int, String>): String {
-    return this
-}
+//fun String.translate(table: Map<Int, String>): String {
+//    return this
+//}
 
 fun String.upper() = this.toUpperCase()
 
