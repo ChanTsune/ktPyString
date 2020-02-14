@@ -1,5 +1,7 @@
 package ktPyString
 
+import ktPyString.properties.NumericType
+import ktPyString.properties.numericType
 import kotlin.math.sign
 
 
@@ -51,10 +53,10 @@ fun String.endswith(suffix: String, start: Int? = null, end: Int? = null): Boole
 
 fun String.expandtabs(tabsize: Int = 8): String = this.replace("\t", " " * tabsize)
 
-
-fun makeTable(text: String, target: String): Map<Char, Int> {
-    return mapOf()
-}
+//
+//fun makeTable(text: String, target: String): Map<Char, Int> {
+//    return mapOf()
+//}
 
 fun String.find(sub: String, start: Int? = null, end: Int? = null): Int {
     if (sub.isEmpty()) {
@@ -97,13 +99,16 @@ private fun String.isX(empty:Boolean,conditional:(Char)->Boolean):Boolean{
 }
 
 fun String.isalnum():Boolean {
-    val alnumTypes = listOf(CharCategory.DECIMAL_DIGIT_NUMBER)
     return this.isX(false){
-        alnumTypes.contains(it.category)
+        it.isLetterOrDigit() || it.category == CharCategory.LETTER_NUMBER
     }
 }
 
-// isalpha ...
+fun String.isalpha():Boolean {
+    return this.isX(false){
+        it.isLetter()
+    }
+}
 
 fun String.isascii():Boolean {
     return this.isX(true){
@@ -122,18 +127,26 @@ fun String.isdigit():Boolean {
     }
 }
 fun String.islower():Boolean {
-    return this.isX(false){
-        if (it.isCased()){
-            it.isLowerCase()
-        } else {
-            true
+    if (this.isEmpty()) {
+        return false
+    }
+    var hasCase = false
+    for (chr in this) {
+        if (chr.isCased()) {
+            if (!chr.isLowerCase()) {
+                return false
+            }
+            hasCase = true
         }
     }
+    return hasCase
 }
 fun String.isnumeric(): Boolean {
     return this.isX(false){
-        it.category != it.category
-
+        it.category == CharCategory.LETTER_NUMBER ||
+        it.category == CharCategory.DECIMAL_DIGIT_NUMBER ||
+        it.category == CharCategory.OTHER_NUMBER ||
+        it.numericType != NumericType.NOT_NUMERIC
     }
 }
 fun String.isprintable():Boolean {
@@ -161,6 +174,8 @@ fun String.isspace():Boolean{
         it.isWhiteSpace()
     }
 }
+private fun Char.isTitle():Boolean = this == this.toTitleCase()
+
 fun String.istitle():Boolean {
     if (this.isEmpty()) {
         return false
@@ -168,7 +183,7 @@ fun String.istitle():Boolean {
     var prevCased = false
     for (chr in this) {
         if (!prevCased) {
-            if (!chr.isTitleCase()) {
+            if (!chr.isTitle()) {
                 return false
             }
         } else if (chr.isCased()) {
@@ -181,13 +196,19 @@ fun String.istitle():Boolean {
     return true
 }
 fun String.isupper():Boolean {
-    return this.isX(false){
-        if (it.isCased()){
-            it.isUpperCase()
-        } else {
-            true
+    if (this.isEmpty()) {
+        return false
+    }
+    var hasCase = false
+    for (chr in this) {
+        if (chr.isCased()) {
+            if (!chr.isUpperCase()) {
+                return false
+            }
+            hasCase = true
         }
     }
+    return hasCase
 }
 
 fun String.join(iterable: List<String>): String {
@@ -220,13 +241,13 @@ fun String.lstrip(chars: String? = null): String {
     }
 }
 
-fun String.maketrans(x: Map<Int, String?>): Map<Int, String> {
-    var table: MutableMap<Int, String> = mutableMapOf()
-    for ((k, v) in x) {
-        table[k] = v ?: ""
-    }
-    return table
-}
+//fun String.maketrans(x: Map<Int, String?>): Map<Int, String> {
+//    var table: MutableMap<Int, String> = mutableMapOf()
+//    for ((k, v) in x) {
+//        table[k] = v ?: ""
+//    }
+//    return table
+//}
 
 // fun String.maketrans(x:Map<Char,String?>):Map<Int,String> {
 //     var table: MutableMap<Int, String> = mutableMapOf()
@@ -235,16 +256,16 @@ fun String.maketrans(x: Map<Int, String?>): Map<Int, String> {
 //     }
 //     return table
 // }
-fun String.maketrans(x: String, y: String, z: String = ""): Map<Int, String> {
-    var table: MutableMap<Int, String> = mutableMapOf()
-    for ((k, v) in x zip y) {
-        table[k.toInt()] = v.toString()
-    }
-    for (c in x) {
-        table[c.toInt()] = ""
-    }
-    return table
-}
+//fun String.maketrans(x: String, y: String, z: String = ""): Map<Int, String> {
+//    var table: MutableMap<Int, String> = mutableMapOf()
+//    for ((k, v) in x zip y) {
+//        table[k.toInt()] = v.toString()
+//    }
+//    for (c in x) {
+//        table[c.toInt()] = ""
+//    }
+//    return table
+//}
 
 fun String.partition(sep: String): Triple<String, String, String> {
     val tmp = this.split(sep, 1)
@@ -449,9 +470,9 @@ fun String.title(): String {
     return titled
 }
 
-fun String.translate(table: Map<Int, String>): String {
-    return this
-}
+//fun String.translate(table: Map<Int, String>): String {
+//    return this
+//}
 
 fun String.upper() = this.toUpperCase()
 
