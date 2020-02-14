@@ -6,19 +6,22 @@ import kotlin.test.assertEquals
 
 internal class NumericTypeTest {
     @Test
-    fun notNumeric(){
+    fun notNumeric() {
         assertEquals(NumericType.NOT_NUMERIC, ' '.numericType)
     }
+
     @Test
-    fun decimal(){
+    fun decimal() {
         assertEquals(NumericType.DECIMAL, '1'.numericType)
     }
+
     @Test
-    fun digit(){
+    fun digit() {
         assertEquals(NumericType.DIGIT, '①'.numericType)
     }
+
     @Test
-    fun numeric(){
+    fun numeric() {
         assertEquals(NumericType.NUMERIC, '¾'.numericType)
     }
 }

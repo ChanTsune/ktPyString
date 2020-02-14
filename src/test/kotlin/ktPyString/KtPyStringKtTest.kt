@@ -44,18 +44,21 @@ internal class KtPyStringKtTest {
         assertEquals("", empty[5, 7])
         assertEquals("", empty[7, null])
     }
+
     @Test
     fun sliceStepIsNegative() {
-        assertEquals("dlroW olleH", "Hello World"[null,null,-1])
-        assertEquals("drWolH", "Hello World"[null,null,-2])
-        assertEquals("H", "Hello World"[0,null,-2])
-        assertEquals("drWo", "Hello World"[null,3,-2])
-        assertEquals("d", "Hello World"[null,-3,-2])
+        assertEquals("dlroW olleH", "Hello World"[null, null, -1])
+        assertEquals("drWolH", "Hello World"[null, null, -2])
+        assertEquals("H", "Hello World"[0, null, -2])
+        assertEquals("drWo", "Hello World"[null, 3, -2])
+        assertEquals("d", "Hello World"[null, -3, -2])
     }
+
     @Test
     fun sliceStopAndStepIsNegative() {
-        assertEquals("3210", "0123"[null,-6,-1])
+        assertEquals("3210", "0123"[null, -6, -1])
     }
+
     @Test
     fun center() {
         val str = "12"
@@ -146,6 +149,7 @@ internal class KtPyStringKtTest {
     fun indexNotFound() {
         assertEquals(0, digits.index("87"))
     }
+
     @Test
     fun isalnum() {
         assertFalse("".isalnum())
@@ -154,6 +158,7 @@ internal class KtPyStringKtTest {
         assertFalse("a@b".isalnum())
         assertFalse("abc 123".isalnum())
     }
+
     @Test
     fun isalpha() {
         assertFalse("I have pen.".isalpha())
@@ -161,6 +166,7 @@ internal class KtPyStringKtTest {
         assertFalse("123".isalpha())
         assertFalse("".isalpha())
     }
+
     @Test
     fun isascii() {
         assertTrue("I have pen.".isascii())
@@ -169,6 +175,7 @@ internal class KtPyStringKtTest {
         assertTrue("".isascii())
         assertFalse("非ASCII文字列".isascii())
     }
+
     @Test
     fun isdecimal() {
         assertTrue("123".isdecimal())
@@ -176,6 +183,7 @@ internal class KtPyStringKtTest {
         assertFalse("一".isdecimal())
         assertFalse("".isdecimal())
     }
+
     @Test
     fun isdigit() {
         assertTrue("123".isdigit())
@@ -183,6 +191,7 @@ internal class KtPyStringKtTest {
         assertFalse("一".isdigit())
         assertFalse("".isdigit())
     }
+
     @Test
     fun islower() {
         assertTrue("lower case string".islower())
@@ -191,18 +200,21 @@ internal class KtPyStringKtTest {
         assertFalse("lower Case string".islower())
         assertFalse("小文字では無い".islower())
     }
+
     @Test
     fun isprintable() {
         assertTrue("".isprintable())
         assertTrue("abc".isprintable())
         assertFalse("\u060D".isprintable())
     }
+
     @Test
     fun isspace() {
         assertTrue(" ".isspace())
         assertFalse("".isspace())
         assertFalse("Speace".isspace())
     }
+
     @Test
     fun isnumeric() {
         assertTrue("123".isnumeric())
@@ -210,6 +222,7 @@ internal class KtPyStringKtTest {
         assertTrue("一".isnumeric())
         assertFalse("".isnumeric())
     }
+
     @Test
     fun istitle() {
         assertTrue("Title Case String".istitle())
@@ -219,6 +232,7 @@ internal class KtPyStringKtTest {
         assertFalse("NotTitleCaseString".istitle())
         assertFalse("Not Title case String".istitle())
     }
+
     @Test
     fun isupper() {
         assertTrue("UPPER CASE STRING".isupper())
@@ -301,6 +315,7 @@ internal class KtPyStringKtTest {
     fun rjust() {
         val b = "abc"
         assertEquals("----abc", b.rjust(7, '-'))
+        assertEquals("    abc", b.rjust(7))
     }
 
     @Test
@@ -359,6 +374,10 @@ internal class KtPyStringKtTest {
 
     @Test
     fun splitlines() {
+        assertEquals(listOf("abc", "abc"), "abc\nabc".splitlines())
+        assertEquals(listOf("abc\n", "abc\r"), "abc\nabc\r".splitlines(true))
+        assertEquals(listOf("abc", "abc"), "abc\r\nabc\n".splitlines())
+        assertEquals(listOf("abc\r\n", "abc\n"), "abc\r\nabc\n".splitlines(true))
     }
 
     @Test

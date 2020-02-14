@@ -86,47 +86,50 @@ fun String.index(sub: String, start: Int? = null, end: Int? = null): Int {
     return if (tmp == -1) throw Exception("ValueError: substring not found") else tmp
 }
 
-private fun String.isX(empty:Boolean,conditional:(Char)->Boolean):Boolean{
-    if (this.isEmpty()){
+private fun String.isX(empty: Boolean, conditional: (Char) -> Boolean): Boolean {
+    if (this.isEmpty()) {
         return empty
     }
-    for (i in this){
-        if(!conditional(i)){
+    for (i in this) {
+        if (!conditional(i)) {
             return false
         }
     }
     return true
 }
 
-fun String.isalnum():Boolean {
-    return this.isX(false){
+fun String.isalnum(): Boolean {
+    return this.isX(false) {
         it.isLetterOrDigit() || it.category == CharCategory.LETTER_NUMBER
     }
 }
 
-fun String.isalpha():Boolean {
-    return this.isX(false){
+fun String.isalpha(): Boolean {
+    return this.isX(false) {
         it.isLetter()
     }
 }
 
-fun String.isascii():Boolean {
-    return this.isX(true){
+fun String.isascii(): Boolean {
+    return this.isX(true) {
         it in '\u0000'..'\u0080'
     }
 }
-fun String.isdecimal():Boolean {
-    return this.isX(false){
+
+fun String.isdecimal(): Boolean {
+    return this.isX(false) {
         it.category == CharCategory.DECIMAL_DIGIT_NUMBER
     }
 }
-fun String.isdigit():Boolean {
-    return this.isX(false){
+
+fun String.isdigit(): Boolean {
+    return this.isX(false) {
         it.category == CharCategory.LETTER_NUMBER ||
-        it.category == CharCategory.DECIMAL_DIGIT_NUMBER
+                it.category == CharCategory.DECIMAL_DIGIT_NUMBER
     }
 }
-fun String.islower():Boolean {
+
+fun String.islower(): Boolean {
     if (this.isEmpty()) {
         return false
     }
@@ -141,27 +144,30 @@ fun String.islower():Boolean {
     }
     return hasCase
 }
+
 fun String.isnumeric(): Boolean {
-    return this.isX(false){
+    return this.isX(false) {
         it.category == CharCategory.LETTER_NUMBER ||
-        it.category == CharCategory.DECIMAL_DIGIT_NUMBER ||
-        it.category == CharCategory.OTHER_NUMBER ||
-        it.numericType != NumericType.NOT_NUMERIC
+                it.category == CharCategory.DECIMAL_DIGIT_NUMBER ||
+                it.category == CharCategory.OTHER_NUMBER ||
+                it.numericType != NumericType.NOT_NUMERIC
     }
 }
-fun String.isprintable():Boolean {
+
+fun String.isprintable(): Boolean {
     val otherTypes = listOf(
         CharCategory.OTHER_LETTER,
         CharCategory.OTHER_NUMBER,
         CharCategory.OTHER_PUNCTUATION,
-        CharCategory.OTHER_SYMBOL)
+        CharCategory.OTHER_SYMBOL
+    )
     val separatorTypes = listOf(
         CharCategory.LINE_SEPARATOR,
         CharCategory.SPACE_SEPARATOR,
         CharCategory.PARAGRAPH_SEPARATOR
     )
     val maybeDisPrintable = otherTypes + separatorTypes
-    return this.isX(true){
+    return this.isX(true) {
         if (maybeDisPrintable.contains(it.category)) {
             it == ' '
         } else {
@@ -169,14 +175,16 @@ fun String.isprintable():Boolean {
         }
     }
 }
-fun String.isspace():Boolean{
-    return this.isX(false){
+
+fun String.isspace(): Boolean {
+    return this.isX(false) {
         it.isWhiteSpace()
     }
 }
-private fun Char.isTitle():Boolean = this == this.toTitleCase()
 
-fun String.istitle():Boolean {
+private fun Char.isTitle(): Boolean = this == this.toTitleCase()
+
+fun String.istitle(): Boolean {
     if (this.isEmpty()) {
         return false
     }
@@ -195,7 +203,8 @@ fun String.istitle():Boolean {
     }
     return true
 }
-fun String.isupper():Boolean {
+
+fun String.isupper(): Boolean {
     if (this.isEmpty()) {
         return false
     }
@@ -324,12 +333,11 @@ fun String.rpartition(sep: String): Triple<String, String, String> {
 
 private fun String._rsplit(sep: String, maxsplit: Int): List<String> {
     val result: MutableList<String> = mutableListOf()
-    var index = 0
     var prevIndex = Int.MAX_VALUE
     val sep_len = sep.length
     var maxsplit = maxsplit
     while (maxsplit > 0) {
-        index = this.rfind(sep, 0, prevIndex)
+        var index = this.rfind(sep, 0, prevIndex)
         if (index == -1) {
             break
         }
@@ -374,11 +382,10 @@ fun String.rstrip(chars: String? = null): String {
 private fun String._split(sep: String, maxsplit: Int): List<String> {
     var maxsplit = maxsplit
     val result: MutableList<String> = mutableListOf()
-    var index = 0
     var prevIndex = 0
     val sepLen = sep.length
     while (maxsplit > 0) {
-        index = this.find(sep, prevIndex)
+        val index = this.find(sep, prevIndex)
         if (index == -1) {
             break
         }
@@ -426,8 +433,38 @@ fun String.split(sep: String? = null, maxsplit: Int = -1): List<String> {
     }
 }
 
+private fun Char.isRowBoundary(): Boolean {
+    return listOf(
+        0xa, 0xb, 0xc, 0xd,
+        0x1c, 0x1d, 0x1e,
+        0x85, 0x2028, 0x2029
+    ).contains(this.toInt())
+}
+
 fun String.splitlines(keepends: Boolean = false): List<String> {
-    var splited: MutableList<String> = mutableListOf()
+    val splited: MutableList<String> = mutableListOf()
+    val len = this.length
+    var i = 0
+    var j = 0
+    while (i < len) {
+        while (i < len && !this[i].isRowBoundary())
+            ++i
+        var eol = i
+        if (i < len) {
+            if (this[i] == '\r' && i + 1 < len && this[i + 1] == '\n') {
+                i += 2
+            } else {
+                ++i
+            }
+            if (keepends)
+                eol = i
+        }
+        splited.add(this[j, eol])
+        j = i
+    }
+    if (j < len) {
+        splited.add(this[j, len])
+    }
     return splited
 }
 
@@ -456,7 +493,7 @@ fun String.title(): String {
                 c
             }
         } else {
-            if (c.isTitleCase()) {
+            if (c.isTitle()) {
                 c
             } else {
                 c.toTitleCase()

@@ -11,7 +11,7 @@ class StringTest {
             b += i.toString()
         }
         val indices = arrayOf(0, null, 1, 3, 19, 100, 54775807, -1, -2, -31, -100)
-        val subIndices = indices.slice(IntRange(1,10))
+        val subIndices = indices.slice(IntRange(1, 10))
         for (start in indices) {
             for (stop in indices) {
                 for (step in subIndices) {
