@@ -8,7 +8,7 @@ import org.jetbrains.dokka.gradle.DokkaTask
  * This generated file contains a sample Kotlin library project to get you started.
  */
 
-group = "jp.ChanTsune"
+group = "dev.tsune"
 version = "0.0.0"
 val siteUrl = "https://github.com/example/example"
 val githubUrl = "https://github.com/example/example"
@@ -146,8 +146,8 @@ bintray {
         vcsUrl = "https://github.com/ChanTsune/ktPyString.git"
 
         with(version) {
-            name = version.toString()
-            vcsTag = version.toString()
+            name = project.version.toString()
+            vcsTag = project.version.toString()
         }
     }
 }
