@@ -14,10 +14,15 @@ class Slice(stop: Int?) {
         this.step = step
     }
 
+    fun indices(length: Int): Triple<Int, Int, Int> {
+        val (f, s, t, _) = this.adjustIndex(length)
+        return Triple(f, s, t)
+    }
+
     override fun toString(): String = "Slice($start, $stop, $step)"
 
     fun adjustIndex(length: Int): Quad<Int, Int, Int, Int> {
-        val step: Int = if (this.step == 0) 1 else (this.step ?: 1)
+        val step: Int = this.step ?: 1
         var start: Int
         var stop: Int
         var upper: Int
