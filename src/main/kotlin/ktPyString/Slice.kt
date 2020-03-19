@@ -1,32 +1,46 @@
 package ktPyString
 
 import kotlin.math.sign
-
 import ktPyString.utils.Quad
 
-class Slice(stop: Int?) {
-    private var start: Int? = null
-    private var stop: Int? = stop
-    private var step: Int? = null
+/**
+ * Slice object representing the set of indices specified by range(start, stop, step).
+ * @param start indices specified start.
+ * @param stop indices specified stop.
+ * @param step indices specified step.
+ * @property start indices specified start.
+ * @property stop indices specified stop.
+ * @property step indices specified step.
+ */
+class Slice(
+    val start: Int?,
+    val stop: Int?,
+    val step: Int? = null
+) {
 
-    constructor(start: Int? = null, stop: Int? = null, step: Int? = null) : this(stop) {
-        this.start = start
-        this.step = step
-    }
+    constructor(stop: Int?) : this(null, stop)
 
+    /**
+     * Return adjusted slice indices
+     * @param length target sequence length.
+     * @return Triple(start, stop, step)
+     */
     fun indices(length: Int): Triple<Int, Int, Int> {
         val (f, s, t, _) = this.adjustIndex(length)
         return Triple(f, s, t)
     }
 
+    /**
+     * Returns string representation of the [Slice]
+     */
     override fun toString(): String = "Slice($start, $stop, $step)"
 
     fun adjustIndex(length: Int): Quad<Int, Int, Int, Int> {
         val step: Int = this.step ?: 1
         var start: Int
         var stop: Int
-        var upper: Int
-        var lower: Int
+        val upper: Int
+        val lower: Int
 
         // Convert step to an integer; raise for zero step.
         val stepSign: Int = step.sign
@@ -48,7 +62,7 @@ class Slice(stop: Int?) {
         if (this.start == null) {
             start = if (stepIsNegative) upper else lower
         } else {
-            start = this.start!!
+            start = this.start
 
             if (start.sign < 0) {
                 start += length
@@ -67,7 +81,7 @@ class Slice(stop: Int?) {
         if (this.stop == null) {
             stop = if (stepIsNegative) lower else upper
         } else {
-            stop = this.stop!!
+            stop = this.stop
 
             if (stop.sign < 0) {
                 stop += length
