@@ -20,7 +20,7 @@ internal class SliceTest {
 
     @Test
     fun testSliceInit3() {
-        val sliceObj = Slice(null, step = 2)
+        val sliceObj = Slice(null, 2)
         assertEquals(sliceObj, sliceObj)
     }
 
@@ -65,6 +65,6 @@ internal class SliceTest {
 
     @Test
     fun testIndies() {
-        assertEquals(Triple(0, 10, 1), Slice().indices(10))
+        assertEquals(Triple(0, 10, 1), Slice(10).indices(10))
     }
 }
