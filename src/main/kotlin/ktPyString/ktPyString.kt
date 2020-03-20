@@ -35,15 +35,15 @@ fun String.center(width: Int, fillchar: Char = ' '): String {
 }
 
 fun String.count(sub: String, start: Int? = null, end: Int? = null): Int {
-    val (start, end, _, length) = Slice(start, end).adjustIndex(this.length)
+    val (s, e, _, length) = Slice(start, end).adjustIndex(this.length)
     if (sub.isEmpty()) {
         return length + 1
     }
-    var n = this.find(sub, start, end)
+    var n = this.find(sub, s, e)
     var c = 0
     while (n != -1) {
         c += 1
-        n = this.find(sub, n + sub.length, end)
+        n = this.find(sub, n + sub.length, e)
     }
     return c
 }
@@ -53,22 +53,18 @@ fun String.endswith(suffix: String, start: Int? = null, end: Int? = null): Boole
 
 fun String.expandtabs(tabsize: Int = 8): String = this.replace("\t", " " * tabsize)
 
-//
-//fun makeTable(text: String, target: String): Map<Char, Int> {
-//    return mapOf()
-//}
 
 fun String.find(sub: String, start: Int? = null, end: Int? = null): Int {
     if (sub.isEmpty()) {
         return 0
     }
-    var (start, end, _, _) = Slice(start, end).adjustIndex(this.length)
-    val fin = end - sub.length
-    while (start <= fin) {
-        if (this[start, start + sub.length] == sub) {
-            return start
+    var (s, e, _, _) = Slice(start, end).adjustIndex(this.length)
+    val fin = e - sub.length
+    while (s <= fin) {
+        if (this[s, s + sub.length] == sub) {
+            return s
         }
-        ++start
+        ++s
     }
     return -1
 }
@@ -335,8 +331,8 @@ private fun String._rsplit(sep: String, maxsplit: Int): List<String> {
     val result: MutableList<String> = mutableListOf()
     var prevIndex = Int.MAX_VALUE
     val sep_len = sep.length
-    var maxsplit = maxsplit
-    while (maxsplit > 0) {
+    var maxSplit = maxsplit
+    while (maxSplit > 0) {
         var index = this.rfind(sep, 0, prevIndex)
         if (index == -1) {
             break
@@ -348,9 +344,9 @@ private fun String._rsplit(sep: String, maxsplit: Int): List<String> {
         index -= 1
         prevIndex = index + 1
 
-        maxsplit -= 1
+        maxSplit -= 1
 
-        if (maxsplit <= 0) {
+        if (maxSplit <= 0) {
             break
         }
     }
@@ -363,11 +359,11 @@ private fun String._rsplit(maxsplit: Int): List<String> {
 }
 
 fun String.rsplit(sep: String? = null, maxsplit: Int = -1): List<String> {
-    var maxsplit = if (maxsplit.sign == -1) Int.MAX_VALUE else maxsplit
+    val maxSplit = if (maxsplit.sign == -1) Int.MAX_VALUE else maxsplit
     return if (sep != null && sep.isNotEmpty()) {
-        this._rsplit(sep, maxsplit)
+        this._rsplit(sep, maxSplit)
     } else {
-        this._rsplit(maxsplit)
+        this._rsplit(maxSplit)
     }
 }
 
@@ -380,11 +376,11 @@ fun String.rstrip(chars: String? = null): String {
 }
 
 private fun String._split(sep: String, maxsplit: Int): List<String> {
-    var maxsplit = maxsplit
+    var maxSplit = maxsplit
     val result: MutableList<String> = mutableListOf()
     var prevIndex = 0
     val sepLen = sep.length
-    while (maxsplit > 0) {
+    while (maxSplit > 0) {
         val index = this.find(sep, prevIndex)
         if (index == -1) {
             break
@@ -392,7 +388,7 @@ private fun String._split(sep: String, maxsplit: Int): List<String> {
         result.add(this[prevIndex, index])
         prevIndex = index + sepLen
 
-        maxsplit -= 1
+        maxSplit -= 1
     }
     result.add(this[prevIndex, null])
     return result
@@ -400,16 +396,16 @@ private fun String._split(sep: String, maxsplit: Int): List<String> {
 
 private fun String._split(maxsplit: Int): List<String> {
     val result: MutableList<String> = mutableListOf()
-    var maxsplit = maxsplit
+    var maxSplit = maxsplit
     var len = 0
     val strLength = this.length
     var strIndex = 0
-    while (strLength > strIndex && maxsplit > 0) {
+    while (strLength > strIndex && maxSplit > 0) {
         val chr = this[strIndex]
         if (chr.isWhiteSpace()) {
             if (len != 0) {
                 result.add(this[strIndex - len, strIndex])
-                maxsplit -= 1
+                maxSplit -= 1
                 len = 0
             }
         } else {
@@ -425,11 +421,11 @@ private fun String._split(maxsplit: Int): List<String> {
 }
 
 fun String.split(sep: String? = null, maxsplit: Int = -1): List<String> {
-    val maxsplit = if (maxsplit.sign == -1) Int.MAX_VALUE else maxsplit
+    val maxSplit = if (maxsplit.sign == -1) Int.MAX_VALUE else maxsplit
     return if (sep != null && sep.isNotEmpty()) {
-        this._split(sep, maxsplit)
+        this._split(sep, maxSplit)
     } else {
-        this._split(maxsplit)
+        this._split(maxSplit)
     }
 }
 

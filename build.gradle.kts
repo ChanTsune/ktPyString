@@ -10,9 +10,6 @@ import org.jetbrains.dokka.gradle.DokkaTask
 
 group = "dev.tsune"
 version = "0.0.0"
-val siteUrl = "https://github.com/example/example"
-val githubUrl = "https://github.com/example/example"
-val scmConnection = "scm:git:https://github.com/example/example.git"
 
 plugins {
     // Apply the Kotlin JVM plugin to add support for Kotlin.
