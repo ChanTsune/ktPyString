@@ -512,9 +512,8 @@ fun String.zfill(width: Int): String {
     }
 }
 
-private fun Char.isWhiteSpace(): Boolean {
-    return "\u0020\u00A0\u2002\u2003\u2004\u2005\u2006\u2007\u2008\u2009\u200A\u200B\u3000\uFEFF\u0009".contains(this)
-}
+private fun Char.isWhiteSpace(): Boolean =
+    "\u0020\u00A0\u2002\u2003\u2004\u2005\u2006\u2007\u2008\u2009\u200A\u200B\u3000\uFEFF\u0009".contains(this)
 
 private fun Char.isCased(): Boolean =
     this.isUpperCase() || this.isLowerCase() || this.isTitleCase()
