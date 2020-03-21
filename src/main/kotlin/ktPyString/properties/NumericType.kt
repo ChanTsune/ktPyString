@@ -1763,7 +1763,9 @@ private val numericTable = mapOf(
     0x2F890 to (NumericType.NUMERIC to 9.0)
 )
 
-
+/**
+ * Return Character's [NumericType].
+ */
 val Char.numericType: NumericType
     get() {
         return (numericTable[this.toInt()] ?: (NumericType.NOT_NUMERIC to Double.MAX_VALUE)).first
