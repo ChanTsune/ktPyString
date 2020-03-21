@@ -483,16 +483,14 @@ fun String.title(): String {
     for (c in this) {
         val cIsCased = c.isCased()
         titled += if (prevCased) {
-            if (cIsCased && !c.isLowerCase()) {
-                c.toLowerCase()
-            } else {
-                c
+            when {
+                cIsCased && !c.isLowerCase() -> c.toLowerCase()
+                else -> c
             }
         } else {
-            if (c.isTitle()) {
-                c
-            } else {
-                c.toTitleCase()
+            when {
+                c.isTitle() -> c
+                else -> c.toTitleCase()
             }
         }
         prevCased = cIsCased

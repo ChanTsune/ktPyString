@@ -17,7 +17,10 @@ class Slice(
     val stop: Int?,
     val step: Int? = null
 ) {
-
+    /**
+     * Shortcut constractor. [start] and [step] will be 'null'
+     * @param stop indices specified stop.
+     */
     constructor(stop: Int?) : this(null, stop)
 
     /**
@@ -35,7 +38,7 @@ class Slice(
      */
     override fun toString(): String = "Slice($start, $stop, $step)"
 
-    fun adjustIndex(length: Int): Quad<Int, Int, Int, Int> {
+    internal fun adjustIndex(length: Int): Quad<Int, Int, Int, Int> {
         val step: Int = this.step ?: 1
         var start: Int
         var stop: Int

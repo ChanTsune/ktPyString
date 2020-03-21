@@ -2,8 +2,12 @@ package ktPyString.properties
 
 /**
  * Represents the character Numeric type in the Unicode specification.
+ * @param code NumericType code in the Unicode specification.
  */
 enum class NumericType(val code: String) {
+    /**
+     * Not NumericType in the Unicode specification.
+     */
     NOT_NUMERIC(""),
     /**
      * NumericType "De" in the Unicode specification.
