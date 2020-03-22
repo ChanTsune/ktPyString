@@ -5,6 +5,10 @@ import ktPyString.properties.numericType
 import kotlin.math.sign
 
 
+/**
+ * Returns a string containing this char sequence repeated [n] times.
+ * @param n How many repeat string.
+ */
 operator fun String.times(n: Int): String = this.repeat(if (n > 0) n else 0)
 
 operator fun String.get(slice: Slice): String {
