@@ -11,6 +11,10 @@ import kotlin.math.sign
  */
 operator fun String.times(n: Int): String = this.repeat(if (n > 0) n else 0)
 
+/**
+ * Return a string sub char sequence specified [slice].
+ * @param slice Specify sub sequence.
+ */
 operator fun String.get(slice: Slice): String {
     var (start, _, step, loop) = slice.adjustIndex(this.length)
     var result = ""
@@ -22,6 +26,12 @@ operator fun String.get(slice: Slice): String {
     return result
 }
 
+/**
+ * Return a string sub char sequence specified [start], [end] and [step].
+ * @param start indices specified start.
+ * @param end indices specified stop.
+ * @param step indices specified step.
+ */
 operator fun String.get(start: Int?, end: Int?, step: Int? = null): String = this[Slice(start, end, step)]
 
 // capitalize  ... exist in kotlin
