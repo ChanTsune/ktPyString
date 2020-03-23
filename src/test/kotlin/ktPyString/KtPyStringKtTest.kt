@@ -392,6 +392,12 @@ internal class KtPyStringKtTest {
     }
 
     @Test
+    fun startswithVarargs() {
+        assertTrue(digits.startswith("0","1"))
+        assertFalse(digits.startswith("1","2"))
+    }
+
+    @Test
     fun strip() {
         assertEquals("b", "abc".strip("ac"))
         assertEquals("", empty.strip())

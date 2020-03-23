@@ -464,8 +464,24 @@ fun String.splitlines(keepends: Boolean = false): List<String> {
     return splited
 }
 
+/**
+ * Return True if string starts with the [prefix], otherwise return False.
+ * With optional [start], test string beginning at that position.
+ * With optional [end], stop comparing string at that position.
+ */
 fun String.startswith(prefix: String, start: Int? = null, end: Int? = null): Boolean =
-    this[start, end].startsWith(prefix)
+    this[Slice(start, end)].startsWith(prefix)
+
+/**
+ * Return True if string starts with the [prefixes], otherwise return False.
+ * With optional [start], test string beginning at that position.
+ * With optional [end], stop comparing string at that position.
+ */
+fun String.startswith(vararg  prefixes: String, start: Int? = null, end: Int? = null): Boolean {
+    val sub = this[Slice(start, end)]
+    for (prefix in prefixes) if (sub.startsWith(prefix)) return true
+    return false
+}
 
 fun String.strip(chars: String? = null): String = this.lstrip(chars).rstrip(chars)
 
