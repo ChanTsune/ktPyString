@@ -51,6 +51,17 @@ fun String.count(sub: String, start: Int? = null, end: Int? = null): Int {
 fun String.endswith(suffix: String, start: Int? = null, end: Int? = null): Boolean =
     this[Slice(start, end)].endsWith(suffix)
 
+/**
+ * Return True if the string ends with the specified [suffixes], otherwise return False.
+ * With optional [start], test beginning at that position.
+ * With optional [end], stop comparing at that position.
+ */
+fun String.endswith(vararg suffixes: String, start: Int? = null, end: Int? = null): Boolean {
+    val sub = this[Slice(start,end)]
+    for( suffix in suffixes) if (sub.endsWith(suffix)) return true
+    return false
+}
+
 fun String.expandtabs(tabsize: Int = 8): String = this.replace("\t", " " * tabsize)
 
 
