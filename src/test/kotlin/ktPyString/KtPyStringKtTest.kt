@@ -105,6 +105,12 @@ internal class KtPyStringKtTest {
     }
 
     @Test
+    fun endswithVararg() {
+        assertTrue(digits.endswith("9", "8"))
+        assertFalse(digits.endswith("8", "7"))
+    }
+
+    @Test
     fun expandtabs() {
         assertEquals("        ", "\t".expandtabs())
         assertEquals("    ", "\t".expandtabs(4))
