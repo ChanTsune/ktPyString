@@ -105,6 +105,12 @@ internal class KtPyStringKtTest {
     }
 
     @Test
+    fun endswithVararg() {
+        assertTrue(digits.endswith("9", "8"))
+        assertFalse(digits.endswith("8", "7"))
+    }
+
+    @Test
     fun expandtabs() {
         assertEquals("        ", "\t".expandtabs())
         assertEquals("    ", "\t".expandtabs(4))
@@ -397,6 +403,12 @@ internal class KtPyStringKtTest {
         assertTrue(b.startswith("h"))
         assertFalse(b.startswith("hellow"))
         assertFalse(b.startswith("ha"))
+    }
+
+    @Test
+    fun startswithVarargs() {
+        assertTrue(digits.startswith("0","1"))
+        assertFalse(digits.startswith("1","2"))
     }
 
     @Test
