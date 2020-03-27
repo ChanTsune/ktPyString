@@ -115,6 +115,14 @@ internal class KtPyStringKtTest {
         assertEquals("        ", "\t".expandtabs())
         assertEquals("    ", "\t".expandtabs(4))
         assertEquals("", empty.expandtabs())
+        assertEquals("abc\rab      def\ng       hi","abc\rab\tdef\ng\thi".expandtabs())
+        assertEquals("abc\rab      def\ng       hi", "abc\rab\tdef\ng\thi".expandtabs(8))
+        assertEquals("abc\rab  def\ng   hi", "abc\rab\tdef\ng\thi".expandtabs(4))
+        assertEquals("abc\r\nab      def\ng       hi", "abc\r\nab\tdef\ng\thi".expandtabs())
+        assertEquals("abc\r\nab      def\ng       hi", "abc\r\nab\tdef\ng\thi".expandtabs(8))
+        assertEquals("abc\r\nab  def\ng   hi", "abc\r\nab\tdef\ng\thi".expandtabs(4))
+        assertEquals("abc\r\nab\r\ndef\ng\r\nhi", "abc\r\nab\r\ndef\ng\r\nhi".expandtabs(4))
+        assertEquals("  a\n b", " \ta\n\tb".expandtabs(1))
     }
 
     @Test
