@@ -5,8 +5,16 @@ import ktPyString.properties.numericType
 import kotlin.math.sign
 
 
+/**
+ * Returns a string containing this char sequence repeated [n] times.
+ * @param n How many repeat string.
+ */
 operator fun String.times(n: Int): String = this.repeat(if (n > 0) n else 0)
 
+/**
+ * Return a string sub char sequence specified [slice].
+ * @param slice Specify sub sequence.
+ */
 operator fun String.get(slice: Slice): String {
     var (start, _, step, loop) = slice.adjustIndex(this.length)
     var result = ""
@@ -18,12 +26,25 @@ operator fun String.get(slice: Slice): String {
     return result
 }
 
+/**
+ * Return a string sub char sequence specified [start], [end] and [step].
+ * @param start indices specified start.
+ * @param end indices specified stop.
+ * @param step indices specified step.
+ */
 operator fun String.get(start: Int?, end: Int?, step: Int? = null): String = this[Slice(start, end, step)]
 
 // capitalize  ... exist in kotlin
 
 // casefoled ... Bothersome
 
+/**
+ * Return centered in a string of length width.
+ * Padding is done using the specified [fillchar] (default is an ASCII space).
+ * The original string is returned if width is less than or equal to String.length.
+ * @param width Padded width.
+ * @param fillchar Padding character. default is an ASCII space.
+ */
 fun String.center(width: Int, fillchar: Char = ' '): String {
     if (this.length >= width) {
         return this
@@ -34,6 +55,13 @@ fun String.center(width: Int, fillchar: Char = ' '): String {
     return fillchar.toString() * l + this + fillchar.toString() * r
 }
 
+/**
+ * Return the number of non-overlapping occurrences of substring sub in the range [start, end].
+ * Optional arguments [start] and [end] are interpreted as in slice notation.
+ * @param sub
+ * @param start indices specified start.
+ * @param end indices specified stop.
+ */
 fun String.count(sub: String, start: Int? = null, end: Int? = null): Int {
     val (s, e, _, length) = Slice(start, end).adjustIndex(this.length)
     if (sub.isEmpty()) {
@@ -48,6 +76,11 @@ fun String.count(sub: String, start: Int? = null, end: Int? = null): Int {
     return c
 }
 
+/**
+ * Return True if the string ends with the specified [suffix], otherwise return False.
+ * With optional [start], test beginning at that position.
+ * With optional [end], stop comparing at that position.
+ */
 fun String.endswith(suffix: String, start: Int? = null, end: Int? = null): Boolean =
     this[Slice(start, end)].endsWith(suffix)
 
