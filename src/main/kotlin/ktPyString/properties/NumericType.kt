@@ -2,8 +2,12 @@ package ktPyString.properties
 
 /**
  * Represents the character Numeric type in the Unicode specification.
+ * @param code NumericType code in the Unicode specification.
  */
 enum class NumericType(val code: String) {
+    /**
+     * Not NumericType in the Unicode specification.
+     */
     NOT_NUMERIC(""),
     /**
      * NumericType "De" in the Unicode specification.
@@ -1763,7 +1767,9 @@ private val numericTable = mapOf(
     0x2F890 to (NumericType.NUMERIC to 9.0)
 )
 
-
+/**
+ * Return Character's [NumericType].
+ */
 val Char.numericType: NumericType
     get() {
         return (numericTable[this.toInt()] ?: (NumericType.NOT_NUMERIC to Double.MAX_VALUE)).first
