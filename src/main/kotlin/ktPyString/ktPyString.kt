@@ -524,16 +524,16 @@ fun String.rpartition(sep: String): Triple<String, String, String> {
 private fun String._rsplit(sep: String, maxsplit: Int): List<String> {
     val result: MutableList<String> = mutableListOf()
     var prevIndex = Int.MAX_VALUE
-    val sep_len = sep.length
+    val sepLen = sep.length
     var maxSplit = maxsplit
     while (maxSplit > 0) {
         var index = this.rfind(sep, 0, prevIndex)
         if (index == -1) {
             break
         }
-        index += sep_len
+        index += sepLen
         result.add(0, this[index, prevIndex])
-        index -= sep_len
+        index -= sepLen
 
         index -= 1
         prevIndex = index + 1
