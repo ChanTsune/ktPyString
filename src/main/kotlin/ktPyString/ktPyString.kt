@@ -34,6 +34,8 @@ operator fun String.get(slice: Slice): String {
  */
 operator fun String.get(start: Int?, end: Int?, step: Int? = null): String = this[Slice(start, end, step)]
 
+internal fun Char.repeat(n: Int): String = String(CharArray(n) { this })
+
 // capitalize  ... exist in kotlin
 
 // casefoled ... Bothersome
@@ -45,15 +47,15 @@ operator fun String.get(start: Int?, end: Int?, step: Int? = null): String = thi
  * @param width Padded width.
  * @param fillchar Padding character. default is an ASCII space.
  */
-fun String.center(width: Int, fillchar: Char = ' '): String {
-    if (this.length >= width) {
-        return this
+fun String.center(width: Int, fillchar: Char = ' '): String =
+    if (length >= width)
+        this
+    else
+    (width - length).let {
+        val r = it / 2
+        val l = r + it % 2
+        fillchar.repeat(l) + this + fillchar.repeat(r)
     }
-    var l: Int = width - length
-    val r: Int = l / 2
-    l = r + l % 2
-    return fillchar.toString() * l + this + fillchar.toString() * r
-}
 
 /**
  * Return the number of non-overlapping occurrences of substring sub in the range [start, end].
@@ -367,13 +369,8 @@ fun String.join(iterable: List<String>): String {
  * @param width Padded width.
  * @param fillchar Padding character. default is an ASCII space.
  */
-fun String.ljust(width: Int, fillchar: Char = ' '): String {
-    if (this.length >= width) {
-        return this
-    }
-    val filllen = width - this.length
-    return this + fillchar.toString() * filllen
-}
+fun String.ljust(width: Int, fillchar: Char = ' '): String =
+    if (length >= width) this else this + fillchar.repeat(width - length)
 
 /**
  * Return a copy of the string with all the cased characters converted to lowercase.
@@ -489,14 +486,8 @@ fun String.rindex(sub: String, start: Int? = null, end: Int? = null): Int {
  * @param width Padded width.
  * @param fillchar Padding character. default is an ASCII space.
  */
-fun String.rjust(width: Int, fillchar: Char = ' '): String {
-    return if (this.length >= width) {
-        this
-    } else {
-        val filllen = width - this.length
-        fillchar.toString() * filllen + this
-    }
-}
+fun String.rjust(width: Int, fillchar: Char = ' '): String =
+    if (length >= width) this else fillchar.repeat(width - length) + this
 
 /**
  * Split the string at the last occurrence of [sep], and return a Triple containing the part before the separator, the separator itself, and the part after the separator.
