@@ -467,7 +467,7 @@ fun String.rfind(sub: String, start: Int? = null, end: Int? = null): Int {
     }
     var (s, e, _, _) = Slice(start, end).adjustIndex(this.length)
     if ((e - s) < sub.length) {
-        return -1;
+        return -1
     }
     s -= 1
     var fin = e - sub.length
