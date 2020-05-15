@@ -170,17 +170,9 @@ fun String.index(sub: String, start: Int? = null, end: Int? = null): Int {
     return if (tmp == -1) throw Exception("ValueError: substring not found") else tmp
 }
 
-private fun String.isX(empty: Boolean, conditional: (Char) -> Boolean): Boolean {
-    if (this.isEmpty()) {
-        return empty
-    }
-    for (i in this) {
-        if (!conditional(i)) {
-            return false
-        }
-    }
-    return true
-}
+internal inline fun String.isX(empty: Boolean, conditional: (Char) -> Boolean): Boolean =
+    if (this.isEmpty()) empty else this.all(conditional)
+
 
 /**
  * Return True if all characters in the string are alphanumeric and there is at least one character, False otherwise.
