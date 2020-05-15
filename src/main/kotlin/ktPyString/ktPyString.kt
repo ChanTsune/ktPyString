@@ -90,9 +90,8 @@ fun String.endswith(suffix: String, start: Int? = null, end: Int? = null): Boole
  * With optional [end], stop comparing at that position.
  */
 fun String.endswith(vararg suffixes: String, start: Int? = null, end: Int? = null): Boolean {
-    val sub = this[Slice(start,end)]
-    for( suffix in suffixes) if (sub.endsWith(suffix)) return true
-    return false
+    val sub = this[Slice(start, end)]
+    return suffixes.any { sub.endsWith(it) }
 }
 
 /**
@@ -697,8 +696,7 @@ fun String.startswith(prefix: String, start: Int? = null, end: Int? = null): Boo
  */
 fun String.startswith(vararg  prefixes: String, start: Int? = null, end: Int? = null): Boolean {
     val sub = this[Slice(start, end)]
-    for (prefix in prefixes) if (sub.startsWith(prefix)) return true
-    return false
+    return prefixes.any{ sub.startsWith(it) }
 }
 
 /**
