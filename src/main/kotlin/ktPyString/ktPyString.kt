@@ -16,7 +16,7 @@ operator fun String.times(n: Int): String = this.repeat(if (n > 0) n else 0)
  * @param slice Specify sub sequence.
  */
 operator fun String.get(slice: Slice): String {
-    var (start, _, step, loop) = slice.adjustIndex(this.length)
+    var (start, _, step, loop) = slice.adjustIndex(length)
     var result = ""
 
     for (i in 0 until loop) {
@@ -65,7 +65,7 @@ fun String.center(width: Int, fillchar: Char = ' '): String =
  * @param end indices specified stop.
  */
 fun String.count(sub: String, start: Int? = null, end: Int? = null): Int {
-    val (s, e, _, length) = Slice(start, end).adjustIndex(this.length)
+    val (s, e, _, length) = Slice(start, end).adjustIndex(length)
     if (sub.isEmpty()) {
         return length + 1
     }
@@ -141,7 +141,7 @@ fun String.find(sub: String, start: Int? = null, end: Int? = null): Int {
     if (sub.isEmpty()) {
         return 0
     }
-    var (s, e, _, _) = Slice(start, end).adjustIndex(this.length)
+    var (s, e, _, _) = Slice(start, end).adjustIndex(length)
     val fin = e - sub.length
     while (s <= fin) {
         if (this[s, s + sub.length] == sub) {
@@ -451,9 +451,9 @@ fun String.replace(old: String, new: String, maxcount: Int = Int.MAX_VALUE): Str
  */
 fun String.rfind(sub: String, start: Int? = null, end: Int? = null): Int {
     if (sub.isEmpty()) {
-        return this.length
+        return length
     }
-    var (s, e, _, _) = Slice(start, end).adjustIndex(this.length)
+    var (s, e, _, _) = Slice(start, end).adjustIndex(length)
     if ((e - s) < sub.length) {
         return -1
     }
