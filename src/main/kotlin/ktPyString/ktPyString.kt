@@ -676,9 +676,9 @@ fun String.startswith(prefix: String, start: Int? = null, end: Int? = null): Boo
  * With optional [start], test string beginning at that position.
  * With optional [end], stop comparing string at that position.
  */
-fun String.startswith(vararg  prefixes: String, start: Int? = null, end: Int? = null): Boolean {
+fun String.startswith(vararg prefixes: String, start: Int? = null, end: Int? = null): Boolean {
     val sub = this[Slice(start, end)]
-    return prefixes.any{ sub.startsWith(it) }
+    return prefixes.any { sub.startsWith(it) }
 }
 
 /**
