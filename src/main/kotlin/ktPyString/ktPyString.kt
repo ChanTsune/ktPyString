@@ -109,24 +109,26 @@ fun String.endswith(vararg suffixes: String, start: Int? = null, end: Int? = nul
  * @param tabsize Size of tab('\t').
  */
 fun String.expandtabs(tabsize: Int = 8): String {
-    var result = ""
+    val builder = StringBuilder(
+        length + count { it == '\t' } * tabsize
+    )
     var linePos = 0
     for (ch in this) {
         if (ch == '\t') {
             if (tabsize > 0) {
                 val incr = tabsize - (linePos % tabsize)
                 linePos += incr
-                result += " " * incr
+                builder.append(' '.repeat(incr))
             }
         }
         else {
             linePos++
-            result += ch
+            builder.append(ch)
             if (ch == '\n' || ch == '\r')
                 linePos = 0
         }
     }
-    return result
+    return builder.toString()
 }
 
 /**
@@ -706,24 +708,26 @@ fun String.swapcase(): String = map { c ->
  * Return a titlecased version of the string where words start with an uppercase character and the remaining characters are lowercase.
  */
 fun String.title(): String {
-    var titled = ""
+    val builder = StringBuilder(length)
     var prevCased = false
     for (c in this) {
         val cIsCased = c.isCased()
-        titled += if (prevCased) {
-            when {
-                cIsCased && !c.isLowerCase() -> c.toLowerCase()
-                else -> c
+        builder.append(
+            if (prevCased) {
+                when {
+                    cIsCased && !c.isLowerCase() -> c.toLowerCase()
+                    else -> c
+                }
+            } else {
+                when {
+                    c.isTitle() -> c
+                    else -> c.toTitleCase()
+                }
             }
-        } else {
-            when {
-                c.isTitle() -> c
-                else -> c.toTitleCase()
-            }
-        }
+        )
         prevCased = cIsCased
     }
-    return titled
+    return builder.toString()
 }
 
 //fun String.translate(table: Map<Int, String>): String {
