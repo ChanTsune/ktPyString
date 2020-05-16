@@ -506,12 +506,10 @@ private fun String._rsplit(sep: String, maxsplit: Int): List<String> {
         if (index == -1) {
             break
         }
-        index += sepLen
-        result.add(0, this[index, prevIndex])
-        index -= sepLen
+        result.add(0, this[index + sepLen, prevIndex])
 
+        prevIndex = index
         index -= 1
-        prevIndex = index + 1
 
         maxSplit -= 1
 
