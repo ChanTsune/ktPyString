@@ -17,13 +17,13 @@ operator fun String.times(n: Int): String = repeat(if (n > 0) n else 0)
  */
 operator fun String.get(slice: Slice): String {
     var (start, _, step, loop) = slice.adjustIndex(length)
-    var result = ""
+    val builder = StringBuilder(length)
 
     for (i in 0 until loop) {
-        result += this[start]
+        builder.append(this[start])
         start += step
     }
-    return result
+    return builder.toString()
 }
 
 /**
