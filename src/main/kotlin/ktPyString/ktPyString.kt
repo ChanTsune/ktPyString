@@ -351,16 +351,7 @@ fun String.isupper(): Boolean {
  * Return a string which is the concatenation of the strings in [iterable].
  * @param iterable
  */
-fun String.join(iterable: List<String>): String {
-    var result = ""
-    var sep = ""
-    for (item in iterable) {
-        result += sep
-        result += item
-        sep = this
-    }
-    return result
-}
+fun String.join(iterable: List<String>): String = iterable.joinToString(this)
 
 /**
  * Return the string left justified in a string of length width.
