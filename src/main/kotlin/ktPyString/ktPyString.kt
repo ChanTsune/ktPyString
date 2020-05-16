@@ -9,7 +9,7 @@ import kotlin.math.sign
  * Returns a string containing this char sequence repeated [n] times.
  * @param n How many repeat string.
  */
-operator fun String.times(n: Int): String = this.repeat(if (n > 0) n else 0)
+operator fun String.times(n: Int): String = repeat(if (n > 0) n else 0)
 
 /**
  * Return a string sub char sequence specified [slice].
@@ -172,7 +172,7 @@ fun String.index(sub: String, start: Int? = null, end: Int? = null): Int {
 }
 
 internal inline fun String.isX(empty: Boolean, conditional: (Char) -> Boolean): Boolean =
-    if (this.isEmpty()) empty else this.all(conditional)
+    if (isEmpty()) empty else all(conditional)
 
 
 /**
@@ -301,7 +301,7 @@ fun String.isspace(): Boolean {
     }
 }
 
-private fun Char.isTitle(): Boolean = this == this.toTitleCase()
+private fun Char.isTitle(): Boolean = this == toTitleCase()
 
 /**
  * Return True if the string is a titlecased string and there is at least one character,
@@ -375,7 +375,7 @@ fun String.ljust(width: Int, fillchar: Char = ' '): String =
 /**
  * Return a copy of the string with all the cased characters converted to lowercase.
  */
-fun String.lower(): String = this.toLowerCase()
+fun String.lower(): String = toLowerCase()
 
 /**
  * Return a copy of the string with leading characters removed.
@@ -386,9 +386,9 @@ fun String.lower(): String = this.toLowerCase()
  */
 fun String.lstrip(chars: String? = null): String {
     return if (chars != null) {
-        this.dropWhile { c -> chars.contains(c) }
+        dropWhile { chars.contains(it) }
     } else {
-        this.dropWhile { c -> c.isWhiteSpace() } // 空白文字を除去するパターン
+        dropWhile { it.isWhiteSpace() } // 空白文字を除去するパターン
     }
 }
 
@@ -531,7 +531,7 @@ private fun String._rsplit(sep: String, maxsplit: Int): List<String> {
 }
 
 private fun String._rsplit(maxsplit: Int): List<String> {
-    return this.reversed()._split(maxsplit).map { str -> str.reversed() }.reversed()
+    return reversed()._split(maxsplit).map { it.reversed() }.reversed()
 }
 
 /**
@@ -697,13 +697,13 @@ fun String.startswith(vararg  prefixes: String, start: Int? = null, end: Int? = 
  * The chars argument is not a prefix or suffix; rather, all combinations of its values are stripped.
  * @param chars Specifying the set of characters to be removed.
  */
-fun String.strip(chars: String? = null): String = this.lstrip(chars).rstrip(chars)
+fun String.strip(chars: String? = null): String = lstrip(chars).rstrip(chars)
 
 /**
  * Return a copy of the string with uppercase characters converted to lowercase and vice versa.
  * Note that it is not necessarily true that s.swapcase().swapcase() == s.
  */
-fun String.swapcase(): String = this.map { c ->
+fun String.swapcase(): String = map { c ->
     when {
         c.isLowerCase() -> c.toUpperCase()
         c.isUpperCase() -> c.toLowerCase()
@@ -743,7 +743,7 @@ fun String.title(): String {
  * Note that s.upper().isupper() might be False if s contains uncased characters or if the Unicode category of the resulting character(s) is not “Lu” (Letter, uppercase), but e.g. “Lt” (Letter, titlecase).
  * The uppercasing algorithm used is described in section 3.13 of the Unicode Standard.
  */
-fun String.upper() = this.toUpperCase()
+fun String.upper(): String = toUpperCase()
 
 /**
  * Return a copy of the string left filled with ASCII '0' digits to make a string of length [width].
@@ -762,4 +762,4 @@ private fun Char.isWhiteSpace(): Boolean =
     "\u0020\u00A0\u2002\u2003\u2004\u2005\u2006\u2007\u2008\u2009\u200A\u200B\u3000\uFEFF\u0009".contains(this)
 
 private fun Char.isCased(): Boolean =
-    this.isUpperCase() || this.isLowerCase() || this.isTitleCase()
+    isUpperCase() || isLowerCase() || isTitleCase()
