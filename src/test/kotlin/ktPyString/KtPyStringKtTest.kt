@@ -414,7 +414,7 @@ internal class KtPyStringKtTest {
     @Test
     fun strip() {
         assertEquals("b", "abc".strip("ac"))
-        assertEquals("", empty.strip())
+        assertEquals("", empty.strip(null))
     }
 
     @Test
