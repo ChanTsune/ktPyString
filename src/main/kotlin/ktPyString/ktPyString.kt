@@ -735,6 +735,12 @@ fun String.zfill(width: Int): String {
     }
 }
 
+internal inline fun <R> String.mapToString(builder: StringBuilder = StringBuilder(length), transform: (Char) -> R): String {
+    for (item in this)
+        builder.append(transform(item))
+    return builder.toString()
+}
+
 private fun Char.isWhiteSpace(): Boolean =
     "\u0020\u00A0\u2002\u2003\u2004\u2005\u2006\u2007\u2008\u2009\u200A\u200B\u3000\uFEFF\u0009".contains(this)
 
