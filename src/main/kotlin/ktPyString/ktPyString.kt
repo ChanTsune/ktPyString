@@ -143,15 +143,9 @@ fun String.find(sub: String, start: Int? = null, end: Int? = null): Int {
     if (sub.isEmpty()) {
         return 0
     }
-    var (s, e, _, _) = Slice(start, end).adjustIndex(length)
-    val fin = e - sub.length
-    while (s <= fin) {
-        if (this[s, s + sub.length] == sub) {
-            return s
-        }
-        ++s
-    }
-    return -1
+    val (s, e, _, _) = Slice(start, end).adjustIndex(length)
+    val i = this[s, e].indexOf(sub, ignoreCase = false)
+    return if (i != -1) s + i else -1
 }
 
 //fun String.format() {
@@ -446,19 +440,9 @@ fun String.rfind(sub: String, start: Int? = null, end: Int? = null): Int {
     if (sub.isEmpty()) {
         return length
     }
-    var (s, e, _, _) = Slice(start, end).adjustIndex(length)
-    if ((e - s) < sub.length) {
-        return -1
-    }
-    s -= 1
-    var fin = e - sub.length
-    while (fin != s) {
-        if (this[fin, fin + sub.length] == sub) {
-            return fin
-        }
-        fin -= 1
-    }
-    return -1
+    val (s, e, _, _) = Slice(start, end).adjustIndex(length)
+    val i = this[s, e].lastIndexOf(sub, ignoreCase = false)
+    return if (i != -1) s + i else -1
 }
 
 /**
