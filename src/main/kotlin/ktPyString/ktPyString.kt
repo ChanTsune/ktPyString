@@ -678,14 +678,13 @@ fun String.strip(chars: String? = null): String = lstrip(chars).rstrip(chars)
  * Return a copy of the string with uppercase characters converted to lowercase and vice versa.
  * Note that it is not necessarily true that s.swapcase().swapcase() == s.
  */
-fun String.swapcase(): String = map { c ->
+fun String.swapcase(): String = mapToString { c ->
     when {
         c.isLowerCase() -> c.toUpperCase()
         c.isUpperCase() -> c.toLowerCase()
         else -> c
-    }.toString()
-}.reduce { s1, s2 -> s1 + s2 }
-
+    }
+}
 /**
  * Return a titlecased version of the string where words start with an uppercase character and the remaining characters are lowercase.
  */
