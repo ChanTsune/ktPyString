@@ -23,7 +23,7 @@ enum class NumericType(val code: String) {
     NUMERIC("Nu")
 }
 
-private val numericTable = mapOf(
+internal val numericTable = hashMapOf(
     0x30 to (NumericType.DECIMAL to 0.0),
     0x31 to (NumericType.DECIMAL to 1.0),
     0x32 to (NumericType.DECIMAL to 2.0),
