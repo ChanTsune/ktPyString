@@ -29,7 +29,7 @@ class Slice(
      * @return Triple(start, stop, step)
      */
     fun indices(length: Int): Triple<Int, Int, Int> {
-        val (f, s, t, _) = this.adjustIndex(length)
+        val (f, s, t, _) = adjustIndex(length)
         return Triple(f, s, t)
     }
 

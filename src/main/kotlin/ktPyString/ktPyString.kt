@@ -9,21 +9,21 @@ import kotlin.math.sign
  * Returns a string containing this char sequence repeated [n] times.
  * @param n How many repeat string.
  */
-operator fun String.times(n: Int): String = this.repeat(if (n > 0) n else 0)
+operator fun String.times(n: Int): String = repeat(if (n > 0) n else 0)
 
 /**
  * Return a string sub char sequence specified [slice].
  * @param slice Specify sub sequence.
  */
 operator fun String.get(slice: Slice): String {
-    var (start, _, step, loop) = slice.adjustIndex(this.length)
-    var result = ""
+    var (start, _, step, loop) = slice.adjustIndex(length)
+    val builder = StringBuilder(length)
 
     for (i in 0 until loop) {
-        result += this[start]
+        builder.append(this[start])
         start += step
     }
-    return result
+    return builder.toString()
 }
 
 /**
@@ -33,6 +33,8 @@ operator fun String.get(slice: Slice): String {
  * @param step indices specified step.
  */
 operator fun String.get(start: Int?, end: Int?, step: Int? = null): String = this[Slice(start, end, step)]
+
+internal fun Char.repeat(n: Int): String = String(CharArray(n) { this })
 
 // capitalize  ... exist in kotlin
 
@@ -45,15 +47,15 @@ operator fun String.get(start: Int?, end: Int?, step: Int? = null): String = thi
  * @param width Padded width.
  * @param fillchar Padding character. default is an ASCII space.
  */
-fun String.center(width: Int, fillchar: Char = ' '): String {
-    if (this.length >= width) {
-        return this
+fun String.center(width: Int, fillchar: Char = ' '): String =
+    if (length >= width)
+        this
+    else
+    (width - length).let {
+        val r = it / 2
+        val l = r + it % 2
+        fillchar.repeat(l) + this + fillchar.repeat(r)
     }
-    var l: Int = width - length
-    val r: Int = l / 2
-    l = r + l % 2
-    return fillchar.toString() * l + this + fillchar.toString() * r
-}
 
 /**
  * Return the number of non-overlapping occurrences of substring sub in the range [start, end].
@@ -63,7 +65,7 @@ fun String.center(width: Int, fillchar: Char = ' '): String {
  * @param end indices specified stop.
  */
 fun String.count(sub: String, start: Int? = null, end: Int? = null): Int {
-    val (s, e, _, length) = Slice(start, end).adjustIndex(this.length)
+    val (s, e, _, length) = Slice(start, end).adjustIndex(length)
     if (sub.isEmpty()) {
         return length + 1
     }
@@ -90,9 +92,8 @@ fun String.endswith(suffix: String, start: Int? = null, end: Int? = null): Boole
  * With optional [end], stop comparing at that position.
  */
 fun String.endswith(vararg suffixes: String, start: Int? = null, end: Int? = null): Boolean {
-    val sub = this[Slice(start,end)]
-    for( suffix in suffixes) if (sub.endsWith(suffix)) return true
-    return false
+    val sub = this[Slice(start, end)]
+    return suffixes.any { sub.endsWith(it) }
 }
 
 /**
@@ -108,24 +109,26 @@ fun String.endswith(vararg suffixes: String, start: Int? = null, end: Int? = nul
  * @param tabsize Size of tab('\t').
  */
 fun String.expandtabs(tabsize: Int = 8): String {
-    var result = ""
+    val builder = StringBuilder(
+        length + count { it == '\t' } * tabsize
+    )
     var linePos = 0
     for (ch in this) {
         if (ch == '\t') {
             if (tabsize > 0) {
                 val incr = tabsize - (linePos % tabsize)
                 linePos += incr
-                result += " " * incr
+                builder.append(' '.repeat(incr))
             }
         }
         else {
             linePos++
-            result += ch
+            builder.append(ch)
             if (ch == '\n' || ch == '\r')
                 linePos = 0
         }
     }
-    return result
+    return builder.toString()
 }
 
 /**
@@ -140,15 +143,9 @@ fun String.find(sub: String, start: Int? = null, end: Int? = null): Int {
     if (sub.isEmpty()) {
         return 0
     }
-    var (s, e, _, _) = Slice(start, end).adjustIndex(this.length)
-    val fin = e - sub.length
-    while (s <= fin) {
-        if (this[s, s + sub.length] == sub) {
-            return s
-        }
-        ++s
-    }
-    return -1
+    val (s, e, _, _) = Slice(start, end).adjustIndex(length)
+    val i = this[s, e].indexOf(sub, ignoreCase = false)
+    return if (i != -1) s + i else -1
 }
 
 //fun String.format() {
@@ -170,17 +167,9 @@ fun String.index(sub: String, start: Int? = null, end: Int? = null): Int {
     return if (tmp == -1) throw Exception("ValueError: substring not found") else tmp
 }
 
-private fun String.isX(empty: Boolean, conditional: (Char) -> Boolean): Boolean {
-    if (this.isEmpty()) {
-        return empty
-    }
-    for (i in this) {
-        if (!conditional(i)) {
-            return false
-        }
-    }
-    return true
-}
+internal inline fun String.isX(empty: Boolean, conditional: (Char) -> Boolean): Boolean =
+    if (isEmpty()) empty else all(conditional)
+
 
 /**
  * Return True if all characters in the string are alphanumeric and there is at least one character, False otherwise.
@@ -308,7 +297,7 @@ fun String.isspace(): Boolean {
     }
 }
 
-private fun Char.isTitle(): Boolean = this == this.toTitleCase()
+private fun Char.isTitle(): Boolean = this == toTitleCase()
 
 /**
  * Return True if the string is a titlecased string and there is at least one character,
@@ -358,16 +347,7 @@ fun String.isupper(): Boolean {
  * Return a string which is the concatenation of the strings in [iterable].
  * @param iterable
  */
-fun String.join(iterable: List<String>): String {
-    var result = ""
-    var sep = ""
-    for (item in iterable) {
-        result += sep
-        result += item
-        sep = this
-    }
-    return result
-}
+fun String.join(iterable: List<String>): String = iterable.joinToString(this)
 
 /**
  * Return the string left justified in a string of length width.
@@ -376,18 +356,13 @@ fun String.join(iterable: List<String>): String {
  * @param width Padded width.
  * @param fillchar Padding character. default is an ASCII space.
  */
-fun String.ljust(width: Int, fillchar: Char = ' '): String {
-    if (this.length >= width) {
-        return this
-    }
-    val filllen = width - this.length
-    return this + fillchar.toString() * filllen
-}
+fun String.ljust(width: Int, fillchar: Char = ' '): String =
+    if (length >= width) this else this + fillchar.repeat(width - length)
 
 /**
  * Return a copy of the string with all the cased characters converted to lowercase.
  */
-fun String.lower(): String = this.toLowerCase()
+fun String.lower(): String = toLowerCase()
 
 /**
  * Return a copy of the string with leading characters removed.
@@ -398,9 +373,9 @@ fun String.lower(): String = this.toLowerCase()
  */
 fun String.lstrip(chars: String? = null): String {
     return if (chars != null) {
-        this.dropWhile { c -> chars.contains(c) }
+        dropWhile { chars.contains(it) }
     } else {
-        this.dropWhile { c -> c.isWhiteSpace() } // 空白文字を除去するパターン
+        dropWhile { it.isWhiteSpace() } // 空白文字を除去するパターン
     }
 }
 
@@ -463,21 +438,11 @@ fun String.replace(old: String, new: String, maxcount: Int = Int.MAX_VALUE): Str
  */
 fun String.rfind(sub: String, start: Int? = null, end: Int? = null): Int {
     if (sub.isEmpty()) {
-        return this.length
+        return length
     }
-    var (s, e, _, _) = Slice(start, end).adjustIndex(this.length)
-    if ((e - s) < sub.length) {
-        return -1;
-    }
-    s -= 1
-    var fin = e - sub.length
-    while (fin != s) {
-        if (this[fin, fin + sub.length] == sub) {
-            return fin
-        }
-        fin -= 1
-    }
-    return -1
+    val (s, e, _, _) = Slice(start, end).adjustIndex(length)
+    val i = this[s, e].lastIndexOf(sub, ignoreCase = false)
+    return if (i != -1) s + i else -1
 }
 
 /**
@@ -498,14 +463,8 @@ fun String.rindex(sub: String, start: Int? = null, end: Int? = null): Int {
  * @param width Padded width.
  * @param fillchar Padding character. default is an ASCII space.
  */
-fun String.rjust(width: Int, fillchar: Char = ' '): String {
-    return if (this.length >= width) {
-        this
-    } else {
-        val filllen = width - this.length
-        fillchar.toString() * filllen + this
-    }
-}
+fun String.rjust(width: Int, fillchar: Char = ' '): String =
+    if (length >= width) this else fillchar.repeat(width - length) + this
 
 /**
  * Split the string at the last occurrence of [sep], and return a Triple containing the part before the separator, the separator itself, and the part after the separator.
@@ -524,19 +483,17 @@ fun String.rpartition(sep: String): Triple<String, String, String> {
 private fun String._rsplit(sep: String, maxsplit: Int): List<String> {
     val result: MutableList<String> = mutableListOf()
     var prevIndex = Int.MAX_VALUE
-    val sep_len = sep.length
+    val sepLen = sep.length
     var maxSplit = maxsplit
     while (maxSplit > 0) {
         var index = this.rfind(sep, 0, prevIndex)
         if (index == -1) {
             break
         }
-        index += sep_len
-        result.add(0, this[index, prevIndex])
-        index -= sep_len
+        result.add(0, this[index + sepLen, prevIndex])
 
+        prevIndex = index
         index -= 1
-        prevIndex = index + 1
 
         maxSplit -= 1
 
@@ -549,7 +506,7 @@ private fun String._rsplit(sep: String, maxsplit: Int): List<String> {
 }
 
 private fun String._rsplit(maxsplit: Int): List<String> {
-    return this.reversed()._split(maxsplit).map { str -> str.reversed() }.reversed()
+    return reversed()._split(maxsplit).map { it.reversed() }.reversed()
 }
 
 /**
@@ -703,10 +660,9 @@ fun String.startswith(prefix: String, start: Int? = null, end: Int? = null): Boo
  * With optional [start], test string beginning at that position.
  * With optional [end], stop comparing string at that position.
  */
-fun String.startswith(vararg  prefixes: String, start: Int? = null, end: Int? = null): Boolean {
+fun String.startswith(vararg prefixes: String, start: Int? = null, end: Int? = null): Boolean {
     val sub = this[Slice(start, end)]
-    for (prefix in prefixes) if (sub.startsWith(prefix)) return true
-    return false
+    return prefixes.any { sub.startsWith(it) }
 }
 
 /**
@@ -716,42 +672,43 @@ fun String.startswith(vararg  prefixes: String, start: Int? = null, end: Int? = 
  * The chars argument is not a prefix or suffix; rather, all combinations of its values are stripped.
  * @param chars Specifying the set of characters to be removed.
  */
-fun String.strip(chars: String? = null): String = this.lstrip(chars).rstrip(chars)
+fun String.strip(chars: String? = null): String = lstrip(chars).rstrip(chars)
 
 /**
  * Return a copy of the string with uppercase characters converted to lowercase and vice versa.
  * Note that it is not necessarily true that s.swapcase().swapcase() == s.
  */
-fun String.swapcase(): String = this.map { c ->
+fun String.swapcase(): String = mapToString { c ->
     when {
         c.isLowerCase() -> c.toUpperCase()
         c.isUpperCase() -> c.toLowerCase()
         else -> c
-    }.toString()
-}.reduce { s1, s2 -> s1 + s2 }
-
+    }
+}
 /**
  * Return a titlecased version of the string where words start with an uppercase character and the remaining characters are lowercase.
  */
 fun String.title(): String {
-    var titled = ""
+    val builder = StringBuilder(length)
     var prevCased = false
     for (c in this) {
         val cIsCased = c.isCased()
-        titled += if (prevCased) {
-            when {
-                cIsCased && !c.isLowerCase() -> c.toLowerCase()
-                else -> c
+        builder.append(
+            if (prevCased) {
+                when {
+                    cIsCased && !c.isLowerCase() -> c.toLowerCase()
+                    else -> c
+                }
+            } else {
+                when {
+                    c.isTitle() -> c
+                    else -> c.toTitleCase()
+                }
             }
-        } else {
-            when {
-                c.isTitle() -> c
-                else -> c.toTitleCase()
-            }
-        }
+        )
         prevCased = cIsCased
     }
-    return titled
+    return builder.toString()
 }
 
 //fun String.translate(table: Map<Int, String>): String {
@@ -762,7 +719,7 @@ fun String.title(): String {
  * Note that s.upper().isupper() might be False if s contains uncased characters or if the Unicode category of the resulting character(s) is not “Lu” (Letter, uppercase), but e.g. “Lt” (Letter, titlecase).
  * The uppercasing algorithm used is described in section 3.13 of the Unicode Standard.
  */
-fun String.upper() = this.toUpperCase()
+fun String.upper(): String = toUpperCase()
 
 /**
  * Return a copy of the string left filled with ASCII '0' digits to make a string of length [width].
@@ -777,8 +734,14 @@ fun String.zfill(width: Int): String {
     }
 }
 
+internal inline fun <R> String.mapToString(builder: StringBuilder = StringBuilder(length), transform: (Char) -> R): String {
+    for (item in this)
+        builder.append(transform(item))
+    return builder.toString()
+}
+
 private fun Char.isWhiteSpace(): Boolean =
     "\u0020\u00A0\u2002\u2003\u2004\u2005\u2006\u2007\u2008\u2009\u200A\u200B\u3000\uFEFF\u0009".contains(this)
 
 private fun Char.isCased(): Boolean =
-    this.isUpperCase() || this.isLowerCase() || this.isTitleCase()
+    isUpperCase() || isLowerCase() || isTitleCase()

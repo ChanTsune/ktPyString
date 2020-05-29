@@ -48,15 +48,6 @@ dependencies {
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit")
 }
 
-sourceSets {
-    val examples by creating {
-        java {
-            compileClasspath += sourceSets.main.get().output
-            runtimeClasspath += sourceSets.main.get().output
-        }
-    }
-}
-
 //sources
 val sourcesJar by tasks.creating(Jar::class) {
     from(sourceSets.main.get().allSource)

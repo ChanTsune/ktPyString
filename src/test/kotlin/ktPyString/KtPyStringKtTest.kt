@@ -377,9 +377,9 @@ internal class KtPyStringKtTest {
     @Test
     fun splitWithArgument() {
         val expected1 = listOf("1", "1", "1", "1", "1")
-        val expected2 = listOf("", "1", "1", "1", "1", "1", "");
-        val expected3 = listOf("-1", "1", "1", "1", "1-");
-        val expected4 = listOf("", "1", "", "1", "", "1", "", "1", "", "1", "");
+        val expected2 = listOf("", "1", "1", "1", "1", "1", "")
+        val expected3 = listOf("-1", "1", "1", "1", "1-")
+        val expected4 = listOf("", "1", "", "1", "", "1", "", "1", "", "1", "")
         assertEquals(expected1, "1,1,1,1,1".split(","))
         assertEquals(expected2, ",1,1,1,1,1,".split(","))
         assertEquals(expected3, "-1--1--1--1--1-".split("--"))
