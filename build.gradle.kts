@@ -9,7 +9,7 @@ import org.jetbrains.dokka.gradle.DokkaTask
  */
 
 group = "dev.tsune"
-version = "0.0.0"
+version = "1.0.0-beta1"
 
 plugins {
     // Apply the Kotlin JVM plugin to add support for Kotlin.
