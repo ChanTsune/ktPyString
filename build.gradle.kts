@@ -9,7 +9,7 @@ import org.jetbrains.dokka.gradle.DokkaTask
  */
 
 group = "dev.tsune"
-version = "0.0.0"
+version = "1.0.0-beta1"
 
 plugins {
     // Apply the Kotlin JVM plugin to add support for Kotlin.
@@ -46,15 +46,6 @@ dependencies {
 
     // Use the Kotlin JUnit integration.
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit")
-}
-
-sourceSets {
-    val examples by creating {
-        java {
-            compileClasspath += sourceSets.main.get().output
-            runtimeClasspath += sourceSets.main.get().output
-        }
-    }
 }
 
 //sources
