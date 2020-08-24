@@ -132,6 +132,9 @@ bintray {
         websiteUrl = "https://github.com/ChanTsune/ktPyString"
         issueTrackerUrl = "https://github.com/ChanTsune/ktPyString/issues"
         vcsUrl = "https://github.com/ChanTsune/ktPyString.git"
+        publicDownloadNumbers = true
+        githubRepo = "ChanTsune/ktPyString"
+        githubReleaseNotesFile = "README.md"
 
         with(version) {
             name = project.version.toString()
