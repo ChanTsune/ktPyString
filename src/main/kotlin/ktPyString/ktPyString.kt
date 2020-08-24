@@ -347,7 +347,7 @@ fun String.isupper(): Boolean {
  * Return a string which is the concatenation of the strings in [iterable].
  * @param iterable
  */
-fun String.join(iterable: List<String>): String = iterable.joinToString(this)
+fun <E : Iterable<String>> String.join(iterable: E): String = iterable.joinToString(this)
 
 /**
  * Return the string left justified in a string of length width.
