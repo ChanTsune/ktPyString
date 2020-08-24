@@ -19,7 +19,7 @@ plugins {
     id("org.jetbrains.dokka") version "0.9.18"
 
 
-    id("com.jfrog.bintray") version "1.8.4"
+    id("com.jfrog.bintray") version "1.8.5"
 
     // Apply the java-library plugin for API and implementation separation.
     id("java-library")
