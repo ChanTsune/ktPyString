@@ -1,5 +1,4 @@
 import org.gradle.api.publish.maven.MavenPom
-import org.jetbrains.dokka.gradle.DokkaTask
 
 
 group = "dev.tsune"
