@@ -98,7 +98,7 @@ publishing {
 
             pom.initPom()
         }
-        create<MavenPublication>(release){
+        create<MavenPublication>(release) {
             from(components["java"])
             artifact(dokkaJar)
             artifact(sourcesJar)
