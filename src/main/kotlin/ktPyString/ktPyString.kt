@@ -519,10 +519,10 @@ private fun String._rsplit(maxsplit: Int): List<String> {
  */
 public fun String.rsplit(sep: String? = null, maxsplit: Int = -1): List<String> {
     val maxSplit = if (maxsplit.sign == -1) Int.MAX_VALUE else maxsplit
-    return if (sep != null && sep.isNotEmpty()) {
-        this._rsplit(sep, maxSplit)
-    } else {
+    return if (sep.isNullOrEmpty()) {
         this._rsplit(maxSplit)
+    } else {
+        this._rsplit(sep, maxSplit)
     }
 }
 
@@ -598,10 +598,10 @@ private fun String._split(maxsplit: Int): List<String> {
  */
 public fun String.split(sep: String? = null, maxsplit: Int = -1): List<String> {
     val maxSplit = if (maxsplit.sign == -1) Int.MAX_VALUE else maxsplit
-    return if (sep != null && sep.isNotEmpty()) {
-        this._split(sep, maxSplit)
-    } else {
+    return if (sep.isNullOrEmpty()) {
         this._split(maxSplit)
+    } else {
+        this._split(sep, maxSplit)
     }
 }
 
