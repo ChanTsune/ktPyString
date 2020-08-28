@@ -54,7 +54,7 @@ val dokka by tasks.getting(DokkaTask::class){
 val dokkaJar by tasks.creating(Jar::class) {
     group = JavaBasePlugin.DOCUMENTATION_GROUP
     description = "Assembles Kotlin docs with Dokka"
-    classifier = "javadoc"
+    archiveClassifier.set("javadoc")
     // dependsOn(tasks.dokka) not needed; dependency automatically inferred by from(tasks.dokka)
     from(tasks.dokka)
 }
