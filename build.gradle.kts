@@ -1,5 +1,4 @@
 import org.gradle.api.publish.maven.MavenPom
-import org.jetbrains.dokka.gradle.DokkaTask
 
 
 group = "dev.tsune"
@@ -10,7 +9,7 @@ plugins {
     id("org.jetbrains.kotlin.jvm") version "1.4.0"
 
     // Apply plugin for document generation
-    id("org.jetbrains.dokka") version "0.9.18"
+    id("org.jetbrains.dokka") version "1.4.0-rc"
 
 
     id("com.jfrog.bintray") version "1.8.5"
@@ -49,9 +48,17 @@ val sourcesJar by tasks.creating(Jar::class) {
     archiveClassifier.set("sources")
 }
 
-val dokka by tasks.getting(DokkaTask::class){
-    outputFormat = "html"
-    outputDirectory = "$buildDir/javadoc"
+tasks.dokkaHtml.configure {
+    outputDirectory = "$buildDir/dokka/html"
+}
+tasks.dokkaGfm.configure {
+    outputDirectory = "$buildDir/dokka/gfm"
+}
+tasks.dokkaJavadoc.configure {
+    outputDirectory = "$buildDir/dokka/javadoc"
+}
+tasks.dokkaJekyll.configure {
+    outputDirectory = "$buildDir/dokka/jekyll"
 }
 
 // Create dokka Jar task from dokka task output
@@ -60,7 +67,7 @@ val dokkaJar by tasks.creating(Jar::class) {
     description = "Assembles Kotlin docs with Dokka"
     archiveClassifier.set("javadoc")
     // dependsOn(tasks.dokka) not needed; dependency automatically inferred by from(tasks.dokka)
-    from(tasks.dokka)
+    from(tasks.dokkaHtml)
 }
 
 //publications
