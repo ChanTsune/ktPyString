@@ -13,7 +13,7 @@ plugins {
     id("org.jetbrains.dokka") version "0.9.18"
 
 
-    id("com.jfrog.bintray") version "1.8.4"
+    id("com.jfrog.bintray") version "1.8.5"
 
     // Apply the java-library plugin for API and implementation separation.
     id("java-library")
@@ -58,7 +58,7 @@ val dokka by tasks.getting(DokkaTask::class){
 val dokkaJar by tasks.creating(Jar::class) {
     group = JavaBasePlugin.DOCUMENTATION_GROUP
     description = "Assembles Kotlin docs with Dokka"
-    classifier = "javadoc"
+    archiveClassifier.set("javadoc")
     // dependsOn(tasks.dokka) not needed; dependency automatically inferred by from(tasks.dokka)
     from(tasks.dokka)
 }
@@ -127,6 +127,9 @@ bintray {
         websiteUrl = "https://github.com/ChanTsune/ktPyString"
         issueTrackerUrl = "https://github.com/ChanTsune/ktPyString/issues"
         vcsUrl = "https://github.com/ChanTsune/ktPyString.git"
+        publicDownloadNumbers = true
+        githubRepo = "ChanTsune/ktPyString"
+        githubReleaseNotesFile = "README.md"
 
         with(version) {
             name = project.version.toString()

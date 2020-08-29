@@ -79,7 +79,7 @@ public fun String.count(sub: String, start: Int? = null, end: Int? = null): Int 
 }
 
 /**
- * Return True if the string ends with the specified [suffix], otherwise return False.
+ * Return `true` if the string ends with the specified [suffix], otherwise return `false`.
  * With optional [start], test beginning at that position.
  * With optional [end], stop comparing at that position.
  */
@@ -87,7 +87,7 @@ public fun String.endswith(suffix: String, start: Int? = null, end: Int? = null)
     this[Slice(start, end)].endsWith(suffix)
 
 /**
- * Return True if the string ends with the specified [suffixes], otherwise return False.
+ * Return `true` if the string ends with the specified [suffixes], otherwise return `false`.
  * With optional [start], test beginning at that position.
  * With optional [end], stop comparing at that position.
  */
@@ -172,8 +172,8 @@ internal inline fun String.isX(empty: Boolean, conditional: (Char) -> Boolean): 
 
 
 /**
- * Return True if all characters in the string are alphanumeric and there is at least one character, False otherwise.
- * A character c is alphanumeric if one of the following returns True: c.isalpha(), c.isdecimal(), c.isdigit(), or c.isnumeric().
+ * Return `true` if all characters in the string are alphanumeric and there is at least one character, `false` otherwise.
+ * A character c is alphanumeric if one of the following returns `true`: c.isalpha(), c.isdecimal(), c.isdigit(), or c.isnumeric().
  */
 public fun String.isalnum(): Boolean {
     return this.isX(false) {
@@ -182,7 +182,7 @@ public fun String.isalnum(): Boolean {
 }
 
 /**
- * Return True if all characters in the string are alphabetic and there is at least one character, False otherwise.
+ * Return `true` if all characters in the string are alphabetic and there is at least one character, `false` otherwise.
  * Alphabetic characters are those characters defined in the Unicode character database as “Letter”,
  * i.e., those with general category property being one of “Lm”, “Lt”, “Lu”, “Ll”, or “Lo”. Note that this is different from the “Alphabetic” property defined in the Unicode Standard.
  */
@@ -193,7 +193,7 @@ public fun String.isalpha(): Boolean {
 }
 
 /**
- * Return True if the string is empty or all characters in the string are ASCII, False otherwise.
+ * Return `true` if the string is empty or all characters in the string are ASCII, `false` otherwise.
  * ASCII characters have code points in the range U+0000-U+007F.
  */
 public fun String.isascii(): Boolean {
@@ -203,7 +203,7 @@ public fun String.isascii(): Boolean {
 }
 
 /**
- * Return True if all characters in the string are decimal characters and there is at least one character, False otherwise.
+ * Return `true` if all characters in the string are decimal characters and there is at least one character, `false` otherwise.
  * Decimal characters are those that can be used to form numbers in base 10,
  * e.g. U+0660, ARABIC-INDIC DIGIT ZERO.
  * Formally a decimal character is a character in the Unicode General Category “Nd”.
@@ -215,7 +215,7 @@ public fun String.isdecimal(): Boolean {
 }
 
 /**
- * Return True if all characters in the string are digits and there is at least one character, False otherwise.
+ * Return `true` if all characters in the string are digits and there is at least one character, `false` otherwise.
  * Digits include decimal characters and digits that need special handling, such as the compatibility superscript digits.
  * This covers digits which cannot be used to form numbers in base 10, like the Kharosthi numbers.
  * Formally, a digit is a character that has the property value Numeric_Type=Digit or Numeric_Type=Decimal.
@@ -228,7 +228,7 @@ public fun String.isdigit(): Boolean {
 }
 
 /**
- * Return True if all cased characters in the string are lowercase and there is at least one cased character, False otherwise.
+ * Return `true` if all cased characters in the string are lowercase and there is at least one cased character, `false` otherwise.
  */
 public fun String.islower(): Boolean {
     if (this.isEmpty()) {
@@ -247,7 +247,7 @@ public fun String.islower(): Boolean {
 }
 
 /**
- * Return True if all characters in the string are numeric characters, and there is at least one character, False otherwise.
+ * Return `true` if all characters in the string are numeric characters, and there is at least one character, `false` otherwise.
  * Numeric characters include digit characters, and all characters that have the Unicode numeric value property,
  * e.g. U+2155, VULGAR FRACTION ONE FIFTH.
  * Formally, numeric characters are those with the property value Numeric_Type=Digit, Numeric_Type=Decimal or Numeric_Type=Numeric.
@@ -262,7 +262,7 @@ public fun String.isnumeric(): Boolean {
 }
 
 /**
- * Return True if all characters in the string are printable or the string is empty, False otherwise.
+ * Return `true` if all characters in the string are printable or the string is empty, `false` otherwise.
  * Nonprintable characters are those characters defined in the Unicode character database as “Other” or “Separator”, excepting the ASCII space (0x20) which is considered printable.
  */
 public fun String.isprintable(): Boolean {
@@ -288,7 +288,7 @@ public fun String.isprintable(): Boolean {
 }
 
 /**
- * Return True if there are only whitespace characters in the string and there is at least one character, False otherwise.
+ * Return `true` if there are only whitespace characters in the string and there is at least one character, `false` otherwise.
  * A character is whitespace if in the Unicode character database, either its general category is Zs (“Separator, space”), or its bidirectional class is one of WS, B, or S.
  */
 public fun String.isspace(): Boolean {
@@ -300,9 +300,9 @@ public fun String.isspace(): Boolean {
 private fun Char.isTitle(): Boolean = this == toTitleCase()
 
 /**
- * Return True if the string is a titlecased string and there is at least one character,
+ * Return `true` if the string is a titlecased string and there is at least one character,
  * for example uppercase characters may only follow uncased characters and lowercase characters only cased ones.
- * Return False otherwise.
+ * Return `false` otherwise.
  */
 public fun String.istitle(): Boolean {
     if (this.isEmpty()) {
@@ -325,7 +325,7 @@ public fun String.istitle(): Boolean {
 }
 
 /**
- * Return True if all cased characters in the string are uppercase and there is at least one cased character, False otherwise.
+ * Return `true` if all cased characters in the string are uppercase and there is at least one cased character, `false` otherwise.
  */
 public fun String.isupper(): Boolean {
     if (this.isEmpty()) {
@@ -347,7 +347,7 @@ public fun String.isupper(): Boolean {
  * Return a string which is the concatenation of the strings in [iterable].
  * @param iterable
  */
-public fun String.join(iterable: List<String>): String = iterable.joinToString(this)
+public fun <E : Iterable<String>> String.join(iterable: E): String = iterable.joinToString(this)
 
 /**
  * Return the string left justified in a string of length width.
@@ -615,10 +615,10 @@ private fun Char.isRowBoundary(): Boolean {
 
 /**
  * Return a list of the lines in the string, breaking at line boundaries.
- * Line breaks are not included in the resulting list unless [keepends] is given and true.
+ * Line breaks are not included in the resulting list unless [keepends] is given and `true`.
  * This method splits on the following line boundaries.
  * In particular, the boundaries are a superset of universal newlines.
- * @param keepends If true was given keep line breaks. Default is false.
+ * @param keepends If `true` was given keep line breaks. Default is `false`.
  */
 public fun String.splitlines(keepends: Boolean = false): List<String> {
     val splited: MutableList<String> = mutableListOf()
@@ -648,7 +648,7 @@ public fun String.splitlines(keepends: Boolean = false): List<String> {
 }
 
 /**
- * Return True if string starts with the [prefix], otherwise return False.
+ * Return `true` if string starts with the [prefix], otherwise return `false`.
  * With optional [start], test string beginning at that position.
  * With optional [end], stop comparing string at that position.
  */
@@ -656,7 +656,7 @@ public fun String.startswith(prefix: String, start: Int? = null, end: Int? = nul
     this[Slice(start, end)].startsWith(prefix)
 
 /**
- * Return True if string starts with the [prefixes], otherwise return False.
+ * Return `true` if string starts with the [prefixes], otherwise return `false`.
  * With optional [start], test string beginning at that position.
  * With optional [end], stop comparing string at that position.
  */
@@ -676,7 +676,7 @@ public fun String.strip(chars: String? = null): String = lstrip(chars).rstrip(ch
 
 /**
  * Return a copy of the string with uppercase characters converted to lowercase and vice versa.
- * Note that it is not necessarily true that s.swapcase().swapcase() == s.
+ * Note that it is not necessarily `true` that s.swapcase().swapcase() == s.
  */
 public fun String.swapcase(): String = mapToString { c ->
     when {
@@ -685,6 +685,7 @@ public fun String.swapcase(): String = mapToString { c ->
         else -> c
     }
 }
+
 /**
  * Return a titlecased version of the string where words start with an uppercase character and the remaining characters are lowercase.
  */
@@ -716,7 +717,7 @@ public fun String.title(): String {
 //}
 /**
  * Return a copy of the string with all the cased characters converted to uppercase.
- * Note that s.upper().isupper() might be False if s contains uncased characters or if the Unicode category of the resulting character(s) is not “Lu” (Letter, uppercase), but e.g. “Lt” (Letter, titlecase).
+ * Note that s.upper().isupper() might be `false` if s contains uncased characters or if the Unicode category of the resulting character(s) is not “Lu” (Letter, uppercase), but e.g. “Lt” (Letter, titlecase).
  * The uppercasing algorithm used is described in section 3.13 of the Unicode Standard.
  */
 public fun String.upper(): String = toUpperCase()
