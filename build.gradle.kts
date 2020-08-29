@@ -39,6 +39,10 @@ dependencies {
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit")
 }
 
+kotlin {
+    explicitApiWarning()
+}
+
 //sources
 val sourcesJar by tasks.creating(Jar::class) {
     from(sourceSets.main.get().allSource)

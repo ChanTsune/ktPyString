@@ -17,7 +17,7 @@ package ktPyString.utils
  * @property third Third value.
  * @property fourth Fourth value.
  */
-data class Quad<out A, out B, out C, out D>(
+internal data class Quad<out A, out B, out C, out D>(
     val first: A,
     val second: B,
     val third: C,
@@ -35,4 +35,4 @@ data class Quad<out A, out B, out C, out D>(
 /**
  * Converts this quad into a list.
  */
-fun <T> Quad<T, T, T, T>.toList(): List<T> = listOf(first, second, third, fourth)
+internal fun <T> Quad<T, T, T, T>.toList(): List<T> = listOf(first, second, third, fourth)
