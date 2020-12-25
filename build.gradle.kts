@@ -11,9 +11,6 @@ plugins {
     // Apply plugin for document generation
     id("org.jetbrains.dokka") version "1.4.0-rc"
 
-
-    id("com.jfrog.bintray") version "1.8.5"
-
     // Apply the java-library plugin for API and implementation separation.
     id("java-library")
 
@@ -70,11 +67,18 @@ val dokkaJar by tasks.creating(Jar::class) {
     from(tasks.dokkaHtml)
 }
 
-//publications
-val snapshot = "snapshot"
-val release = "release"
-
 publishing {
+    fun getProperty(propertyName: String, envName: String): String? {
+        return findProperty(propertyName) as? String ?: System.getenv(envName)
+    }
+
+    fun getBintrayUser(): String? {
+        return getProperty("bintray_user", "BINTRAY_USER")
+    }
+
+    fun getBintrayKey(): String? {
+        return getProperty("bintray_key", "BINTRAY_KEY")
+    }
     fun MavenPom.initPom() {
         name.set("ktPyString")
         description.set("Python like String method in Kotlin")
@@ -91,7 +95,7 @@ publishing {
         }
     }
     publications {
-        create<MavenPublication>(snapshot) {
+        create<MavenPublication>("snapshot") {
             from(components["java"])
             artifact(dokkaJar)
             artifact(sourcesJar)
@@ -100,7 +104,7 @@ publishing {
 
             pom.initPom()
         }
-        create<MavenPublication>(release) {
+        create<MavenPublication>("release") {
             from(components["java"])
             artifact(dokkaJar)
             artifact(sourcesJar)
@@ -110,37 +114,18 @@ publishing {
             pom.initPom()
         }
     }
-}
+    repositories {
+        maven {
+            name = "bintray"
+            val bintrayUsername = "chantsune"
+            val bintrayRepoName = "ktPyString"
+            val bintrayPackageName = "dev.tsune.ktPyString"
+            setUrl("https://api.bintray.com/content/$bintrayUsername/$bintrayRepoName/$bintrayPackageName/${project.version};publish=0;override=1")
 
-
-bintray {
-    user = findProperty("bintray_user") as? String
-    key = findProperty("bintray_key") as? String
-
-    val isRelease = findProperty("release") == "true"
-
-    publish = isRelease
-    override = false
-
-    setPublications(if (isRelease) release else snapshot)
-
-//    dryRun = true
-
-    with(pkg) {
-        repo = "ktPyString"
-        name = "ktPyString"
-        setLicenses("MIT")
-        setLabels("kotlin")
-        websiteUrl = "https://github.com/ChanTsune/ktPyString"
-        issueTrackerUrl = "https://github.com/ChanTsune/ktPyString/issues"
-        vcsUrl = "https://github.com/ChanTsune/ktPyString.git"
-        publicDownloadNumbers = true
-        githubRepo = "ChanTsune/ktPyString"
-        githubReleaseNotesFile = "README.md"
-
-        with(version) {
-            name = project.version.toString()
-            vcsTag = project.version.toString()
+            credentials {
+                username = getBintrayUser()
+                password = getBintrayKey()
+            }
         }
     }
 }
