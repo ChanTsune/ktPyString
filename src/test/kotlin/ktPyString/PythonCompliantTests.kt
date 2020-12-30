@@ -5,7 +5,6 @@ import kotlin.test.*
 
 
 class PythonCompliantTests {
-    class OverflowError : Error()
 
     fun assertNotFails(message: String? = null, block: () -> Unit): Throwable {
         val defaultMessage = "Expected completed successfully, but was an exception to be thrown."
@@ -564,20 +563,6 @@ class PythonCompliantTests {
     }
 
     @Test
-    fun test_replace_overflow() {
-        var A2_16 = "A" * pow(2, 16)
-        assertFailsWith<OverflowError> {
-            A2_16.replace("", A2_16)
-        }
-        assertFailsWith<OverflowError> {
-            A2_16.replace("A", A2_16)
-        }
-        assertFailsWith<OverflowError> {
-            A2_16.replace("AA", A2_16 + A2_16)
-        }
-    }
-
-    @Test
     fun test_removeprefix() {
         assertEquals("am", "spam".removeprefix("sp"))
         assertEquals("spamspam", "spamspamspam".removeprefix("spam"))
@@ -1069,11 +1054,6 @@ class PythonCompliantTests {
         assertEquals("$", "%c".rem(36))
         assertEquals("10", "%d".rem(10))
         assertEquals("", "%c".rem(127))
-        for (ordinal in Pair(-100, 2097152).toList()) {
-            assertFailsWith<OverflowError> {
-                "%c".rem(ordinal)
-            }
-        }
         var longvalue = Int.MAX_VALUE + 10
         var slongvalue = longvalue.toString()
         assertEquals(" 42", "%3ld".rem(42))
@@ -1097,29 +1077,6 @@ class PythonCompliantTests {
         }
         assertFailsWith<ValueError> {
             "%%.%df" % pow(2, 64).rem(3.2)
-        }
-        assertFailsWith<OverflowError> {
-            "%*s".rem(Pair(Int.MAX_VALUE + 1, ""))
-        }
-        assertFailsWith<OverflowError> {
-            "%.*f".rem(Pair(Int.MAX_VALUE + 1, 1.0 / 7))
-        }
-    }
-
-    @Test
-    fun test_formatting_c_limits() {
-        var SIZE_MAX = (1 shl Long.SIZE_BITS) - 1
-        assertFailsWith<OverflowError> {
-            "%*s".rem(Pair(Int.MAX_VALUE + 1, ""))
-        }
-        assertFailsWith<OverflowError> {
-            "%.*f".rem(Pair(Int.MAX_VALUE + 1, 1.0 / 7))
-        }
-        assertFailsWith<OverflowError> {
-            "%*s".rem(Pair(SIZE_MAX + 1, ""))
-        }
-        assertFailsWith<OverflowError> {
-            "%.*f".rem(Pair(UInt.MAX_VALUE + 1u, 1.0 / 7))
         }
     }
 
