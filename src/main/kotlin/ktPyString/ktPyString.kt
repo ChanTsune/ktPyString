@@ -196,8 +196,8 @@ public fun String.isalpha(): Boolean {
  * ASCII characters have code points in the range U+0000-U+007F.
  */
 public fun String.isascii(): Boolean {
-    return this.isX(true) {
-        it in '\u0000'..'\u0080'
+    return isX(true) {
+        it in '\u0000'..'\u007F'
     }
 }
 
