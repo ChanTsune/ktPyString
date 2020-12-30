@@ -2,7 +2,7 @@ package ktPyString
 
 import ktPyString.properties.NumericType
 import ktPyString.properties.numericType
-import ktPyString.utils.isWhiteSpace
+import ktPyString.utils.*
 import kotlin.math.sign
 
 
@@ -34,8 +34,6 @@ public operator fun String.get(slice: Slice): String {
  * @param step indices specified step.
  */
 public operator fun String.get(start: Int?, end: Int?, step: Int? = null): String = this[Slice(start, end, step)]
-
-internal fun Char.repeat(n: Int): String = String(CharArray(n) { this })
 
 // capitalize  ... exist in kotlin
 
