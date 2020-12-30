@@ -304,23 +304,23 @@ private fun Char.isTitle(): Boolean = this == toTitleCase()
  * Return `false` otherwise.
  */
 public fun String.istitle(): Boolean {
-    if (this.isEmpty()) {
-        return false
-    }
-    var prevCased = false
-    for (chr in this) {
-        if (!prevCased) {
-            if (!chr.isTitle()) {
-                return false
+    if (any { it.isCased() }) {
+        var prevCased = false
+        for (chr in this) {
+            if (!prevCased) {
+                if (!chr.isTitle()) {
+                    return false
+                }
+            } else if (chr.isCased()) {
+                if (!chr.isLowerCase()) {
+                    return false
+                }
             }
-        } else if (chr.isCased()) {
-            if (!chr.isLowerCase()) {
-                return false
-            }
+            prevCased = chr.isCased()
         }
-        prevCased = chr.isCased()
+        return true
     }
-    return true
+    return false
 }
 
 /**
