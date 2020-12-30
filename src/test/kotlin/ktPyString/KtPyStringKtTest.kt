@@ -159,9 +159,11 @@ internal class KtPyStringKtTest {
         assertEquals(0, digits.index(""))
     }
 
-    @Test(expected = Exception::class)
+    @Test
     fun indexNotFound() {
-        assertEquals(0, digits.index("87"))
+        assertFailsWith<ValueError> {
+            digits.index("87")
+        }
     }
 
     @Test
@@ -319,10 +321,12 @@ internal class KtPyStringKtTest {
         assertEquals(-1, b.rfind(w, 1, 3))
     }
 
-    @Test(expected = Exception::class)
+    @Test
     fun rindex() {
-        val b = "mississippi"
-        b.rindex("w")
+        assertFailsWith<ValueError> {
+            val b = "mississippi"
+            b.rindex("w")
+        }
     }
 
     @Test
