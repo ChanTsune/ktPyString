@@ -1056,8 +1056,8 @@ class PythonCompliantTests {
         assertEquals("", "%c".rem(127))
         var longvalue = Int.MAX_VALUE + 10
         var slongvalue = longvalue.toString()
-        assertEquals(" 42", "%3ld".rem(42))
-        assertEquals("42", "%d".rem(42.0))
+        assertEquals(" 42", "%3d".rem(42))
+        assertEquals("42", "%d".rem(42))
         assertEquals(slongvalue, "%d".rem(longvalue))
         assertNotFails {
             "%d" % longvalue.toFloat()
