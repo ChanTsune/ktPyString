@@ -156,14 +156,15 @@ public fun String.find(sub: String, start: Int? = null, end: Int? = null): Int {
 //}
 
 /**
- * Like find(), but raise Exception when the substring is not found.
+ * Like find(), but raise [ValueError] when the substring is not found.
  * @param sub Target substring.
  * @param start Start position.
  * @param end End position.
  */
 public fun String.index(sub: String, start: Int? = null, end: Int? = null): Int {
-    val tmp = this.find(sub, start, end)
-    return if (tmp == -1) throw Exception("ValueError: substring not found") else tmp
+    return find(sub, start, end).also {
+        if (it == -1) throw ValueError("substring not found")
+    }
 }
 
 internal inline fun String.isX(empty: Boolean, conditional: (Char) -> Boolean): Boolean =
@@ -445,14 +446,15 @@ public fun String.rfind(sub: String, start: Int? = null, end: Int? = null): Int 
 }
 
 /**
- * Like rfind() but raises [Exception] when the substring sub is not found.
+ * Like rfind() but raises [ValueError] when the substring sub is not found.
  * @param sub Target substring.
  * @param start Start position.
  * @param end End positions.
  */
 public fun String.rindex(sub: String, start: Int? = null, end: Int? = null): Int {
-    val i = this.rfind(sub, start, end)
-    return if (i == -1) throw Exception("ValueError: substring not found") else i
+    return rfind(sub, start, end).also {
+        if (it == -1) throw ValueError("substring not found")
+    }
 }
 
 /**
@@ -480,6 +482,7 @@ public fun String.rpartition(sep: String): Triple<String, String, String> {
 }
 
 private fun String._rsplit(sep: String, maxsplit: Int): List<String> {
+    if (sep.isEmpty()) throw ValueError("empty separator")
     val result: MutableList<String> = mutableListOf()
     var prevIndex = Int.MAX_VALUE
     val sepLen = sep.length
@@ -518,7 +521,7 @@ private fun String._rsplit(maxsplit: Int): List<String> {
  */
 public fun String.rsplit(sep: String? = null, maxsplit: Int = -1): List<String> {
     val maxSplit = if (maxsplit.sign == -1) Int.MAX_VALUE else maxsplit
-    return if (sep.isNullOrEmpty()) {
+    return if (sep == null) {
         this._rsplit(maxSplit)
     } else {
         this._rsplit(sep, maxSplit)
@@ -541,6 +544,7 @@ public fun String.rstrip(chars: String? = null): String {
 }
 
 private fun String._split(sep: String, maxsplit: Int): List<String> {
+    if (sep.isEmpty()) { throw ValueError("empty separator") }
     var maxSplit = maxsplit
     val result: MutableList<String> = mutableListOf()
     var prevIndex = 0
@@ -597,7 +601,7 @@ private fun String._split(maxsplit: Int): List<String> {
  */
 public fun String.split(sep: String? = null, maxsplit: Int = -1): List<String> {
     val maxSplit = if (maxsplit.sign == -1) Int.MAX_VALUE else maxsplit
-    return if (sep.isNullOrEmpty()) {
+    return if (sep == null) {
         this._split(maxSplit)
     } else {
         this._split(sep, maxSplit)
