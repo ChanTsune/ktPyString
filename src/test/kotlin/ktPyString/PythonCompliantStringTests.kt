@@ -474,7 +474,7 @@ class PythonCompliantStringTests {
         assertEquals("BCD", "ABCADAA".replace("A", ""))
         assertEquals("BCD", "BCD".replace("A", ""))
         assertEquals("*************", "*************".replace("A", ""))
-        assertEquals("^A^", "^" + "A" * 1000 + "^".replace("A", "", 999))
+        assertEquals("^A^", ("^" + ("A" * 1000) + "^").replace("A", "", 999))
         assertEquals("", "the".replace("the", ""))
         assertEquals("ater", "theater".replace("the", ""))
         assertEquals("", "thethe".replace("the", ""))
