@@ -50,11 +50,11 @@ public fun String.center(width: Int, fillchar: Char = ' '): String =
     if (length >= width)
         this
     else
-    (width - length).let {
-        val r = it / 2
-        val l = r + it % 2
-        fillchar.repeat(l) + this + fillchar.repeat(r)
-    }
+        (width - length).let {
+            val r = it / 2
+            val l = r + it % 2
+            fillchar.repeat(l) + this + fillchar.repeat(r)
+        }
 
 /**
  * Return the number of non-overlapping occurrences of substring sub in the range [start, end].
