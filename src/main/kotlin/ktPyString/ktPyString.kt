@@ -127,8 +127,7 @@ public fun String.expandtabs(tabsize: Int = 8): String {
                 linePos += incr
                 builder.append(' '.repeat(incr))
             }
-        }
-        else {
+        } else {
             linePos++
             builder.append(ch)
             if (ch == '\n' || ch == '\r')
@@ -557,7 +556,7 @@ public fun String.rstrip(chars: String? = null): String {
 }
 
 private fun String._split(sep: String, maxsplit: Int): List<String> {
-    if (sep.isEmpty()) { throw ValueError("empty separator") }
+    if (sep.isEmpty()) throw ValueError("empty separator")
     var maxSplit = maxsplit
     val result: MutableList<String> = mutableListOf()
     var prevIndex = 0
@@ -758,7 +757,10 @@ public fun String.zfill(width: Int): String {
     }
 }
 
-internal inline fun <R> String.mapToString(builder: StringBuilder = StringBuilder(length), transform: (Char) -> R): String {
+internal inline fun <R> String.mapToString(
+    builder: StringBuilder = StringBuilder(length),
+    transform: (Char) -> R
+): String {
     for (item in this)
         builder.append(transform(item))
     return builder.toString()
