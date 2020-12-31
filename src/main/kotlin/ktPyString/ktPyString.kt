@@ -436,7 +436,24 @@ public fun String.partition(sep: String): Triple<String, String, String> {
  * @param maxcount　Maximum number of replacements.
  */
 public fun String.replace(old: String, new: String, maxcount: Int = Int.MAX_VALUE): String {
-    return new.join(this.split(old, maxcount))
+    if (length < old.length) return this
+    if (maxcount == 0) return this
+    if (old == new) return this
+    if (old.isEmpty() && new.isEmpty()) return this
+    if (isEmpty() && old.isEmpty()) return new
+    if (old.isEmpty()) {
+        var maxcount = if (maxcount < 0) Int.MAX_VALUE else maxcount
+        return buildString {
+            append(new)
+            for (c in this@replace) {
+                append(c)
+                if (--maxcount > 0) {
+                    append(new)
+                }
+            }
+        }
+    }
+    return new.join(split(old, maxcount))
 }
 
 /**
