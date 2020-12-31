@@ -147,12 +147,15 @@ public fun String.expandtabs(tabsize: Int = 8): String {
  * @param end End position.
  */
 public fun String.find(sub: String, start: Int? = null, end: Int? = null): Int {
-    if (sub.isEmpty()) {
-        return 0
+    val (s, e) = adjustIndex(start, end)
+    if (e - s < sub.length) return -1
+    return this[s, e].indexOf(sub, ignoreCase = false).let {
+        if (it != -1) {
+            s + it
+        } else {
+            -1
+        }
     }
-    val (s, e, _, _) = Slice(start, end).adjustIndex(length)
-    val i = this[s, e].indexOf(sub, ignoreCase = false)
-    return if (i != -1) s + i else -1
 }
 
 //fun String.format() {
@@ -445,12 +448,14 @@ public fun String.replace(old: String, new: String, maxcount: Int = Int.MAX_VALU
  * @param end End position.
  */
 public fun String.rfind(sub: String, start: Int? = null, end: Int? = null): Int {
+    val (s, e) = adjustIndex(start, end)
+    if (e - s < sub.length) return -1
     if (sub.isEmpty()) {
         return length
     }
-    val (s, e, _, _) = Slice(start, end).adjustIndex(length)
-    val i = this[s, e].lastIndexOf(sub, ignoreCase = false)
-    return if (i != -1) s + i else -1
+    return this[s, e].lastIndexOf(sub, ignoreCase = false).let {
+        if (it != -1) s + it else -1
+    }
 }
 
 /**
