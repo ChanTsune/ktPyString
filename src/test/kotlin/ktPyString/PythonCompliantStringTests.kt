@@ -4,7 +4,7 @@ import kotlin.math.pow
 import kotlin.test.*
 
 
-class PythonCompliantTests {
+class PythonCompliantStringTests {
 
     fun assertNotFails(message: String? = null, block: () -> Unit): Throwable {
         val defaultMessage = "Expected completed successfully, but was an exception to be thrown."
