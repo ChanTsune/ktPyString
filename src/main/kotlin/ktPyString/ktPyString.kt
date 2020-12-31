@@ -83,8 +83,11 @@ public fun String.count(sub: String, start: Int? = null, end: Int? = null): Int 
  * With optional [start], test beginning at that position.
  * With optional [end], stop comparing at that position.
  */
-public fun String.endswith(suffix: String, start: Int? = null, end: Int? = null): Boolean =
-    this[Slice(start, end)].endsWith(suffix)
+public fun String.endswith(suffix: String, start: Int? = null, end: Int? = null): Boolean {
+    val (s, e) = adjustIndex(start, end)
+    if (e - s < suffix.length) return false
+    return this[Slice(start, end)].endsWith(suffix)
+}
 
 /**
  * Return `true` if the string ends with the specified [suffixes], otherwise return `false`.
@@ -92,8 +95,12 @@ public fun String.endswith(suffix: String, start: Int? = null, end: Int? = null)
  * With optional [end], stop comparing at that position.
  */
 public fun String.endswith(vararg suffixes: String, start: Int? = null, end: Int? = null): Boolean {
+    val (s, e) = adjustIndex(start, end)
     val sub = this[Slice(start, end)]
-    return suffixes.any { sub.endsWith(it) }
+    return suffixes.any {
+        if (e - s < it.length) false
+        else sub.endsWith(it)
+    }
 }
 
 /**
@@ -656,8 +663,11 @@ public fun String.splitlines(keepends: Boolean = false): List<String> {
  * With optional [start], test string beginning at that position.
  * With optional [end], stop comparing string at that position.
  */
-public fun String.startswith(prefix: String, start: Int? = null, end: Int? = null): Boolean =
-    this[Slice(start, end)].startsWith(prefix)
+public fun String.startswith(prefix: String, start: Int? = null, end: Int? = null): Boolean {
+    val (s, e) = adjustIndex(start, end)
+    if (e - s < prefix.length) return false
+    return this[Slice(s, e)].startsWith(prefix)
+}
 
 /**
  * Return `true` if string starts with the [prefixes], otherwise return `false`.
@@ -665,8 +675,12 @@ public fun String.startswith(prefix: String, start: Int? = null, end: Int? = nul
  * With optional [end], stop comparing string at that position.
  */
 public fun String.startswith(vararg prefixes: String, start: Int? = null, end: Int? = null): Boolean {
-    val sub = this[Slice(start, end)]
-    return prefixes.any { sub.startsWith(it) }
+    val (s, e) = adjustIndex(start, end)
+    val sub = this[Slice(s, e)]
+    return prefixes.any {
+        if (e - s < it.length) false
+        else sub.startsWith(it)
+    }
 }
 
 /**
