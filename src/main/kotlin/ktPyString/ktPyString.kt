@@ -64,15 +64,16 @@ public fun String.center(width: Int, fillchar: Char = ' '): String =
  * @param end indices specified stop.
  */
 public fun String.count(sub: String, start: Int? = null, end: Int? = null): Int {
-    val (s, e, _, length) = Slice(start, end).adjustIndex(length)
+    val (s, e) = adjustIndex(start, end)
+    if (e - s < sub.length) return 0
     if (sub.isEmpty()) {
-        return length + 1
+        return (e - s).coerceAtLeast(0) + 1
     }
-    var n = this.find(sub, s, e)
+    var n = find(sub, s, e)
     var c = 0
     while (n != -1) {
         c += 1
-        n = this.find(sub, n + sub.length, e)
+        n = find(sub, n + sub.length, e)
     }
     return c
 }
@@ -742,6 +743,22 @@ internal inline fun <R> String.mapToString(builder: StringBuilder = StringBuilde
     for (item in this)
         builder.append(transform(item))
     return builder.toString()
+}
+
+internal fun String.adjustIndex(s: Int?, e: Int?): Pair<Int, Int> {
+    var start = s ?: 0
+    var end = e ?: length
+    if (end > length) {
+        end = length
+    } else if (end < 0) {
+        end += length
+        end = end.coerceAtLeast(0)
+    }
+    if (start < 0) {
+        start += length
+        start = start.coerceAtLeast(0)
+    }
+    return start to end
 }
 
 private fun Char.isCased(): Boolean =
