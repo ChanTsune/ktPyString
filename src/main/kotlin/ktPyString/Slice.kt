@@ -12,7 +12,7 @@ import ktPyString.utils.Quad
  * @property stop indices specified stop.
  * @property step indices specified step.
  */
-public class Slice(
+public data class Slice(
         public val start: Int?,
         public val stop: Int?,
         public val step: Int? = null
