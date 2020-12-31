@@ -58,7 +58,7 @@ internal class SliceTest {
 
     @Test
     fun testStepIsZero() {
-        assertFailsWith<Exception> {
+        assertFailsWith<ValueError> {
             Slice(null, -5, 0).adjustIndex(10)
         }
     }

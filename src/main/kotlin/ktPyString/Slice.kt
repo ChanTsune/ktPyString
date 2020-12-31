@@ -48,7 +48,7 @@ public class Slice(
         // Convert step to an integer; raise for zero step.
         val stepSign: Int = step.sign
         if (stepSign == 0) {
-            throw Exception("ValueError: slice step cannot be zero")
+            throw ValueError("slice step cannot be zero")
         }
         val stepIsNegative: Boolean = stepSign < 0
 
