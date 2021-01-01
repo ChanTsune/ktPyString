@@ -2,7 +2,7 @@ import org.gradle.api.publish.maven.MavenPom
 
 
 group = "dev.tsune"
-version = "1.0.0-beta1"
+version = "0.1.0"
 
 plugins {
     // Apply the Kotlin JVM plugin to add support for Kotlin.

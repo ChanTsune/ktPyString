@@ -22,3 +22,53 @@ jobs:
           GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
     outputs:
       created: ${{ steps.create_release.outputs.created }}
+
+  publish:
+    needs: release
+    if: ${{ needs.release.outputs.created == 'true' }}
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-latest
+            publish_command: publishReleasePublicationToBintrayRepository
+    name: publish
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v2.3.4
+      - uses: actions/cache@v2
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+      - name: run publication
+        run: ./gradlew clean ${{ matrix.publish_command }}
+    env:
+      BINTRAY_USER: ${{ secrets.BINTRAY_USER }}
+      BINTRAY_KEY: ${{ secrets.BINTRAY_KEY }}
+
+  publish_snapshot:
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-latest
+            publish_command: publishSnapshotPublicationToBintrayRepository
+    name: publish
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v2.3.4
+      - uses: actions/cache@v2
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+      - name: run publication
+        run: ./gradlew clean ${{ matrix.publish_command }}
+    env:
+      BINTRAY_USER: ${{ secrets.BINTRAY_USER }}
+      BINTRAY_KEY: ${{ secrets.BINTRAY_KEY }}
