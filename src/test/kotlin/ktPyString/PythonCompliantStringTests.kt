@@ -100,10 +100,10 @@ class PythonCompliantStringTests {
         assertEquals(0, "".count("xx"))
         assertEquals(0, "".count("xx", 1, 1))
         assertEquals(0, "".count("xx", Int.MAX_VALUE, 0))
-        var charset = listOf("", "a", "b")
-        var digits = 7
-        var base = charset.size
-        var teststrings = mutableSetOf<String>()
+        val charset = listOf("", "a", "b")
+        val digits = 7
+        val base = charset.size
+        val teststrings = mutableSetOf<String>()
         for (i in range(pow(base, digits))) {
             var i = i
             val entry = mutableListOf<String>()
@@ -151,10 +151,10 @@ class PythonCompliantStringTests {
         assertEquals(-1, "".find("xx", 1, 1))
         assertEquals(-1, "".find("xx", Int.MAX_VALUE, 0))
         assertEquals(-1, "ab".find("xxx", Int.MAX_VALUE + 1, 0))
-        var charset = listOf("", "a", "b", "c")
-        var digits = 5
-        var base = charset.size
-        var teststrings = mutableSetOf<String>()
+        val charset = listOf("", "a", "b", "c")
+        val digits = 5
+        val base = charset.size
+        val teststrings = mutableSetOf<String>()
         for (i in range(pow(base, digits))) {
             var i = i
             val entry = mutableListOf<String>()
@@ -194,10 +194,10 @@ class PythonCompliantStringTests {
         assertEquals(12, "rrarrrrrrrrra".rfind("a", 4, null))
         assertEquals(2, "rrarrrrrrrrra".rfind("a", null, 6))
 
-        var charset = listOf("", "a", "b", "c")
-        var digits = 5
-        var base = charset.size
-        var teststrings = mutableSetOf<String>()
+        val charset = listOf("", "a", "b", "c")
+        val digits = 5
+        val base = charset.size
+        val teststrings = mutableSetOf<String>()
         for (i in range(pow(base, digits))) {
             var i = i
             val entry = mutableListOf<String>()
@@ -658,7 +658,7 @@ class PythonCompliantStringTests {
         assertEquals("hello   ", "   hello   ".lstrip())
         assertEquals("   hello", "   hello   ".rstrip())
         assertEquals("hello", "hello".strip())
-        var b = " \t\n\r\u000c\u000Babc \t\n\r\u000c\u000B"
+        val b = " \t\n\r\u000c\u000Babc \t\n\r\u000c\u000B"
         assertEquals("abc", b.strip())
         assertEquals("abc \t\n\r\u000c\u000B", b.lstrip())
         assertEquals(" \t\n\r\u000c\u000Babc", b.rstrip())
