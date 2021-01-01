@@ -48,7 +48,8 @@ class PythonCompliantStringTests {
         return endswith(*p.toTypedArray(), start = start, end = end)
     }
 
-    fun String.join(iterable: Iterable<Char>): String = join(iterable.map { it.toString() })
+    fun String.join(iterable: Iterable<Char>): String = iterable.joinToString(separator = this)
+    fun String.join(iterable: CharSequence): String = join(iterable.asIterable())
 
     operator fun <E> List<E>.get(slice: Slice): List<E> {
         var (start, _, step, loop) = slice.adjustIndex(size)
@@ -1002,7 +1003,7 @@ class PythonCompliantStringTests {
         for (start in indices) {
             for (stop in indices) {
                 for (step in indices[slice(1, null, null)]) {
-                    val L = s.toList()[slice(start, stop, step)]
+                    val L = s[slice(start, stop, step)]
                     assertEquals("".join(L), s.get(slice(start, stop, step)))
                 }
             }
