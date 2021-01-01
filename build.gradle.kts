@@ -9,7 +9,7 @@ plugins {
     id("org.jetbrains.kotlin.jvm") version "1.4.0"
 
     // Apply plugin for document generation
-    id("org.jetbrains.dokka") version "1.4.0-rc"
+    id("org.jetbrains.dokka") version "1.4.20"
 
     // Apply the java-library plugin for API and implementation separation.
     id("java-library")
@@ -46,16 +46,18 @@ val sourcesJar by tasks.creating(Jar::class) {
 }
 
 tasks.dokkaHtml.configure {
-    outputDirectory = "$buildDir/dokka/html"
-}
-tasks.dokkaGfm.configure {
-    outputDirectory = "$buildDir/dokka/gfm"
-}
-tasks.dokkaJavadoc.configure {
-    outputDirectory = "$buildDir/dokka/javadoc"
-}
-tasks.dokkaJekyll.configure {
-    outputDirectory = "$buildDir/dokka/jekyll"
+    doLast {
+        val outputDir = outputDirectory.get().absolutePath
+        File("$outputDir/index.html").apply {
+            writeText("""
+            <html><script>document.location = "./${project.name.map {
+                if (it.isUpperCase()) "-"+it.toLowerCase()
+                else it
+            }.joinToString(separator = "")}"</script></html>
+            """.trimIndent()
+            )
+        }
+    }
 }
 
 // Create dokka Jar task from dokka task output
