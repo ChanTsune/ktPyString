@@ -1160,14 +1160,6 @@ class PythonCompliantStringTests {
     }
 }
 
-private fun String.removesuffix(suffix: String): String {
-    return if (endswith(suffix)) substring(0, length - suffix.length) else this
-}
-
-private fun String.removeprefix(prefix: String): String {
-    return if (startswith(prefix)) substring(prefix.length) else this
-}
-
 private operator fun String.rem(x: Any?): String {
     return format(x)
 }

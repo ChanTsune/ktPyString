@@ -429,6 +429,24 @@ public fun String.partition(sep: String): Triple<String, String, String> {
 }
 
 /**
+ * If the string ends with the suffix string and that suffix is not empty, return string[null, -suffix.length].
+ * Otherwise, return a copy of the original string.
+ * @param suffix
+ */
+public fun String.removesuffix(suffix: String): String {
+    return if (endswith(suffix)) substring(0, length - suffix.length) else this
+}
+
+/**
+ * If the string starts with the prefix string, return string[prefix.length, null].
+ * Otherwise, return a copy of the original string.
+ * @param prefix
+ */
+public fun String.removeprefix(prefix: String): String {
+    return if (startswith(prefix)) substring(prefix.length) else this
+}
+
+/**
  * Return a copy of the string with all occurrences of substring old replaced by new.
  * If the optional argument count is given, only the first count occurrences are replaced.
  * @param old Old String.
