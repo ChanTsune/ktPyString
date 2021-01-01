@@ -121,8 +121,8 @@ publishing {
             name = "bintray"
             val bintrayUsername = "chantsune"
             val bintrayRepoName = "ktPyString"
-            val bintrayPackageName = "dev.tsune.ktPyString"
-            setUrl("https://api.bintray.com/content/$bintrayUsername/$bintrayRepoName/$bintrayPackageName/${project.version};publish=0;override=1")
+            val bintrayPackageName = "ktPyString"
+            setUrl("https://api.bintray.com/content/$bintrayUsername/$bintrayRepoName/$bintrayPackageName/${project.version};publish=1;override=1")
 
             credentials {
                 username = getBintrayUser()
