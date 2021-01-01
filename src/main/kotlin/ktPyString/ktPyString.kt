@@ -51,9 +51,9 @@ public fun String.center(width: Int, fillchar: Char = ' '): String =
         this
     else
         (width - length).let {
-            val r = it / 2
-            val l = r + it % 2
-            fillchar.repeat(l) + this + fillchar.repeat(r)
+            val left = it / 2 + (it.and(width).and(1))
+            val right = it - left
+            fillchar.repeat(left) + this + fillchar.repeat(right)
         }
 
 /**
