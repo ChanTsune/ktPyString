@@ -6,16 +6,6 @@ import kotlin.test.*
 
 class PythonCompliantStringTests {
 
-    fun assertNotFails(message: String? = null, block: () -> Unit): Throwable {
-        val defaultMessage = "Expected completed successfully, but was an exception to be thrown."
-
-        class E : Error()
-        return assertFailsWith<E>(message ?: defaultMessage) {
-            block.invoke()
-            throw E()
-        }
-    }
-
     fun slice(i: Int?, j: Int?, k: Int? = null): Slice {
         return Slice(i, j, k)
     }
