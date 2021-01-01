@@ -610,7 +610,7 @@ class PythonCompliantStringTests {
         assertEquals(listOf("a", "b", "c   "), "  a    b   c   ".split(null, 2))
         assertEquals(listOf("a", "b", "c"), "  a    b   c   ".split(null, 3))
         assertEquals(listOf("a", "b"), "\n\ta \t\r b \u000B ".split())
-        var aaa = " a " * 20
+        val aaa = " a " * 20
         assertEquals(listOf("a") * 20, aaa.split())
         assertEquals(listOf("a") + listOf(aaa[slice(4, null, null)]), aaa.split(null, 1))
         assertEquals(listOf("a") * 19 + listOf("a "), aaa.split(null, 19))
@@ -642,7 +642,7 @@ class PythonCompliantStringTests {
         assertEquals(listOf("  a", "b", "c"), "  a    b   c   ".rsplit(null, 2))
         assertEquals(listOf("a", "b", "c"), "  a    b   c   ".rsplit(null, 3))
         assertEquals(listOf("a", "b"), "\n\ta \t\r b \u000B ".rsplit(null, 88))
-        var aaa = " a " * 20
+        val aaa = " a " * 20
         assertEquals(listOf("a") * 20, aaa.rsplit())
         assertEquals(listOf(aaa[slice(null, -4, null)]) + listOf("a"), aaa.rsplit(null, 1))
         assertEquals(listOf(" a  a") + listOf("a") * 18, aaa.rsplit(null, 18))
@@ -858,10 +858,10 @@ class PythonCompliantStringTests {
 
     @Test
     fun test_hash() {
-        var a = "DNSSEC"
+        val a = "DNSSEC"
         var b = ""
         for (c in a) {
-            b = b + c
+            b += c
             hash(b)
         }
         assertEquals(hash(a), hash(b))
@@ -999,7 +999,7 @@ class PythonCompliantStringTests {
     @Test
     fun test_extended_getslice() {
         val s = String.ASCII_LETTERS + String.DIGITS
-        var indices = listOf(0, null, 1, 3, 41, Int.MAX_VALUE, -1, -2, -37)
+        val indices = listOf(0, null, 1, 3, 41, Int.MAX_VALUE, -1, -2, -37)
         for (start in indices) {
             for (stop in indices) {
                 for (step in indices[slice(1, null, null)]) {
@@ -1103,7 +1103,7 @@ class PythonCompliantStringTests {
     @Test
     fun test_partition() {
         assertEquals(Triple("this is the par", "ti", "tion method"), "this is the partition method".partition("ti"))
-        var S = "http://www.python.org"
+        val S = "http://www.python.org"
         assertEquals(Triple("http", "://", "www.python.org"), S.partition("://"))
         assertEquals(Triple("http://www.python.org", "", ""), S.partition("?"))
         assertEquals(Triple("", "http://", "www.python.org"), S.partition("http://"))
@@ -1116,7 +1116,7 @@ class PythonCompliantStringTests {
     @Test
     fun test_rpartition() {
         assertEquals(Triple("this is the rparti", "ti", "on method"), "this is the rpartition method".rpartition("ti"))
-        var S = "http://www.python.org"
+        val S = "http://www.python.org"
         assertEquals(Triple("http", "://", "www.python.org"), S.rpartition("://"))
         assertEquals(Triple("", "", "http://www.python.org"), S.rpartition("?"))
         assertEquals(Triple("", "http://", "www.python.org"), S.rpartition("http://"))
@@ -1128,7 +1128,7 @@ class PythonCompliantStringTests {
 
     @Test
     fun test_none_arguments() {
-        var s = "hello"
+        val s = "hello"
         assertEquals(2, s.find("l", null))
         assertEquals(3, s.find("l", -2, null))
         assertEquals(2, s.find("l", null, -2))
