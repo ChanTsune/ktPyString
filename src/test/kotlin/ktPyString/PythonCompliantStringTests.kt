@@ -974,26 +974,26 @@ class PythonCompliantStringTests {
 
     @Test
     fun test_subscript() {
-        assertEquals('a', "abc".get(0))
+        assertEquals('a', "abc"[0])
 //        assertEquals('c', "abc".get(-1))
-        assertEquals('a', "abc".get(0))
-        assertEquals("abc", "abc".get(slice(0, 3)))
-        assertEquals("abc", "abc".get(slice(0, 1000)))
-        assertEquals("a", "abc".get(slice(0, 1)))
-        assertEquals("", "abc".get(slice(0, 0)))
+        assertEquals('a', "abc"[0])
+        assertEquals("abc", "abc"[slice(0, 3)])
+        assertEquals("abc", "abc"[slice(0, 1000)])
+        assertEquals("a", "abc"[slice(0, 1)])
+        assertEquals("", "abc"[slice(0, 0)])
     }
 
     @Test
     fun test_slice() {
-        assertEquals("abc", "abc".get(slice(0, 1000)))
-        assertEquals("abc", "abc".get(slice(0, 3)))
-        assertEquals("ab", "abc".get(slice(0, 2)))
-        assertEquals("bc", "abc".get(slice(1, 3)))
-        assertEquals("b", "abc".get(slice(1, 2)))
-        assertEquals("", "abc".get(slice(2, 2)))
-        assertEquals("", "abc".get(slice(1000, 1000)))
-        assertEquals("", "abc".get(slice(2000, 1000)))
-        assertEquals("", "abc".get(slice(2, 1)))
+        assertEquals("abc", "abc"[slice(0, 1000)])
+        assertEquals("abc", "abc"[slice(0, 3)])
+        assertEquals("ab", "abc"[slice(0, 2)])
+        assertEquals("bc", "abc"[slice(1, 3)])
+        assertEquals("b", "abc"[slice(1, 2)])
+        assertEquals("", "abc"[slice(2, 2)])
+        assertEquals("", "abc"[slice(1000, 1000)])
+        assertEquals("", "abc"[slice(2000, 1000)])
+        assertEquals("", "abc"[slice(2, 1)])
     }
 
     @Test
@@ -1004,7 +1004,7 @@ class PythonCompliantStringTests {
             for (stop in indices) {
                 for (step in indices[slice(1, null, null)]) {
                     val L = s[slice(start, stop, step)]
-                    assertEquals("".join(L), s.get(slice(start, stop, step)))
+                    assertEquals("".join(L), s[slice(start, stop, step)])
                 }
             }
         }
