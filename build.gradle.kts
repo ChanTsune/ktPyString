@@ -6,7 +6,7 @@ version = "0.1.0"
 
 plugins {
     // Apply the Kotlin JVM plugin to add support for Kotlin.
-    id("org.jetbrains.kotlin.jvm") version "1.5.30"
+    id("org.jetbrains.kotlin.jvm") version "1.5.31"
 
     // Apply plugin for document generation
     id("org.jetbrains.dokka") version "1.5.30"
