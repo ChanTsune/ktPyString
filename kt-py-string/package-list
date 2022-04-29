@@ -2,10 +2,10 @@ $dokka.format:html-v1
 $dokka.linkExtension:html
 $dokka.location:ktPyString.properties////PointingToDeclaration/kt-py-string/ktPyString.properties/index.html
 $dokka.location:ktPyString.properties//numericType/kotlin.Char#/PointingToDeclaration/kt-py-string/ktPyString.properties/numeric-type.html
-$dokka.location:ktPyString.properties/NumericType.DECIMAL///PointingToDeclaration/kt-py-string/ktPyString.properties/-numeric-type/-d-e-c-i-m-a-l/index.html
-$dokka.location:ktPyString.properties/NumericType.DIGIT///PointingToDeclaration/kt-py-string/ktPyString.properties/-numeric-type/-d-i-g-i-t/index.html
-$dokka.location:ktPyString.properties/NumericType.NOT_NUMERIC///PointingToDeclaration/kt-py-string/ktPyString.properties/-numeric-type/-n-o-t_-n-u-m-e-r-i-c/index.html
-$dokka.location:ktPyString.properties/NumericType.NUMERIC///PointingToDeclaration/kt-py-string/ktPyString.properties/-numeric-type/-n-u-m-e-r-i-c/index.html
+$dokka.location:ktPyString.properties/NumericType.DECIMAL///PointingToDeclaration/{"org.jetbrains.dokka.links.EnumEntryDRIExtra":{"key":"org.jetbrains.dokka.links.EnumEntryDRIExtra"}}kt-py-string/ktPyString.properties/-numeric-type/-d-e-c-i-m-a-l/index.html
+$dokka.location:ktPyString.properties/NumericType.DIGIT///PointingToDeclaration/{"org.jetbrains.dokka.links.EnumEntryDRIExtra":{"key":"org.jetbrains.dokka.links.EnumEntryDRIExtra"}}kt-py-string/ktPyString.properties/-numeric-type/-d-i-g-i-t/index.html
+$dokka.location:ktPyString.properties/NumericType.NOT_NUMERIC///PointingToDeclaration/{"org.jetbrains.dokka.links.EnumEntryDRIExtra":{"key":"org.jetbrains.dokka.links.EnumEntryDRIExtra"}}kt-py-string/ktPyString.properties/-numeric-type/-n-o-t_-n-u-m-e-r-i-c/index.html
+$dokka.location:ktPyString.properties/NumericType.NUMERIC///PointingToDeclaration/{"org.jetbrains.dokka.links.EnumEntryDRIExtra":{"key":"org.jetbrains.dokka.links.EnumEntryDRIExtra"}}kt-py-string/ktPyString.properties/-numeric-type/-n-u-m-e-r-i-c/index.html
 $dokka.location:ktPyString.properties/NumericType///PointingToDeclaration/kt-py-string/ktPyString.properties/-numeric-type/index.html
 $dokka.location:ktPyString.properties/NumericType/code/#/PointingToDeclaration/kt-py-string/ktPyString.properties/-numeric-type/code.html
 $dokka.location:ktPyString////PointingToDeclaration/kt-py-string/ktPyString/index.html
