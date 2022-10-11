@@ -9,7 +9,7 @@ plugins {
     id("org.jetbrains.kotlin.jvm") version "1.6.21"
 
     // Apply plugin for document generation
-    id("org.jetbrains.dokka") version "1.7.10"
+    id("org.jetbrains.dokka") version "1.7.20"
 
     // Apply the java-library plugin for API and implementation separation.
     id("java-library")
