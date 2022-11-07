@@ -8,8 +8,6 @@ $dokka.location:ktPyString.properties/NumericType.NOT_NUMERIC///PointingToDeclar
 $dokka.location:ktPyString.properties/NumericType.NUMERIC///PointingToDeclaration/{"org.jetbrains.dokka.links.EnumEntryDRIExtra":{"key":"org.jetbrains.dokka.links.EnumEntryDRIExtra"}}kt-py-string/ktPyString.properties/-numeric-type/-n-u-m-e-r-i-c/index.html
 $dokka.location:ktPyString.properties/NumericType///PointingToDeclaration/kt-py-string/ktPyString.properties/-numeric-type/index.html
 $dokka.location:ktPyString.properties/NumericType/code/#/PointingToDeclaration/kt-py-string/ktPyString.properties/-numeric-type/code.html
-$dokka.location:ktPyString.properties/NumericType/valueOf/#kotlin.String/PointingToDeclaration/kt-py-string/ktPyString.properties/-numeric-type/value-of.html
-$dokka.location:ktPyString.properties/NumericType/values/#/PointingToDeclaration/kt-py-string/ktPyString.properties/-numeric-type/values.html
 $dokka.location:ktPyString////PointingToDeclaration/kt-py-string/ktPyString/index.html
 $dokka.location:ktPyString//center/kotlin.String#kotlin.Int#kotlin.Char/PointingToDeclaration/kt-py-string/ktPyString/center.html
 $dokka.location:ktPyString//count/kotlin.String#kotlin.String#kotlin.Int?#kotlin.Int?/PointingToDeclaration/kt-py-string/ktPyString/count.html
