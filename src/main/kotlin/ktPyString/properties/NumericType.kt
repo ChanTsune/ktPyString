@@ -1772,5 +1772,5 @@ internal val numericTable = hashMapOf(
  */
 val Char.numericType: NumericType
     get() {
-        return (numericTable[this.toInt()] ?: (NumericType.NOT_NUMERIC to Double.MAX_VALUE)).first
+        return (numericTable[this.code] ?: (NumericType.NOT_NUMERIC to Double.MAX_VALUE)).first
     }

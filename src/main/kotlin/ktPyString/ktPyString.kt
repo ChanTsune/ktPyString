@@ -660,7 +660,7 @@ private fun Char.isRowBoundary(): Boolean {
         0xa, 0xb, 0xc, 0xd,
         0x1c, 0x1d, 0x1e,
         0x85, 0x2028, 0x2029
-    ).contains(this.toInt())
+    ).contains(this.code)
 }
 
 /**
