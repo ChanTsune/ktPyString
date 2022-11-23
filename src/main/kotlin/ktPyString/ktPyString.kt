@@ -307,7 +307,7 @@ public fun String.isspace(): Boolean {
     }
 }
 
-private fun Char.isTitle(): Boolean = this == toTitleCase()
+private fun Char.isTitle(): Boolean = toString() == titlecase()
 
 /**
  * Return `true` if the string is a titlecased string and there is at least one character,
@@ -751,19 +751,21 @@ public fun String.title(): String {
     var prevCased = false
     for (c in this) {
         val cIsCased = c.isCased()
-        builder.append(
-            if (prevCased) {
+        if (prevCased) {
+            builder.append(
                 when {
                     cIsCased && !c.isLowerCase() -> c.toLowerCase()
                     else -> c
                 }
-            } else {
+            )
+        } else {
+            builder.append(
                 when {
                     c.isTitle() -> c
-                    else -> c.toTitleCase()
+                    else -> c.titlecase()
                 }
-            }
-        )
+            )
+        }
         prevCased = cIsCased
     }
     return builder.toString()
