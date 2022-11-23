@@ -372,7 +372,7 @@ public fun String.ljust(width: Int, fillchar: Char = ' '): String =
 /**
  * Return a copy of the string with all the cased characters converted to lowercase.
  */
-public fun String.lower(): String = toLowerCase()
+public fun String.lower(): String = lowercase()
 
 /**
  * Return a copy of the string with leading characters removed.
@@ -738,7 +738,7 @@ public fun String.strip(chars: String? = null): String = lstrip(chars).rstrip(ch
 public fun String.swapcase(): String = mapToString { c ->
     when {
         c.isLowerCase() -> c.toUpperCase()
-        c.isUpperCase() -> c.toLowerCase()
+        c.isUpperCase() -> c.lowercase()
         else -> c
     }
 }
@@ -754,7 +754,7 @@ public fun String.title(): String {
         if (prevCased) {
             builder.append(
                 when {
-                    cIsCased && !c.isLowerCase() -> c.toLowerCase()
+                    cIsCased && !c.isLowerCase() -> c.lowercase()
                     else -> c
                 }
             )
