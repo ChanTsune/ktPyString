@@ -19,9 +19,9 @@ plugins {
 }
 
 repositories {
-    // Use jcenter for resolving dependencies.
+    // Use mavenCentral for resolving dependencies.
     // You can declare any Maven/Ivy/file repository here.
-    jcenter()
+    mavenCentral()
 }
 
 dependencies {
@@ -51,7 +51,7 @@ tasks.dokkaHtml.configure {
         File("$outputDir/index.html").apply {
             writeText("""
             <html><script>document.location = "./${project.name.map {
-                if (it.isUpperCase()) "-"+it.toLowerCase()
+                if (it.isUpperCase()) "-" + it.toLowerCase()
                 else it
             }.joinToString(separator = "")}"</script></html>
             """.trimIndent()
