@@ -71,12 +71,8 @@ kotlin {
     }
 }
 
-kotlin {
-    explicitApiWarning()
-}
-
 //sources
-val sourcesJar by tasks.creating(Jar::class) {
+val sourceFileJar by tasks.creating(Jar::class) {
     from(sourceSets.main.get().allSource)
     archiveClassifier.set("sources")
 }
@@ -136,7 +132,7 @@ publishing {
         create<MavenPublication>("snapshot") {
             from(components["java"])
             artifact(dokkaJar)
-            artifact(sourcesJar)
+            artifact(sourceFileJar)
             artifactId = "ktPyString"
             version = "${project.version}-SNAPSHOT"
 
@@ -145,7 +141,7 @@ publishing {
         create<MavenPublication>("release") {
             from(components["java"])
             artifact(dokkaJar)
-            artifact(sourcesJar)
+            artifact(sourceFileJar)
             artifactId = "ktPyString"
             version = "${project.version}"
 
