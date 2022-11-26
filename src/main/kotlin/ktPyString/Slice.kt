@@ -12,23 +12,23 @@ import ktPyString.utils.Quad
  * @property stop indices specified stop.
  * @property step indices specified step.
  */
-class Slice(
-    val start: Int?,
-    val stop: Int?,
-    val step: Int? = null
+public data class Slice(
+        public val start: Int?,
+        public val stop: Int?,
+        public val step: Int? = null
 ) {
     /**
      * Shortcut constractor. [start] and [step] will be 'null'
      * @param stop indices specified stop.
      */
-    constructor(stop: Int?) : this(null, stop)
+    public constructor(stop: Int?) : this(null, stop)
 
     /**
      * Return adjusted slice indices
      * @param length target sequence length.
      * @return Triple(start, stop, step)
      */
-    fun indices(length: Int): Triple<Int, Int, Int> {
+    public fun indices(length: Int): Triple<Int, Int, Int> {
         val (f, s, t, _) = adjustIndex(length)
         return Triple(f, s, t)
     }
@@ -48,7 +48,7 @@ class Slice(
         // Convert step to an integer; raise for zero step.
         val stepSign: Int = step.sign
         if (stepSign == 0) {
-            throw Exception("ValueError: slice step cannot be zero")
+            throw ValueError("slice step cannot be zero")
         }
         val stepIsNegative: Boolean = stepSign < 0
 

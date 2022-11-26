@@ -1,18 +1,14 @@
 import org.gradle.api.publish.maven.MavenPom
-import org.jetbrains.dokka.gradle.DokkaTask
 
 
 group = "dev.tsune"
-version = "1.0.0-beta1"
+version = "0.1.0"
 
 plugins {
-    kotlin("multiplatform") version "1.4.0"
+    kotlin("multiplatform") version "1.7.21"
 
     // Apply plugin for document generation
-    id("org.jetbrains.dokka") version "0.9.18"
-
-
-    id("com.jfrog.bintray") version "1.8.4"
+    id("org.jetbrains.dokka") version "1.7.20"
 
     // Apply the java-library plugin for API and implementation separation.
     id("java-library")
@@ -22,9 +18,9 @@ plugins {
 }
 
 repositories {
-    // Use jcenter for resolving dependencies.
+    // Use mavenCentral for resolving dependencies.
     // You can declare any Maven/Ivy/file repository here.
-    jcenter()
+    mavenCentral()
 }
 
 kotlin {
@@ -75,31 +71,52 @@ kotlin {
     }
 }
 
+kotlin {
+    explicitApiWarning()
+}
+
 //sources
 val sourcesJar by tasks.creating(Jar::class) {
     from(sourceSets.main.get().allSource)
     archiveClassifier.set("sources")
 }
 
-val dokka by tasks.getting(DokkaTask::class){
-    outputFormat = "html"
-    outputDirectory = "$buildDir/javadoc"
+tasks.dokkaHtml.configure {
+    doLast {
+        val outputDir = outputDirectory.get().absolutePath
+        File("$outputDir/index.html").apply {
+            writeText("""
+            <html><script>document.location = "./${project.name.map {
+                if (it.isUpperCase()) "-" + it.toLowerCase()
+                else it
+            }.joinToString(separator = "")}"</script></html>
+            """.trimIndent()
+            )
+        }
+    }
 }
 
 // Create dokka Jar task from dokka task output
 val dokkaJar by tasks.creating(Jar::class) {
     group = JavaBasePlugin.DOCUMENTATION_GROUP
     description = "Assembles Kotlin docs with Dokka"
-    classifier = "javadoc"
+    archiveClassifier.set("javadoc")
     // dependsOn(tasks.dokka) not needed; dependency automatically inferred by from(tasks.dokka)
-    from(tasks.dokka)
+    from(tasks.dokkaHtml)
 }
 
-//publications
-val snapshot = "snapshot"
-val release = "release"
-
 publishing {
+    fun getProperty(propertyName: String, envName: String): String? {
+        return findProperty(propertyName) as? String ?: System.getenv(envName)
+    }
+
+    fun getBintrayUser(): String? {
+        return getProperty("bintray_user", "BINTRAY_USER")
+    }
+
+    fun getBintrayKey(): String? {
+        return getProperty("bintray_key", "BINTRAY_KEY")
+    }
     fun MavenPom.initPom() {
         name.set("ktPyString")
         description.set("Python like String method in Kotlin")
@@ -116,7 +133,7 @@ publishing {
         }
     }
     publications {
-        create<MavenPublication>(snapshot) {
+        create<MavenPublication>("snapshot") {
             from(components["java"])
             artifact(dokkaJar)
             artifact(sourcesJar)
@@ -125,7 +142,7 @@ publishing {
 
             pom.initPom()
         }
-        create<MavenPublication>(release) {
+        create<MavenPublication>("release") {
             from(components["java"])
             artifact(dokkaJar)
             artifact(sourcesJar)
@@ -135,34 +152,18 @@ publishing {
             pom.initPom()
         }
     }
-}
+    repositories {
+        maven {
+            name = "bintray"
+            val bintrayUsername = "chantsune"
+            val bintrayRepoName = "ktPyString"
+            val bintrayPackageName = "ktPyString"
+            setUrl("https://api.bintray.com/content/$bintrayUsername/$bintrayRepoName/$bintrayPackageName/${project.version};publish=1;override=1")
 
-
-bintray {
-    user = findProperty("bintray_user") as? String
-    key = findProperty("bintray_key") as? String
-
-    val isRelease = findProperty("release") == "true"
-
-    publish = isRelease
-    override = false
-
-    setPublications(if (isRelease) release else snapshot)
-
-//    dryRun = true
-
-    with(pkg) {
-        repo = "ktPyString"
-        name = "ktPyString"
-        setLicenses("MIT")
-        setLabels("kotlin")
-        websiteUrl = "https://github.com/ChanTsune/ktPyString"
-        issueTrackerUrl = "https://github.com/ChanTsune/ktPyString/issues"
-        vcsUrl = "https://github.com/ChanTsune/ktPyString.git"
-
-        with(version) {
-            name = project.version.toString()
-            vcsTag = project.version.toString()
+            credentials {
+                username = getBintrayUser()
+                password = getBintrayKey()
+            }
         }
     }
 }

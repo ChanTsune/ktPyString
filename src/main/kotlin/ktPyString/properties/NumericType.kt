@@ -4,7 +4,7 @@ package ktPyString.properties
  * Represents the character Numeric type in the Unicode specification.
  * @param code NumericType code in the Unicode specification.
  */
-enum class NumericType(val code: String) {
+public enum class NumericType(private val code: String) {
     /**
      * Not NumericType in the Unicode specification.
      */
@@ -1770,7 +1770,7 @@ internal val numericTable = hashMapOf(
 /**
  * Return Character's [NumericType].
  */
-val Char.numericType: NumericType
+public val Char.numericType: NumericType
     get() {
-        return (numericTable[this.toInt()] ?: (NumericType.NOT_NUMERIC to Double.MAX_VALUE)).first
+        return (numericTable[this.code] ?: (NumericType.NOT_NUMERIC to Double.MAX_VALUE)).first
     }

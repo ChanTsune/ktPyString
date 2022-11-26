@@ -2,6 +2,7 @@ package ktPyString
 
 import ktPyString.properties.NumericType
 import ktPyString.properties.numericType
+import ktPyString.utils.*
 import kotlin.math.sign
 
 
@@ -9,13 +10,13 @@ import kotlin.math.sign
  * Returns a string containing this char sequence repeated [n] times.
  * @param n How many repeat string.
  */
-operator fun String.times(n: Int): String = repeat(if (n > 0) n else 0)
+public operator fun String.times(n: Int): String = repeat(if (n > 0) n else 0)
 
 /**
  * Return a string sub char sequence specified [slice].
  * @param slice Specify sub sequence.
  */
-operator fun String.get(slice: Slice): String {
+public operator fun String.get(slice: Slice): String {
     var (start, _, step, loop) = slice.adjustIndex(length)
     val builder = StringBuilder(length)
 
@@ -32,9 +33,7 @@ operator fun String.get(slice: Slice): String {
  * @param end indices specified stop.
  * @param step indices specified step.
  */
-operator fun String.get(start: Int?, end: Int?, step: Int? = null): String = this[Slice(start, end, step)]
-
-internal fun Char.repeat(n: Int): String = String(CharArray(n) { this })
+public operator fun String.get(start: Int?, end: Int?, step: Int? = null): String = this[Slice(start, end, step)]
 
 // capitalize  ... exist in kotlin
 
@@ -47,53 +46,61 @@ internal fun Char.repeat(n: Int): String = String(CharArray(n) { this })
  * @param width Padded width.
  * @param fillchar Padding character. default is an ASCII space.
  */
-fun String.center(width: Int, fillchar: Char = ' '): String =
+public fun String.center(width: Int, fillchar: Char = ' '): String =
     if (length >= width)
         this
     else
-    (width - length).let {
-        val r = it / 2
-        val l = r + it % 2
-        fillchar.repeat(l) + this + fillchar.repeat(r)
-    }
+        (width - length).let {
+            val left = it / 2 + (it.and(width).and(1))
+            val right = it - left
+            fillchar.repeat(left) + this + fillchar.repeat(right)
+        }
 
 /**
  * Return the number of non-overlapping occurrences of substring sub in the range [start, end].
  * Optional arguments [start] and [end] are interpreted as in slice notation.
- * @param sub
+ * @param sub Target substring.
  * @param start indices specified start.
  * @param end indices specified stop.
  */
-fun String.count(sub: String, start: Int? = null, end: Int? = null): Int {
-    val (s, e, _, length) = Slice(start, end).adjustIndex(length)
+public fun String.count(sub: String, start: Int? = null, end: Int? = null): Int {
+    val (s, e) = adjustIndex(start, end)
+    if (e - s < sub.length) return 0
     if (sub.isEmpty()) {
-        return length + 1
+        return (e - s).coerceAtLeast(0) + 1
     }
-    var n = this.find(sub, s, e)
+    var n = find(sub, s, e)
     var c = 0
     while (n != -1) {
         c += 1
-        n = this.find(sub, n + sub.length, e)
+        n = find(sub, n + sub.length, e)
     }
     return c
 }
 
 /**
- * Return True if the string ends with the specified [suffix], otherwise return False.
+ * Return `true` if the string ends with the specified [suffix], otherwise return `false`.
  * With optional [start], test beginning at that position.
  * With optional [end], stop comparing at that position.
  */
-fun String.endswith(suffix: String, start: Int? = null, end: Int? = null): Boolean =
-    this[Slice(start, end)].endsWith(suffix)
+public fun String.endswith(suffix: String, start: Int? = null, end: Int? = null): Boolean {
+    val (s, e) = adjustIndex(start, end)
+    if (e - s < suffix.length) return false
+    return this[Slice(start, end)].endsWith(suffix)
+}
 
 /**
- * Return True if the string ends with the specified [suffixes], otherwise return False.
+ * Return `true` if the string ends with the specified [suffixes], otherwise return `false`.
  * With optional [start], test beginning at that position.
  * With optional [end], stop comparing at that position.
  */
-fun String.endswith(vararg suffixes: String, start: Int? = null, end: Int? = null): Boolean {
+public fun String.endswith(vararg suffixes: String, start: Int? = null, end: Int? = null): Boolean {
+    val (s, e) = adjustIndex(start, end)
     val sub = this[Slice(start, end)]
-    return suffixes.any { sub.endsWith(it) }
+    return suffixes.any {
+        if (e - s < it.length) false
+        else sub.endsWith(it)
+    }
 }
 
 /**
@@ -108,7 +115,7 @@ fun String.endswith(vararg suffixes: String, start: Int? = null, end: Int? = nul
  * Any other character is copied unchanged and the current column is incremented by one regardless of how the character is represented when printed.
  * @param tabsize Size of tab('\t').
  */
-fun String.expandtabs(tabsize: Int = 8): String {
+public fun String.expandtabs(tabsize: Int = 8): String {
     val builder = StringBuilder(
         length + count { it == '\t' } * tabsize
     )
@@ -120,8 +127,7 @@ fun String.expandtabs(tabsize: Int = 8): String {
                 linePos += incr
                 builder.append(' '.repeat(incr))
             }
-        }
-        else {
+        } else {
             linePos++
             builder.append(ch)
             if (ch == '\n' || ch == '\r')
@@ -139,13 +145,16 @@ fun String.expandtabs(tabsize: Int = 8): String {
  * @param start Start position.
  * @param end End position.
  */
-fun String.find(sub: String, start: Int? = null, end: Int? = null): Int {
-    if (sub.isEmpty()) {
-        return 0
+public fun String.find(sub: String, start: Int? = null, end: Int? = null): Int {
+    val (s, e) = adjustIndex(start, end)
+    if (e - s < sub.length) return -1
+    return this[s, e].indexOf(sub, ignoreCase = false).let {
+        if (it != -1) {
+            s + it
+        } else {
+            -1
+        }
     }
-    val (s, e, _, _) = Slice(start, end).adjustIndex(length)
-    val i = this[s, e].indexOf(sub, ignoreCase = false)
-    return if (i != -1) s + i else -1
 }
 
 //fun String.format() {
@@ -157,14 +166,15 @@ fun String.find(sub: String, start: Int? = null, end: Int? = null): Int {
 //}
 
 /**
- * Like find(), but raise Exception when the substring is not found.
+ * Like find(), but raise [ValueError] when the substring is not found.
  * @param sub Target substring.
  * @param start Start position.
  * @param end End position.
  */
-fun String.index(sub: String, start: Int? = null, end: Int? = null): Int {
-    val tmp = this.find(sub, start, end)
-    return if (tmp == -1) throw Exception("ValueError: substring not found") else tmp
+public fun String.index(sub: String, start: Int? = null, end: Int? = null): Int {
+    return find(sub, start, end).also {
+        if (it == -1) throw ValueError("substring not found")
+    }
 }
 
 internal inline fun String.isX(empty: Boolean, conditional: (Char) -> Boolean): Boolean =
@@ -172,55 +182,55 @@ internal inline fun String.isX(empty: Boolean, conditional: (Char) -> Boolean): 
 
 
 /**
- * Return True if all characters in the string are alphanumeric and there is at least one character, False otherwise.
- * A character c is alphanumeric if one of the following returns True: c.isalpha(), c.isdecimal(), c.isdigit(), or c.isnumeric().
+ * Return `true` if all characters in the string are alphanumeric and there is at least one character, `false` otherwise.
+ * A character c is alphanumeric if one of the following returns `true`: c.isalpha(), c.isdecimal(), c.isdigit(), or c.isnumeric().
  */
-fun String.isalnum(): Boolean {
+public fun String.isalnum(): Boolean {
     return this.isX(false) {
         it.isLetterOrDigit() || it.category == CharCategory.LETTER_NUMBER
     }
 }
 
 /**
- * Return True if all characters in the string are alphabetic and there is at least one character, False otherwise.
+ * Return `true` if all characters in the string are alphabetic and there is at least one character, `false` otherwise.
  * Alphabetic characters are those characters defined in the Unicode character database as “Letter”,
  * i.e., those with general category property being one of “Lm”, “Lt”, “Lu”, “Ll”, or “Lo”. Note that this is different from the “Alphabetic” property defined in the Unicode Standard.
  */
-fun String.isalpha(): Boolean {
+public fun String.isalpha(): Boolean {
     return this.isX(false) {
         it.isLetter()
     }
 }
 
 /**
- * Return True if the string is empty or all characters in the string are ASCII, False otherwise.
+ * Return `true` if the string is empty or all characters in the string are ASCII, `false` otherwise.
  * ASCII characters have code points in the range U+0000-U+007F.
  */
-fun String.isascii(): Boolean {
-    return this.isX(true) {
-        it in '\u0000'..'\u0080'
+public fun String.isascii(): Boolean {
+    return isX(true) {
+        it in '\u0000'..'\u007F'
     }
 }
 
 /**
- * Return True if all characters in the string are decimal characters and there is at least one character, False otherwise.
+ * Return `true` if all characters in the string are decimal characters and there is at least one character, `false` otherwise.
  * Decimal characters are those that can be used to form numbers in base 10,
  * e.g. U+0660, ARABIC-INDIC DIGIT ZERO.
  * Formally a decimal character is a character in the Unicode General Category “Nd”.
  */
-fun String.isdecimal(): Boolean {
+public fun String.isdecimal(): Boolean {
     return this.isX(false) {
         it.category == CharCategory.DECIMAL_DIGIT_NUMBER
     }
 }
 
 /**
- * Return True if all characters in the string are digits and there is at least one character, False otherwise.
+ * Return `true` if all characters in the string are digits and there is at least one character, `false` otherwise.
  * Digits include decimal characters and digits that need special handling, such as the compatibility superscript digits.
  * This covers digits which cannot be used to form numbers in base 10, like the Kharosthi numbers.
  * Formally, a digit is a character that has the property value Numeric_Type=Digit or Numeric_Type=Decimal.
  */
-fun String.isdigit(): Boolean {
+public fun String.isdigit(): Boolean {
     return this.isX(false) {
         it.category == CharCategory.LETTER_NUMBER ||
                 it.category == CharCategory.DECIMAL_DIGIT_NUMBER
@@ -228,9 +238,9 @@ fun String.isdigit(): Boolean {
 }
 
 /**
- * Return True if all cased characters in the string are lowercase and there is at least one cased character, False otherwise.
+ * Return `true` if all cased characters in the string are lowercase and there is at least one cased character, `false` otherwise.
  */
-fun String.islower(): Boolean {
+public fun String.islower(): Boolean {
     if (this.isEmpty()) {
         return false
     }
@@ -247,12 +257,12 @@ fun String.islower(): Boolean {
 }
 
 /**
- * Return True if all characters in the string are numeric characters, and there is at least one character, False otherwise.
+ * Return `true` if all characters in the string are numeric characters, and there is at least one character, `false` otherwise.
  * Numeric characters include digit characters, and all characters that have the Unicode numeric value property,
  * e.g. U+2155, VULGAR FRACTION ONE FIFTH.
  * Formally, numeric characters are those with the property value Numeric_Type=Digit, Numeric_Type=Decimal or Numeric_Type=Numeric.
  */
-fun String.isnumeric(): Boolean {
+public fun String.isnumeric(): Boolean {
     return this.isX(false) {
         it.category == CharCategory.LETTER_NUMBER ||
                 it.category == CharCategory.DECIMAL_DIGIT_NUMBER ||
@@ -262,10 +272,10 @@ fun String.isnumeric(): Boolean {
 }
 
 /**
- * Return True if all characters in the string are printable or the string is empty, False otherwise.
+ * Return `true` if all characters in the string are printable or the string is empty, `false` otherwise.
  * Nonprintable characters are those characters defined in the Unicode character database as “Other” or “Separator”, excepting the ASCII space (0x20) which is considered printable.
  */
-fun String.isprintable(): Boolean {
+public fun String.isprintable(): Boolean {
     val otherTypes = listOf(
         CharCategory.OTHER_LETTER,
         CharCategory.OTHER_NUMBER,
@@ -288,46 +298,46 @@ fun String.isprintable(): Boolean {
 }
 
 /**
- * Return True if there are only whitespace characters in the string and there is at least one character, False otherwise.
+ * Return `true` if there are only whitespace characters in the string and there is at least one character, `false` otherwise.
  * A character is whitespace if in the Unicode character database, either its general category is Zs (“Separator, space”), or its bidirectional class is one of WS, B, or S.
  */
-fun String.isspace(): Boolean {
+public fun String.isspace(): Boolean {
     return this.isX(false) {
         it.isWhiteSpace()
     }
 }
 
-private fun Char.isTitle(): Boolean = this == toTitleCase()
+private fun Char.isTitle(): Boolean = toString() == titlecase()
 
 /**
- * Return True if the string is a titlecased string and there is at least one character,
+ * Return `true` if the string is a titlecased string and there is at least one character,
  * for example uppercase characters may only follow uncased characters and lowercase characters only cased ones.
- * Return False otherwise.
+ * Return `false` otherwise.
  */
-fun String.istitle(): Boolean {
-    if (this.isEmpty()) {
-        return false
-    }
-    var prevCased = false
-    for (chr in this) {
-        if (!prevCased) {
-            if (!chr.isTitle()) {
-                return false
+public fun String.istitle(): Boolean {
+    if (any { it.isCased() }) {
+        var prevCased = false
+        for (chr in this) {
+            if (!prevCased) {
+                if (!chr.isTitle()) {
+                    return false
+                }
+            } else if (chr.isCased()) {
+                if (!chr.isLowerCase()) {
+                    return false
+                }
             }
-        } else if (chr.isCased()) {
-            if (!chr.isLowerCase()) {
-                return false
-            }
+            prevCased = chr.isCased()
         }
-        prevCased = chr.isCased()
+        return true
     }
-    return true
+    return false
 }
 
 /**
- * Return True if all cased characters in the string are uppercase and there is at least one cased character, False otherwise.
+ * Return `true` if all cased characters in the string are uppercase and there is at least one cased character, `false` otherwise.
  */
-fun String.isupper(): Boolean {
+public fun String.isupper(): Boolean {
     if (this.isEmpty()) {
         return false
     }
@@ -347,7 +357,7 @@ fun String.isupper(): Boolean {
  * Return a string which is the concatenation of the strings in [iterable].
  * @param iterable
  */
-fun String.join(iterable: List<String>): String = iterable.joinToString(this)
+public fun <E : Iterable<String>> String.join(iterable: E): String = iterable.joinToString(this)
 
 /**
  * Return the string left justified in a string of length width.
@@ -356,13 +366,13 @@ fun String.join(iterable: List<String>): String = iterable.joinToString(this)
  * @param width Padded width.
  * @param fillchar Padding character. default is an ASCII space.
  */
-fun String.ljust(width: Int, fillchar: Char = ' '): String =
+public fun String.ljust(width: Int, fillchar: Char = ' '): String =
     if (length >= width) this else this + fillchar.repeat(width - length)
 
 /**
  * Return a copy of the string with all the cased characters converted to lowercase.
  */
-fun String.lower(): String = toLowerCase()
+public fun String.lower(): String = lowercase()
 
 /**
  * Return a copy of the string with leading characters removed.
@@ -371,7 +381,7 @@ fun String.lower(): String = toLowerCase()
  * The chars argument is not a prefix; rather, all combinations of its values are stripped.
  * @param chars Specifying the set of characters to be removed.
  */
-fun String.lstrip(chars: String? = null): String {
+public fun String.lstrip(chars: String? = null): String {
     return if (chars != null) {
         dropWhile { chars.contains(it) }
     } else {
@@ -409,7 +419,7 @@ fun String.lstrip(chars: String? = null): String {
  * If the separator is not found, return a Triple containing the string itself, followed by two empty strings.
  * @param sep Separator.
  */
-fun String.partition(sep: String): Triple<String, String, String> {
+public fun String.partition(sep: String): Triple<String, String, String> {
     val tmp = this.split(sep, 1)
     return if (tmp.size == 2) {
         Triple(tmp[0], sep, tmp[1])
@@ -419,14 +429,49 @@ fun String.partition(sep: String): Triple<String, String, String> {
 }
 
 /**
+ * If the string ends with the suffix string and that suffix is not empty, return string[null, -suffix.length].
+ * Otherwise, return a copy of the original string.
+ * @param suffix
+ */
+public fun String.removesuffix(suffix: String): String {
+    return if (endswith(suffix)) substring(0, length - suffix.length) else this
+}
+
+/**
+ * If the string starts with the prefix string, return string[prefix.length, null].
+ * Otherwise, return a copy of the original string.
+ * @param prefix
+ */
+public fun String.removeprefix(prefix: String): String {
+    return if (startswith(prefix)) substring(prefix.length) else this
+}
+
+/**
  * Return a copy of the string with all occurrences of substring old replaced by new.
  * If the optional argument count is given, only the first count occurrences are replaced.
  * @param old Old String.
  * @param new New string.
  * @param maxcount　Maximum number of replacements.
  */
-fun String.replace(old: String, new: String, maxcount: Int = Int.MAX_VALUE): String {
-    return new.join(this.split(old, maxcount))
+public fun String.replace(old: String, new: String, maxcount: Int = Int.MAX_VALUE): String {
+    if (length < old.length) return this
+    if (maxcount == 0) return this
+    if (old == new) return this
+    if (old.isEmpty() && new.isEmpty()) return this
+    if (isEmpty() && old.isEmpty()) return new
+    if (old.isEmpty()) {
+        var maxcount = if (maxcount < 0) Int.MAX_VALUE else maxcount
+        return buildString {
+            append(new)
+            for (c in this@replace) {
+                append(c)
+                if (--maxcount > 0) {
+                    append(new)
+                }
+            }
+        }
+    }
+    return new.join(split(old, maxcount))
 }
 
 /**
@@ -436,24 +481,27 @@ fun String.replace(old: String, new: String, maxcount: Int = Int.MAX_VALUE): Str
  * @param start Start position.
  * @param end End position.
  */
-fun String.rfind(sub: String, start: Int? = null, end: Int? = null): Int {
+public fun String.rfind(sub: String, start: Int? = null, end: Int? = null): Int {
+    val (s, e) = adjustIndex(start, end)
+    if (e - s < sub.length) return -1
     if (sub.isEmpty()) {
         return length
     }
-    val (s, e, _, _) = Slice(start, end).adjustIndex(length)
-    val i = this[s, e].lastIndexOf(sub, ignoreCase = false)
-    return if (i != -1) s + i else -1
+    return this[s, e].lastIndexOf(sub, ignoreCase = false).let {
+        if (it != -1) s + it else -1
+    }
 }
 
 /**
- * Like rfind() but raises [Exception] when the substring sub is not found.
+ * Like rfind() but raises [ValueError] when the substring sub is not found.
  * @param sub Target substring.
  * @param start Start position.
  * @param end End positions.
  */
-fun String.rindex(sub: String, start: Int? = null, end: Int? = null): Int {
-    val i = this.rfind(sub, start, end)
-    return if (i == -1) throw Exception("ValueError: substring not found") else i
+public fun String.rindex(sub: String, start: Int? = null, end: Int? = null): Int {
+    return rfind(sub, start, end).also {
+        if (it == -1) throw ValueError("substring not found")
+    }
 }
 
 /**
@@ -463,7 +511,7 @@ fun String.rindex(sub: String, start: Int? = null, end: Int? = null): Int {
  * @param width Padded width.
  * @param fillchar Padding character. default is an ASCII space.
  */
-fun String.rjust(width: Int, fillchar: Char = ' '): String =
+public fun String.rjust(width: Int, fillchar: Char = ' '): String =
     if (length >= width) this else fillchar.repeat(width - length) + this
 
 /**
@@ -471,7 +519,7 @@ fun String.rjust(width: Int, fillchar: Char = ' '): String =
  * If the separator is not found, return a Triple containing two empty strings, followed by the string itself.
  * @param sep Separator.
  */
-fun String.rpartition(sep: String): Triple<String, String, String> {
+public fun String.rpartition(sep: String): Triple<String, String, String> {
     val tmp = this.rsplit(sep, 1)
     return if (tmp.size == 2) {
         Triple(tmp[0], sep, tmp[1])
@@ -481,6 +529,7 @@ fun String.rpartition(sep: String): Triple<String, String, String> {
 }
 
 private fun String._rsplit(sep: String, maxsplit: Int): List<String> {
+    if (sep.isEmpty()) throw ValueError("empty separator")
     val result: MutableList<String> = mutableListOf()
     var prevIndex = Int.MAX_VALUE
     val sepLen = sep.length
@@ -517,12 +566,12 @@ private fun String._rsplit(maxsplit: Int): List<String> {
  * @param sep Separator.
  * @param maxsplit Maximum number of divisions.
  */
-fun String.rsplit(sep: String? = null, maxsplit: Int = -1): List<String> {
+public fun String.rsplit(sep: String? = null, maxsplit: Int = -1): List<String> {
     val maxSplit = if (maxsplit.sign == -1) Int.MAX_VALUE else maxsplit
-    return if (sep != null && sep.isNotEmpty()) {
-        this._rsplit(sep, maxSplit)
-    } else {
+    return if (sep == null) {
         this._rsplit(maxSplit)
+    } else {
+        this._rsplit(sep, maxSplit)
     }
 }
 
@@ -533,7 +582,7 @@ fun String.rsplit(sep: String? = null, maxsplit: Int = -1): List<String> {
  * The chars argument is not a suffix; rather, all combinations of its values are stripped.
  * @param chars Specifying the set of characters to be removed.
  */
-fun String.rstrip(chars: String? = null): String {
+public fun String.rstrip(chars: String? = null): String {
     return if (chars != null) {
         dropLastWhile { c -> chars.contains(c) }
     } else {
@@ -542,6 +591,7 @@ fun String.rstrip(chars: String? = null): String {
 }
 
 private fun String._split(sep: String, maxsplit: Int): List<String> {
+    if (sep.isEmpty()) throw ValueError("empty separator")
     var maxSplit = maxsplit
     val result: MutableList<String> = mutableListOf()
     var prevIndex = 0
@@ -596,12 +646,12 @@ private fun String._split(maxsplit: Int): List<String> {
  * @param sep separator.
  * @param maxsplit Maximum number of divisions.
  */
-fun String.split(sep: String? = null, maxsplit: Int = -1): List<String> {
+public fun String.split(sep: String? = null, maxsplit: Int = -1): List<String> {
     val maxSplit = if (maxsplit.sign == -1) Int.MAX_VALUE else maxsplit
-    return if (sep != null && sep.isNotEmpty()) {
-        this._split(sep, maxSplit)
-    } else {
+    return if (sep == null) {
         this._split(maxSplit)
+    } else {
+        this._split(sep, maxSplit)
     }
 }
 
@@ -610,17 +660,17 @@ private fun Char.isRowBoundary(): Boolean {
         0xa, 0xb, 0xc, 0xd,
         0x1c, 0x1d, 0x1e,
         0x85, 0x2028, 0x2029
-    ).contains(this.toInt())
+    ).contains(this.code)
 }
 
 /**
  * Return a list of the lines in the string, breaking at line boundaries.
- * Line breaks are not included in the resulting list unless [keepends] is given and true.
+ * Line breaks are not included in the resulting list unless [keepends] is given and `true`.
  * This method splits on the following line boundaries.
  * In particular, the boundaries are a superset of universal newlines.
- * @param keepends If true was given keep line breaks. Default is false.
+ * @param keepends If `true` was given keep line breaks. Default is `false`.
  */
-fun String.splitlines(keepends: Boolean = false): List<String> {
+public fun String.splitlines(keepends: Boolean = false): List<String> {
     val splited: MutableList<String> = mutableListOf()
     val len = this.length
     var i = 0
@@ -648,21 +698,28 @@ fun String.splitlines(keepends: Boolean = false): List<String> {
 }
 
 /**
- * Return True if string starts with the [prefix], otherwise return False.
+ * Return `true` if string starts with the [prefix], otherwise return `false`.
  * With optional [start], test string beginning at that position.
  * With optional [end], stop comparing string at that position.
  */
-fun String.startswith(prefix: String, start: Int? = null, end: Int? = null): Boolean =
-    this[Slice(start, end)].startsWith(prefix)
+public fun String.startswith(prefix: String, start: Int? = null, end: Int? = null): Boolean {
+    val (s, e) = adjustIndex(start, end)
+    if (e - s < prefix.length) return false
+    return this[Slice(s, e)].startsWith(prefix)
+}
 
 /**
- * Return True if string starts with the [prefixes], otherwise return False.
+ * Return `true` if string starts with the [prefixes], otherwise return `false`.
  * With optional [start], test string beginning at that position.
  * With optional [end], stop comparing string at that position.
  */
-fun String.startswith(vararg prefixes: String, start: Int? = null, end: Int? = null): Boolean {
-    val sub = this[Slice(start, end)]
-    return prefixes.any { sub.startsWith(it) }
+public fun String.startswith(vararg prefixes: String, start: Int? = null, end: Int? = null): Boolean {
+    val (s, e) = adjustIndex(start, end)
+    val sub = this[Slice(s, e)]
+    return prefixes.any {
+        if (e - s < it.length) false
+        else sub.startsWith(it)
+    }
 }
 
 /**
@@ -672,40 +729,43 @@ fun String.startswith(vararg prefixes: String, start: Int? = null, end: Int? = n
  * The chars argument is not a prefix or suffix; rather, all combinations of its values are stripped.
  * @param chars Specifying the set of characters to be removed.
  */
-fun String.strip(chars: String? = null): String = lstrip(chars).rstrip(chars)
+public fun String.strip(chars: String? = null): String = lstrip(chars).rstrip(chars)
 
 /**
  * Return a copy of the string with uppercase characters converted to lowercase and vice versa.
- * Note that it is not necessarily true that s.swapcase().swapcase() == s.
+ * Note that it is not necessarily `true` that s.swapcase().swapcase() == s.
  */
-fun String.swapcase(): String = mapToString { c ->
+public fun String.swapcase(): String = mapToString { c ->
     when {
         c.isLowerCase() -> c.toUpperCase()
-        c.isUpperCase() -> c.toLowerCase()
+        c.isUpperCase() -> c.lowercase()
         else -> c
     }
 }
+
 /**
  * Return a titlecased version of the string where words start with an uppercase character and the remaining characters are lowercase.
  */
-fun String.title(): String {
+public fun String.title(): String {
     val builder = StringBuilder(length)
     var prevCased = false
     for (c in this) {
         val cIsCased = c.isCased()
-        builder.append(
-            if (prevCased) {
+        if (prevCased) {
+            builder.append(
                 when {
-                    cIsCased && !c.isLowerCase() -> c.toLowerCase()
+                    cIsCased && !c.isLowerCase() -> c.lowercase()
                     else -> c
                 }
-            } else {
+            )
+        } else {
+            builder.append(
                 when {
                     c.isTitle() -> c
-                    else -> c.toTitleCase()
+                    else -> c.titlecase()
                 }
-            }
-        )
+            )
+        }
         prevCased = cIsCased
     }
     return builder.toString()
@@ -716,17 +776,17 @@ fun String.title(): String {
 //}
 /**
  * Return a copy of the string with all the cased characters converted to uppercase.
- * Note that s.upper().isupper() might be False if s contains uncased characters or if the Unicode category of the resulting character(s) is not “Lu” (Letter, uppercase), but e.g. “Lt” (Letter, titlecase).
+ * Note that s.upper().isupper() might be `false` if s contains uncased characters or if the Unicode category of the resulting character(s) is not “Lu” (Letter, uppercase), but e.g. “Lt” (Letter, titlecase).
  * The uppercasing algorithm used is described in section 3.13 of the Unicode Standard.
  */
-fun String.upper(): String = toUpperCase()
+public fun String.upper(): String = toUpperCase()
 
 /**
  * Return a copy of the string left filled with ASCII '0' digits to make a string of length [width].
  * A leading sign prefix ('+'/'-') is handled by inserting the padding after the sign character rather than before.
  * The original string is returned if [width] is less than or equal to String.length.
  */
-fun String.zfill(width: Int): String {
+public fun String.zfill(width: Int): String {
     return if (this.isEmpty() || (this[0] != '-' && this[0] != '+')) {
         this.rjust(width, '0')
     } else {
@@ -734,14 +794,30 @@ fun String.zfill(width: Int): String {
     }
 }
 
-internal inline fun <R> String.mapToString(builder: StringBuilder = StringBuilder(length), transform: (Char) -> R): String {
+internal inline fun <R> String.mapToString(
+    builder: StringBuilder = StringBuilder(length),
+    transform: (Char) -> R
+): String {
     for (item in this)
         builder.append(transform(item))
     return builder.toString()
 }
 
-private fun Char.isWhiteSpace(): Boolean =
-    "\u0020\u00A0\u2002\u2003\u2004\u2005\u2006\u2007\u2008\u2009\u200A\u200B\u3000\uFEFF\u0009".contains(this)
+internal fun String.adjustIndex(s: Int?, e: Int?): Pair<Int, Int> {
+    var start = s ?: 0
+    var end = e ?: length
+    if (end > length) {
+        end = length
+    } else if (end < 0) {
+        end += length
+        end = end.coerceAtLeast(0)
+    }
+    if (start < 0) {
+        start += length
+        start = start.coerceAtLeast(0)
+    }
+    return start to end
+}
 
 private fun Char.isCased(): Boolean =
     isUpperCase() || isLowerCase() || isTitleCase()
