@@ -737,7 +737,7 @@ public fun String.strip(chars: String? = null): String = lstrip(chars).rstrip(ch
  */
 public fun String.swapcase(): String = mapToString { c ->
     when {
-        c.isLowerCase() -> c.toUpperCase()
+        c.isLowerCase() -> c.uppercase()
         c.isUpperCase() -> c.lowercase()
         else -> c
     }
@@ -779,7 +779,7 @@ public fun String.title(): String {
  * Note that s.upper().isupper() might be `false` if s contains uncased characters or if the Unicode category of the resulting character(s) is not “Lu” (Letter, uppercase), but e.g. “Lt” (Letter, titlecase).
  * The uppercasing algorithm used is described in section 3.13 of the Unicode Standard.
  */
-public fun String.upper(): String = toUpperCase()
+public fun String.upper(): String = uppercase()
 
 /**
  * Return a copy of the string left filled with ASCII '0' digits to make a string of length [width].
