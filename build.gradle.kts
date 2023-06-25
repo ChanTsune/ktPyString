@@ -51,7 +51,7 @@ tasks.dokkaHtml.configure {
         File("$outputDir/index.html").apply {
             writeText("""
             <html><script>document.location = "./${project.name.map {
-                if (it.isUpperCase()) "-" + it.toLowerCase()
+                if (it.isUpperCase()) "-" + it.lowercaseChar()
                 else it
             }.joinToString(separator = "")}"</script></html>
             """.trimIndent()
