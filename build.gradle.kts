@@ -47,7 +47,7 @@ val sourcesJar by tasks.creating(Jar::class) {
 
 tasks.dokkaHtml.configure {
     doLast {
-        val outputDir = outputDirectory.get().absolutePath
+        val outputDir = outputDirectory.get().asFile.absolutePath
         File("$outputDir/index.html").apply {
             writeText("""
             <html><script>document.location = "./${project.name.map {
