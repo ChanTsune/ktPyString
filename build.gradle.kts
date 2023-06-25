@@ -9,7 +9,7 @@ plugins {
     id("org.jetbrains.kotlin.jvm") version "1.8.22"
 
     // Apply plugin for document generation
-    id("org.jetbrains.dokka") version "1.8.10"
+    id("org.jetbrains.dokka") version "1.8.20"
 
     // Apply the java-library plugin for API and implementation separation.
     id("java-library")
@@ -47,11 +47,11 @@ val sourcesJar by tasks.creating(Jar::class) {
 
 tasks.dokkaHtml.configure {
     doLast {
-        val outputDir = outputDirectory.get().absolutePath
+        val outputDir = outputDirectory.get().asFile.absolutePath
         File("$outputDir/index.html").apply {
             writeText("""
             <html><script>document.location = "./${project.name.map {
-                if (it.isUpperCase()) "-" + it.toLowerCase()
+                if (it.isUpperCase()) "-" + it.lowercaseChar()
                 else it
             }.joinToString(separator = "")}"</script></html>
             """.trimIndent()
